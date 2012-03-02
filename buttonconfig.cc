@@ -1,3 +1,13 @@
+/*Button Config and Interface Constructor for GUFG
+ *This is intended as a configuration for inputs within GUFG
+ *It currently also includes a constructor for the interface struct/class
+ *Which currently just names the inputs and does a call-and-response loop
+ *in a terminal that sets up the buttons for one player.
+ *
+ *Written by Alex Kelly in 2012
+ *License to come
+ */
+
 #include "interface.h"
 interface::interface()
 {

@@ -1,3 +1,12 @@
+/*Interface header for GUFG
+ *The interface class/struct is intended as an abstraction between the player and the engine
+ *This is where things pertaining to inputs should go, as well as possibly information like the
+ *round timer.
+ *
+ *Written by Alex Kelly in 2012
+ *License to come
+ */
+
 #include "SDL.h"
 #include <stdio.h>
 struct interface
