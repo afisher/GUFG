@@ -44,15 +44,4 @@ void interface::keyConfig(int current)
 		}
 	}
 	configFlag == 0;
-/*
-	printf("Enter a key for Down:\n");
-	printf("Enter a key for Left:\n");
-	printf("Enter a key for Right:\n");
-	printf("Enter a key for A:\n");
-	printf("Enter a key for B:\n");
-	printf("Enter a key for C:\n");
-	printf("Enter a key for D:\n");
-	printf("Enter a key for E:\n");
-	printf("Enter a key for Start:\n");
-//*/
 }
