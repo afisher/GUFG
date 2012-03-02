@@ -1,3 +1,11 @@
+/*Key Test for GUFG
+ *This program is intended to do some of the initial SDL engine testing for
+ *Project: Ground Up Fighting Game.
+ *
+ *Written by Alex Kelly in 2012
+ *License to come
+ */
+
 #include "interface.h"
 
 const int GRAV = 5;
