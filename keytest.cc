@@ -127,8 +127,7 @@ int main( int argc, char* argv[] )
 			sRect.y = 330;
 
 		/*Enforcing gravity*/
-		if(sRect.y > 0) aerial = 1;
-		else aerial = 0;
+		if(aerial && sRect.y == 0) { aerial = 0; deltaX = 0; }
 		if(aerial) deltaY += GRAV;
 
 		/*Refresh, not important just yet*/
