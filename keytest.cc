@@ -17,7 +17,7 @@ int main( int argc, char* argv[] )
 	SDL_WM_SetCaption("GUFG", "GUFG");
 
 	/*Make a window*/
-	SDL_Surface* screen = SDL_SetVideoMode(800, 600, 0, 0);
+	SDL_Surface* screen = SDL_SetVideoMode(640, 480, 0, 0);
 
 	/*Set up the sprite*/
 	sTemp = SDL_LoadBMP("SP.bmp");
@@ -32,8 +32,8 @@ int main( int argc, char* argv[] )
 	SDL_SetColorKey(sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 
 	/*More sprite setup*/
-	sRect.x = 350;
-	sRect.y = 450;
+	sRect.x = 200;
+	sRect.y = 330;
 
 	/*Spawn the interface*/
 	interface game;
@@ -102,19 +102,18 @@ int main( int argc, char* argv[] )
 		sRect.y += deltaY;
 
 		/* No escaping the screen */
-		if (sRect.x < 0)
-			sRect.x = 0;
-		else if (sRect.x > 710)
-			sRect.x = 710;
+		if (sRect.x < -10)
+			sRect.x = -10;
+		else if (sRect.x > 560)
+			sRect.x = 560;
 		if (sRect.y < 0)
 			sRect.y = 0;
-		else if (sRect.y > 450)
-			sRect.y = 450;
+		else if (sRect.y > 330)
+			sRect.y = 330;
 
 		/*Refresh, not important just yet*/
 		SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
 		SDL_BlitSurface(sprite, NULL, screen, &sRect);
-		
 		SDL_UpdateRect(screen, 0, 0, 0, 0);
 	}
 
