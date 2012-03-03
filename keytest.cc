@@ -79,7 +79,7 @@ int main( int argc, char* argv[] )
 			case SDL_KEYDOWN:
 				if(aerial == 0){
 					if(event.key.keysym.sym == game.input[0].key.keysym.sym && aerial == 0) {
-						deltaY = -25;
+						deltaY = -23;
 					}
 					if(event.key.keysym.sym == game.input[2].key.keysym.sym) {
 						deltaX = -3;
