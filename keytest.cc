@@ -8,7 +8,7 @@
 
 #include "interface.h"
 
-const int GRAV = 5;
+const int GRAV = 1;
 
 int main( int argc, char* argv[] )
 {
@@ -17,7 +17,7 @@ int main( int argc, char* argv[] )
 	SDL_Rect sRect;
 	int deltaX = 0;
 	int deltaY = 0;
-	bool aerial = 0;
+	int aerial = 0;
 
 	/*Ghetto alpha-value. Not sure why we can't alpha value. This might change*/
 	int colorKey;
@@ -77,23 +77,20 @@ int main( int argc, char* argv[] )
 				printf("JOYSTICKS EXIST!\n");
 				break;
 			case SDL_KEYDOWN:
-				if(!aerial){
-					if(event.key.keysym.sym == game.input[0].key.keysym.sym) {
+				if(aerial == 0){
+					if(event.key.keysym.sym == game.input[0].key.keysym.sym && aerial == 0) {
 						deltaY = -25;
-						aerial = 1;
+					}
 					if(event.key.keysym.sym == game.input[2].key.keysym.sym) {
-						if(aerial) deltaX = -5;
-						else deltaX = -1;
+						deltaX = -3;
 					}
 					if(event.key.keysym.sym == game.input[3].key.keysym.sym) {
-						if(aerial) deltaX = 5;
-						else deltaX = 1;
+						deltaX = 3;
 					}
 				}
-				for(int i = 0; i < 10; i++){
+				for(int i = 4; i < 10; i++){
 					if(event.key.keysym.sym == game.input[i].key.keysym.sym) 
 						printf("%s pressed\n", game.inputName[i]);
-					if(i == 2) i += 2;
 				}
 				switch (event.key.keysym.sym) {
 				case SDLK_ESCAPE:
@@ -105,15 +102,15 @@ int main( int argc, char* argv[] )
 				}
 				break;
 			case SDL_KEYUP:
-				if(!aerial){
-					for(int i = 2; i < 4; i++)
+				if(aerial == 0){
+					for(int i = 2; i < 4; i++){
 						if(event.key.keysym.sym == game.input[i].key.keysym.sym)
 							deltaX = 0;
+					}
 				}
-				for(int i = 0; i < 10; i++){
+				for(int i = 4; i < 10; i++){
 					if(event.key.keysym.sym == game.input[i].key.keysym.sym) 
 						printf("%s released\n", game.inputName[i]);
-					if(i == 2) i += 2;
 				}
 
 				break;
@@ -121,6 +118,7 @@ int main( int argc, char* argv[] )
 
 		}
 		/* Movement currently determined by static deltas */
+		if(sRect.y < 330) aerial = 1;
 		sRect.x += deltaX;
 		sRect.y += deltaY;
 
@@ -135,13 +133,15 @@ int main( int argc, char* argv[] )
 			sRect.y = 330;
 
 		/*Enforcing gravity*/
-		if(aerial && sRect.y == 0) { aerial = 0; deltaX = 0; }
+		if(sRect.y == 330 && aerial == 1) { aerial = 0; deltaX = 0; }
 		if(aerial) deltaY += GRAV;
 
 		/*Refresh, not important just yet*/
 		SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
 		SDL_BlitSurface(sprite, NULL, screen, &sRect);
 		SDL_UpdateRect(screen, 0, 0, 0, 0);
+		while(SDL_GetTicks() % 17 != 0);
+
 	}
 
 
