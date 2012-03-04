@@ -13,11 +13,11 @@ const int GRAV = 1;
 int main( int argc, char* argv[] )
 {
 	/*Set up sprite stuff sprite*/
-	SDL_Surface *sprite, *sTemp, *bg;
-	SDL_Rect sRect;
-	int deltaX = 0;
-	int deltaY = 0;
+	SDL_Surface *p1sprite, *p2sprite, *sTemp, *bg;
+	SDL_Rect s1Rect, s2Rect;
+	int deltaX = 0, deltaY = 0;
 	int aerial = 0;
+	int sUp = 0, sDown = 0, sLeft = 0, sRight = 0;
 
 	/*Ghetto alpha-value. Not sure why we can't alpha value. This might change*/
 	int colorKey;
@@ -31,9 +31,9 @@ int main( int argc, char* argv[] )
 	/*Make a window*/
 	SDL_Surface* screen = SDL_SetVideoMode(640, 480, 0, 0);
 
-	/*Set up the sprite*/
+	/*Set up the p1sprite*/
 	sTemp = SDL_LoadBMP("SP.bmp");
-	sprite = SDL_DisplayFormat(sTemp);
+	p1sprite = SDL_DisplayFormat(sTemp);
 	SDL_FreeSurface(sTemp);
 
 	/*Background color, temporary until we have backgrounds*/
@@ -41,11 +41,11 @@ int main( int argc, char* argv[] )
 
 	/*Set the color key*/
 	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
-	SDL_SetColorKey(sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
+	SDL_SetColorKey(p1sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 
 	/*More sprite setup*/
-	sRect.x = 200;
-	sRect.y = 330;
+	s1Rect.x = 200;
+	s1Rect.y = 330;
 
 	/*Spawn the interface*/
 	interface game;
@@ -77,17 +77,19 @@ int main( int argc, char* argv[] )
 				printf("JOYSTICKS EXIST!\n");
 				break;
 			case SDL_KEYDOWN:
-				if(aerial == 0){
-					if(event.key.keysym.sym == game.input[0].key.keysym.sym && aerial == 0) {
-						deltaY = -23;
-					}
-					if(event.key.keysym.sym == game.input[2].key.keysym.sym) {
-						deltaX = -3;
-					}
-					if(event.key.keysym.sym == game.input[3].key.keysym.sym) {
-						deltaX = 3;
-					}
+				if(event.key.keysym.sym == game.input[0].key.keysym.sym) {
+					sUp = 1;
 				}
+				if(event.key.keysym.sym == game.input[1].key.keysym.sym) {
+					sDown = 1;
+				}
+				if(event.key.keysym.sym == game.input[2].key.keysym.sym) {
+					sLeft = 1;
+				}
+				if(event.key.keysym.sym == game.input[3].key.keysym.sym) {
+					sRight = 1;
+				}
+				
 				for(int i = 4; i < 10; i++){
 					if(event.key.keysym.sym == game.input[i].key.keysym.sym) 
 						printf("%s pressed\n", game.inputName[i]);
@@ -102,13 +104,19 @@ int main( int argc, char* argv[] )
 				}
 				break;
 			case SDL_KEYUP:
-				if(aerial == 0){
-					for(int i = 2; i < 4; i++){
-						if(event.key.keysym.sym == game.input[i].key.keysym.sym)
-							deltaX = 0;
-					}
+				if(event.key.keysym.sym == game.input[0].key.keysym.sym) {
+					sUp = 0;
 				}
-				for(int i = 4; i < 10; i++){
+				if(event.key.keysym.sym == game.input[1].key.keysym.sym) {
+					sDown = 0;
+				}
+				if(event.key.keysym.sym == game.input[2].key.keysym.sym) {
+					sLeft = 0;
+				}
+				if(event.key.keysym.sym == game.input[3].key.keysym.sym) {
+					sRight = 0;
+				}
+				for(int i = 0; i < 10; i++){
 					if(event.key.keysym.sym == game.input[i].key.keysym.sym) 
 						printf("%s released\n", game.inputName[i]);
 				}
@@ -118,28 +126,38 @@ int main( int argc, char* argv[] )
 
 		}
 		/* Movement currently determined by static deltas */
-		if(sRect.y < 330) aerial = 1;
-		sRect.x += deltaX;
-		sRect.y += deltaY;
+		if(s1Rect.y < 330) aerial = 1;
+		s1Rect.x += deltaX;
+		s1Rect.y += deltaY;
 
 		/* No escaping the screen */
-		if (sRect.x < -10)
-			sRect.x = -10;
-		else if (sRect.x > 560)
-			sRect.x = 560;
-		if (sRect.y < 0)
-			sRect.y = 0;
-		else if (sRect.y > 330)
-			sRect.y = 330;
+		if (s1Rect.x < -10)
+			s1Rect.x = -10;
+		else if (s1Rect.x > 560)
+			s1Rect.x = 560;
+		if (s1Rect.y < 0)
+			s1Rect.y = 0;
+		else if (s1Rect.y > 330)
+			s1Rect.y = 330;
 
 		/*Enforcing gravity*/
-		if(sRect.y == 330 && aerial == 1) { aerial = 0; deltaX = 0; }
+		if(s1Rect.y == 330 && aerial == 1) { 
+			aerial = 0; 
+		}
+		if(!aerial){
+			if(sUp) deltaY = -23;
+			else deltaY = 0;
+			if(sRight) deltaX = 3;
+			if(sLeft) deltaX = -3;
+			if((!sLeft && !sRight) || sDown == 1) deltaX = 0;
+		}
 		if(aerial) deltaY += GRAV;
 
 		/*Refresh, not important just yet*/
 		SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
-		SDL_BlitSurface(sprite, NULL, screen, &sRect);
+		SDL_BlitSurface(p1sprite, NULL, screen, &s1Rect);
 		SDL_UpdateRect(screen, 0, 0, 0, 0);
+		game.pushInput(event, sUp, sDown, sLeft, sRight);
 		while(SDL_GetTicks() % 17 != 0);
 
 	}

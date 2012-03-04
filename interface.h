@@ -16,4 +16,22 @@ public:
 	void keyConfig(int);	//Keyconfig. Sets up buttons so they're all dynamic-y and such
 	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
 	char * inputName[10];	//Input names. This is really just for housekeeping.
+	void pushInput(SDL_Event &, int, int, int, int);
+	void moveHook();
+	void resolve();
+	void draw();
+private:
+	int inputBuffer[16];
+	int state;
+	
+	/*Normals
+	
+	move * m5a();
+	move * m5b();
+	move * m5c();
+	move * m5d();
+	move * m6a();
+	smove * m236a();
+
+	*/
 };
