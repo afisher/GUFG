@@ -16,8 +16,8 @@ void interface::pushInput(SDL_Event & tick, int up, int down, int left, int righ
 		}
 		inputBuffer[0] = 0;
 	}
-	printf("Current input buffer: ");
-/*	for(int i = 16; i > 0; i--)
+/*	printf("Current input buffer: ");
+	for(int i = 16; i > 0; i--)
 		printf("%i", inputBuffer[i]);
 	printf("\n");
 */
