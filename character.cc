@@ -12,6 +12,8 @@ character::~character()
 	//Empty for now
 }
 
+/*Here begin move functions. Actually contemplating making this a class instead, but this might be simpler for now*/
+
 void character::m5A()
 {
 	//Print statement for now
