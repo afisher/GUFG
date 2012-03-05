@@ -10,7 +10,7 @@
 
 const int GRAV = 1;
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 	/*Set up sprite stuff sprite*/
 	SDL_Surface *p1sprite, *p2sprite, *sTemp, *bg;
