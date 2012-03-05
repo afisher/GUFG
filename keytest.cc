@@ -91,8 +91,13 @@ int main( int argc, char* argv[] )
 				}
 				
 				for(int i = 4; i < 10; i++){
-					if(event.key.keysym.sym == game.input[i].key.keysym.sym) 
-						printf("%s pressed\n", game.inputName[i]);
+					int a = 0;
+					if(event.key.keysym.sym == game.input[i].key.keysym.sym){
+						if(a != 0) printf("+"); 
+						a++;
+						printf("%s", game.inputName[i]); 
+					}
+					if(a > 0) printf(" pressed (%i)\n", a);
 				}
 				switch (event.key.keysym.sym) {
 				case SDLK_ESCAPE:
@@ -116,7 +121,7 @@ int main( int argc, char* argv[] )
 				if(event.key.keysym.sym == game.input[3].key.keysym.sym) {
 					sRight = 0;
 				}
-				for(int i = 0; i < 10; i++){
+				for(int i = 4; i < 10; i++){
 					if(event.key.keysym.sym == game.input[i].key.keysym.sym) 
 						printf("%s released\n", game.inputName[i]);
 				}

@@ -18,20 +18,14 @@ public:
 	char * inputName[10];	//Input names. This is really just for housekeeping.
 	void pushInput(SDL_Event &, int, int, int, int);
 	void moveHook();
-	void resolve();
-	void draw();
+	void resolve();		//This will eventually resolve actions (Such as a move hitting a player.) With only one player, this is not currently possible.
+	void draw();		//This will eventually draw everything. Right now the drawing is done in the main loop.
+
 private:
 	int inputBuffer[16];
 	int state;
-	
-	/*Normals
-	
-	move * m5a();
-	move * m5b();
-	move * m5c();
-	move * m5d();
-	move * m6a();
-	smove * m236a();
-
+	/*
+	player p1;		//Obviously the idea here is that we'll reckon players separately within the interface eventually.
+	player p2;		//But as it stands, there is only one player, and player is not a class. Etc. 
 	*/
 };
