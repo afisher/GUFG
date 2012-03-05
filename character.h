@@ -39,6 +39,9 @@ public:
 	void j5D();
 	void j5E();
 
+	/*I'm writing a special move hook in here for testing purposes. White will not have special moves once we implement any characters*/
+	void m236A();
+
 private:
 
 	char * initdir;
