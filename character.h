@@ -1,11 +1,15 @@
 #include "SDL.h"
+#include "move.h"
 #include <stdio.h>
+
 
 class character
 {
 public:
-	character();
-	~character();
+	character(); 	//Load the entire character into memory
+	~character();	//Free stuff
+
+	moveTrie * head;
 
 	/*Movement options. For now they are just moves, might treat them separately if it turns out that's 
 	better*/
@@ -44,5 +48,8 @@ public:
 
 private:
 
-	char * initdir;
-};
+	char * directory; //The name of the directory from which the character spawns. This is important for loading into memory
+	int state; 	//The current state of the character. This might need to be more variables. We'll see.
+
+
+};	

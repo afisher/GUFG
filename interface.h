@@ -8,6 +8,7 @@
  */
 
 #include "SDL.h"
+#include "character.h"
 #include <stdio.h>
 struct interface
 {
@@ -17,10 +18,10 @@ public:
 	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
 	char * inputName[10];	//Input names. This is really just for housekeeping.
 	void pushInput(SDL_Event &, int, int, int, int); //I know I know this is pretty ugly. Currently just exists to test the input buffer. Eventually will not be shit.
-	void moveHook();	//This will search a trie of move inputs with the input buffer. Thanks for the suggestion, Psy!
 	void resolve();		//This will eventually resolve actions (Such as a move hitting a player.) With only one player, this is not currently possible.
 	void draw();		//This will eventually draw everything. Right now the drawing is done in the main loop.
-
+	character * pick;
+		
 private:
 	int inputBuffer[16];
 	int state;

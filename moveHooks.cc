@@ -12,7 +12,7 @@ void interface::pushInput(SDL_Event & tick, int up, int down, int left, int righ
 
 	inputBuffer[0] = temp;
 	
-//	moveHook();
+//	pick.head.moveHook(0);
 
 	for(int i = 15; i >= 0; i--){
 		if(inputBuffer[i] != 0) inputBuffer[i+1] = inputBuffer[i];
@@ -26,8 +26,14 @@ void interface::pushInput(SDL_Event & tick, int up, int down, int left, int righ
 */
 }
 
-void interface::moveHook(int a, int b, int c, int d, int e)
+move * moveTrie::moveHook(int i)
 {
-	
-	return;
+	move * test;
+	for(i; i < 16; i++){
+		for(int j = 0; j < 13; j++)
+			test = child[j]->moveHook(i);
+		if(test != NULL) return test;
+	}
+	if(fish != NULL) return fish;
+	else return NULL;
 }
