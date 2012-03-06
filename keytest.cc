@@ -13,6 +13,9 @@ const int GRAV = 1;
 int main(int argc, char* argv[])
 {
 	/*Set up sprite stuff sprite*/
+	SDL_Init(SDL_INIT_JOYSTICK);
+	SDL_Joystick *stickTest;
+	stickTest = SDL_JoystickOpen(1);
 	SDL_Surface *p1sprite, *p2sprite, *sTemp, *bg;
 	SDL_Rect s1Rect, s2Rect;
 	int deltaX = 0, deltaY = 0;

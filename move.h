@@ -10,9 +10,11 @@ struct activeWindow{
 class move{
 public:
 	move();
+	move(char*, int);
 	~move();
 	void execute();	//Do the move. The char arg is just for testing.
 	int check(int, int);	//Check to see if the move is possible right now.
+	int input;
 private:
 	int frames;	//Number of frames.
 //	SDL_Surface *sprite, *hit, *hittable, *collision;
@@ -22,9 +24,14 @@ private:
 
 class moveTrie{
 public:
-	move * moveHook(int, int, int);
-	moveTrie ** child;
+	moveTrie();
+	moveTrie(move *);
+	~moveTrie();
+	move * moveHook(int[], int);
+	moveTrie * child[10];
 	move * fish; 		//Because it's what a hook catches! Okay, this name probably needs to change.
+	moveTrie * insert(int);
+	moveTrie * insert(int, move*);
 private:
 	int children;
 };
