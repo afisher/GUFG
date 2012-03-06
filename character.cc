@@ -3,6 +3,7 @@
 character::character() 
 //Character constructor. This loads the whole character into memory so that that we don't have disk reads during gameplay
 {
+	head = new moveTrie();
 	//Empty for now
 }
 
@@ -13,15 +14,3 @@ character::~character()
 }
 
 /*Here begin move functions. Actually contemplating making this a class instead, but this might be simpler for now*/
-
-void character::m5A()
-{
-	//Print statement for now
-	printf("5A hook detected");
-}
-
-void character::m236A()
-{
-	//Print statement for now
-	printf("236A hook detected");
-}

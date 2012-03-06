@@ -1,12 +1,8 @@
 #include "interface.h"
 
-void interface::pushInput(SDL_Event & tick, int up, int down, int left, int right)
+void interface::pushInput(int axis[4], int button[5])
 {
-	int temp = 5;
-	if(up == 1) temp += 3;
-	if(down == 1) temp -= 3;
-	if(left == 1) temp -= 1;
-	if(right == 1) temp += 1;
+	int temp = 5 + axis[0]*3 - axis[1]*3 - axis[2] + axis[3];
 
 //	if(temp != 5){	
 
