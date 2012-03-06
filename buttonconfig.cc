@@ -14,6 +14,7 @@ interface::interface()
 	for(int i = 0; i < 15; i++)
 		inputBuffer[i] = 0;
 	/*Yeah yeah, I know, char* to literal conversion. I'm lazy right now. Will fix later. Maybe with cstring*/
+	timer = 99;
 	inputName[0] = "Up\0";
 	inputName[1] = "Down\0";
 	inputName[2] = "Left\0";

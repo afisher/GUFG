@@ -17,7 +17,12 @@ int main(int argc, char* argv[])
 	SDL_Rect s1Rect, s2Rect;
 	int deltaX = 0, deltaY = 0;
 	int aerial = 0;
-	int sUp = 0, sDown = 0, sLeft = 0, sRight = 0;
+	int sAxis[4]; 
+	for(int i = 0; i < 5; i++)
+		sAxis[i] = 0;
+	int sButton[5];
+	for(int i = 0; i < 5; i++)
+		sButton[i] = 0;
 
 	/*Ghetto alpha-value. Not sure why we can't alpha value. This might change*/
 	int colorKey;
@@ -57,13 +62,12 @@ int main(int argc, char* argv[])
 	bool gameover = 0;
 
 	/*Loop of everything*/
-	while (!gameover)
-	{
+	while (!gameover){
 		/*Seek out event*/
-		for(int i = 0; i < 13; i++){
-			if (SDL_PollEvent(&event)) {
+		for(int i = 0; i < 14; i++){
+			if (SDL_PollEvent(&event)){
 				/*Do stuff with event*/
-				switch (event.type) {
+				switch (event.type){
 				/*Kill handler*/
 				case SDL_QUIT:
 					gameover = 1;
@@ -78,24 +82,24 @@ int main(int argc, char* argv[])
 					printf("JOYSTICKS EXIST!\n");
 					break;
 				case SDL_KEYDOWN:
-					if(event.key.keysym.sym == game.input[0].key.keysym.sym) {
-						sUp = 1;
-					}
-					if(event.key.keysym.sym == game.input[1].key.keysym.sym) {
-						sDown = 1;
-					}
-					if(event.key.keysym.sym == game.input[2].key.keysym.sym) {
-						sLeft = 1;
-					}
-					if(event.key.keysym.sym == game.input[3].key.keysym.sym) {
-						sRight = 1;
-					}
-					
-					for(int i = 4; i < 10; i++){
-						if(event.key.keysym.sym == game.input[i].key.keysym.sym){
-							printf("%s pressed\n", game.inputName[i]); 
-						}
-					}
+					if(event.key.keysym.sym == game.input[0].key.keysym.sym) 
+						sAxis[0] = 1;
+					if(event.key.keysym.sym == game.input[1].key.keysym.sym)
+						sAxis[1] = 1;
+					if(event.key.keysym.sym == game.input[2].key.keysym.sym)
+						sAxis[2] = 1;
+					if(event.key.keysym.sym == game.input[3].key.keysym.sym)
+						sAxis[3] = 1;
+					if(event.key.keysym.sym == game.input[4].key.keysym.sym)
+						sButton[0] = 1;
+					if(event.key.keysym.sym == game.input[5].key.keysym.sym)
+						sButton[1] = 1;
+					if(event.key.keysym.sym == game.input[6].key.keysym.sym)
+						sButton[2] = 1;
+					if(event.key.keysym.sym == game.input[7].key.keysym.sym)
+						sButton[3] = 1;
+					if(event.key.keysym.sym == game.input[8].key.keysym.sym)
+						sButton[4] = 1;
 					switch (event.key.keysym.sym) {
 					case SDLK_ESCAPE:
 					case SDLK_q:
@@ -106,21 +110,17 @@ int main(int argc, char* argv[])
 					}
 					break;
 					case SDL_KEYUP:
-					if(event.key.keysym.sym == game.input[0].key.keysym.sym) {
-						sUp = 0;
-					}
-					if(event.key.keysym.sym == game.input[1].key.keysym.sym) {
-						sDown = 0;
-					}
-					if(event.key.keysym.sym == game.input[2].key.keysym.sym) {
-						sLeft = 0;
-					}
-					if(event.key.keysym.sym == game.input[3].key.keysym.sym) {
-						sRight = 0;
-					}
-					for(int i = 4; i < 10; i++){
-						if(event.key.keysym.sym == game.input[i].key.keysym.sym) 
-							printf("%s released\n", game.inputName[i]);
+					if(event.key.keysym.sym == game.input[0].key.keysym.sym)
+						sAxis[0] = 0;
+					if(event.key.keysym.sym == game.input[1].key.keysym.sym)
+						sAxis[1] = 0;
+					if(event.key.keysym.sym == game.input[2].key.keysym.sym)
+						sAxis[2] = 0;
+					if(event.key.keysym.sym == game.input[3].key.keysym.sym) 
+						sAxis[3] = 0;
+					for(int i = 4; i < 9; i++){
+						if(event.key.keysym.sym == game.input[i].key.keysym.sym)
+							sButton[i-4] = 0;
 					}
 					break;
 				}
@@ -140,19 +140,26 @@ int main(int argc, char* argv[])
 			s1Rect.x = 560;
 		if (s1Rect.y < 0)
 			s1Rect.y = 0;
+		else if (s1Rect.x > 560)
+			s1Rect.x = 560;
+		if (s1Rect.y < 0)
+			s1Rect.y = 0;
+		else if (s1Rect.x > 560)
+			s1Rect.x = 560;
+		if (s1Rect.y < 0)
+			s1Rect.y = 0;
 		else if (s1Rect.y > 330)
 			s1Rect.y = 330;
 
 		/*Enforcing gravity*/
-		if(s1Rect.y == 330 && aerial == 1) { 
+		if(s1Rect.y == 330 && aerial == 1)  
 			aerial = 0; 
-		}
 		if(!aerial){
-			if(sUp) deltaY = -23;
+			if(sAxis[0]) deltaY = -23;
 			else deltaY = 0;
-			if(sRight) deltaX = 3;
-			if(sLeft) deltaX = -3;
-			if((!sLeft && !sRight) || sDown == 1) deltaX = 0;
+			if(sAxis[3]) deltaX = 3;
+			if(sAxis[2]) deltaX = -3;
+			if((!sAxis[2] && !sAxis[3]) || sAxis[1] == 1) deltaX = 0;
 		}
 		if(aerial) deltaY += GRAV;
 
@@ -160,15 +167,8 @@ int main(int argc, char* argv[])
 		SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
 		SDL_BlitSurface(p1sprite, NULL, screen, &s1Rect);
 		SDL_UpdateRect(screen, 0, 0, 0, 0);
-		game.pushInput(event, sUp, sDown, sLeft, sRight);
+		game.pushInput(sAxis, sButton);
 		while(SDL_GetTicks() % 17 != 0);
 
 	}
-
-
-	/*Quit SDL*/
-	SDL_Quit();
-
-	return 0;
 }
-
