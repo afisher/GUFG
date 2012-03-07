@@ -27,7 +27,7 @@ public:
 	moveTrie();
 	moveTrie(move *);
 	~moveTrie();
-	move * moveHook(int[], int);
+	move * moveHook(int[], int, void * l);
 	moveTrie * child[10];
 	move * fish; 		//Because it's what a hook catches! Okay, this name probably needs to change.
 	moveTrie * insert(int);

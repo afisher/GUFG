@@ -15,7 +15,7 @@ interface::interface()
 	for(int i = 0; i < 15; i++)
 		inputBuffer[i] = 5;
 	/*Yeah yeah, I know, char* to literal conversion. I'm lazy right now. Will fix later. Maybe with cstring*/
-	timer = 99;
+	timer = 5824;
 	inputName[0] = "Up\0";
 	inputName[1] = "Down\0";
 	inputName[2] = "Left\0";
@@ -58,4 +58,14 @@ void interface::keyConfig(int current)
 		}
 	}
 	configFlag == 0;
+}
+
+void interface::runTimer()
+{
+	if(timer % 59 == 42){
+
+		system("clear");
+		printf("%i seconds\n", (timer * 17 / 1000));
+	}
+	timer--;
 }
