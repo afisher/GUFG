@@ -8,14 +8,12 @@ void interface::pushInput(int axis[4], int down[5], int up[5])
 //	if(temp != 5){	
 	mv l = NULL;
 	inputBuffer[0] = temp;
-	if(down[0] == 1 || up[0] == 1) {
-		t = pick->head->moveHook(inputBuffer, 0, (void*)l, up, down);
-	}
-	if(t != NULL) t->execute();
-	
 	for(int i = 30; i > 0; i--){
 		inputBuffer[i] = inputBuffer[i-1];
 	}
+	t = pick->head->moveHook(inputBuffer, 0, (void*)l, down, up);
+	if(t != NULL) t->execute();
+	
 
 /*	printf("Current input buffer: ");
 	for(int i = 16; i > 0; i--)
@@ -28,7 +26,7 @@ move * moveTrie::moveHook(int inputBuffer[30], int i, void * l, int pos[5], int 
 {
 	moveTrie * test = NULL;
 	move * result = NULL;
-	for(int j = i; j < 30; j++){
+	for(int j = i; j < tolerance; j++){
 		test = child[inputBuffer[j]];
 		if(test != NULL){
 			result = test->moveHook(inputBuffer, j, l, pos, neg);
@@ -37,7 +35,8 @@ move * moveTrie::moveHook(int inputBuffer[30], int i, void * l, int pos[5], int 
 			}
 		}
 	}
-	if(fish != NULL) 
-		if(fish->check() == 1) return fish;
+	if(occupants != 0) 
+		for(int i = 0; i < occupants; i++)
+			if(fish[i].check(pos, neg) == 1) return &fish[i];
 	return NULL;
 }

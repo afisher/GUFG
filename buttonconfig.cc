@@ -12,7 +12,7 @@
 interface::interface()
 {
 	pick = new character;
-	for(int i = 0; i < 15; i++)
+	for(int i = 0; i < 40; i++)
 		inputBuffer[i] = 5;
 	timer = 5824;
 	/*Yeah yeah, I know, char* to literal conversion. I'm lazy right now. Will fix later. Maybe with cstring*/
