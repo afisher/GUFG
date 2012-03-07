@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 		posEdge[i] = 0;
 		negEdge[i] = 0;
 	}
-	
+
 
 	/*Ghetto alpha-value. Not sure why we can't alpha value. This might change*/
 	int colorKey;
@@ -125,13 +125,12 @@ int main(int argc, char* argv[])
 					for(int i = 4; i < 9; i++)
 						if(event.key.keysym.sym == game.input[i].key.keysym.sym)
 							negEdge[i-4] = 1;
-					
 					break;
 				}
-	
+
 			}
 		}
-		
+
 		/* Movement currently determined by static deltas */
 		if(s1Rect.y < 330) aerial = 1;
 		s1Rect.x += deltaX;
@@ -156,8 +155,8 @@ int main(int argc, char* argv[])
 			s1Rect.y = 330;
 
 		/*Enforcing gravity*/
-		if(s1Rect.y == 330 && aerial == 1)  
-			aerial = 0; 
+		if(s1Rect.y == 330 && aerial == 1)
+			aerial = 0;
 		if(!aerial){
 			if(sAxis[0]) deltaY = -30;
 			else deltaY = 0;
