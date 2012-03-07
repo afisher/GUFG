@@ -1,21 +1,21 @@
 #include "interface.h"
 
 typedef void (*mv)(void);
-void interface::pushInput(int axis[4], int button[5])
+void interface::pushInput(int axis[4], int down[5], int up[5])
 {
 	int temp = 5 + axis[0]*3 - axis[1]*3 - axis[2] + axis[3];
 	move * t = NULL;
 //	if(temp != 5){	
 	mv l = NULL;
 	inputBuffer[0] = temp;
-
-	if(button[0] == 1) t = pick->head->moveHook(inputBuffer, 0, (void*)l);
+	if(down[0] == 1 || up[0] == 1) {
+		t = pick->head->moveHook(inputBuffer, 0, (void*)l, up, down);
+	}
 	if(t != NULL) t->execute();
 	
-	for(int i = 15; i >= 0; i--){
-		if(inputBuffer[i] != 0) inputBuffer[i+1] = inputBuffer[i];
+	for(int i = 40; i > 0; i--){
+		inputBuffer[i] = inputBuffer[i-1];
 	}
-	inputBuffer[0] = 0;
 
 /*	printf("Current input buffer: ");
 	for(int i = 16; i > 0; i--)
@@ -24,18 +24,20 @@ void interface::pushInput(int axis[4], int button[5])
 */
 }
 
-move * moveTrie::moveHook(int inputBuffer[16], int i, void * l)
+move * moveTrie::moveHook(int inputBuffer[16], int i, void * l, int pos[5], int neg[5])
 {
-	moveTrie * test;
-	move * result;
-	for(i; i < 16; i++){
-		test = child[inputBuffer[i]];
+	moveTrie * test = NULL;
+	move * result = NULL;
+	for(int j = i; j < 40; j++){
+		test = child[inputBuffer[j]];
 		if(test != NULL){
-			result = test->moveHook(inputBuffer, i, l);
-			if(result != NULL) return result;
+			result = test->moveHook(inputBuffer, j, l, pos, neg);
+			if(result != NULL) {
+				return result;
+			}
 		}
 	}
 	if(fish != NULL) 
-		if(fish->check(0, 0) == 1) return fish;
+		if(fish->check() == 1) return fish;
 	return NULL;
 }

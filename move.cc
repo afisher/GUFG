@@ -2,6 +2,7 @@
 move::move()
 {
 	name = NULL;
+	cost = 0;
 }
 
 move::move(char * n, int i)
@@ -15,9 +16,9 @@ move::~move()
 	delete [] name;
 }
 
-int move::check(int meter, int state)
+int move::check(/*int meter, int state*/)
 {
-	if(meter < cost) return 0;
+	//if(meter < cost) return 0;
 //	if(state != allowedState) return 0;
 	return 1;
 }
@@ -36,23 +37,27 @@ moveTrie::moveTrie()
 
 moveTrie::moveTrie(move * a)
 {
-	fish = a;
 	for(int i = 0; i < 10; i++)
-	child[i] = NULL;
+		child[i] = NULL;
+	fish = a;
 }
 
 moveTrie * moveTrie::insert(int a, move * b)
 {
-	if(a > 9 || a < 1);
-	else child[a] = new moveTrie(b);
-	return child[a];
+	if(a < 10 && a > 0){
+		child[a] = new moveTrie(b);
+		return child[a];
+	}
+	else return NULL;
 }
 
 moveTrie * moveTrie::insert(int a)
 {
-	if(a > 9 || a < 1);
-	else child[a] = new moveTrie();
-	return child[a];
+	if(a < 10 && a > 0) {
+		child[a] = new moveTrie();
+		return child[a];
+	}
+	else return NULL;
 }
 
 moveTrie::~moveTrie()

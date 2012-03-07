@@ -17,14 +17,14 @@ public:
 	void keyConfig(int);	//Keyconfig. Sets up buttons so they're all dynamic-y and such
 	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
 	char * inputName[10];	//Input names. This is really just for housekeeping.
-	void pushInput(int[], int[]); //I know I know this is pretty ugly. Currently just exists to test the input buffer. Eventually will not be shit.
+	void pushInput(int[], int[], int[]); //I know I know this is pretty ugly. Currently just exists to test the input buffer. Eventually will not be shit.
 	void resolve();		//This will eventually resolve actions (Such as a move hitting a player.) With only one player, this is not currently possible.
 	void draw();		//This will eventually draw everything. Right now the drawing is done in the main loop.
 	character * pick;
 	void runTimer();
 		
 private:
-	int inputBuffer[16];
+	int inputBuffer[40];
 	int state;
 	int timer;
 	/*
