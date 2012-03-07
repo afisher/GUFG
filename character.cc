@@ -8,12 +8,19 @@ character::character()
 	
 	temp = new move("A\0", 5);
 	head = new moveTrie(temp);
-	
-	curr = head->insert(6);
+
+	temp = new move("6A\0", 6);
+	curr = head->insert(6, temp);
+
 	temp = new move("236A\0", 236);
 	curr = curr->insert(3);
 	curr = curr->insert(2, temp); 
 	
+	temp = new move("236236A\0", 236236);
+	curr = curr->insert(6);
+	curr = curr->insert(3);
+	curr = curr->insert(2, temp);
+
 	curr = head->insert(2);
 	temp = new move("252A\0", 252);
 	curr = curr->insert(5);
