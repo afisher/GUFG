@@ -13,7 +13,7 @@ void interface::pushInput(int axis[4], int down[5], int up[5])
 	}
 	if(t != NULL) t->execute();
 	
-	for(int i = 40; i > 0; i--){
+	for(int i = 30; i > 0; i--){
 		inputBuffer[i] = inputBuffer[i-1];
 	}
 
@@ -24,11 +24,11 @@ void interface::pushInput(int axis[4], int down[5], int up[5])
 */
 }
 
-move * moveTrie::moveHook(int inputBuffer[16], int i, void * l, int pos[5], int neg[5])
+move * moveTrie::moveHook(int inputBuffer[30], int i, void * l, int pos[5], int neg[5])
 {
 	moveTrie * test = NULL;
 	move * result = NULL;
-	for(int j = i; j < 40; j++){
+	for(int j = i; j < 30; j++){
 		test = child[inputBuffer[j]];
 		if(test != NULL){
 			result = test->moveHook(inputBuffer, j, l, pos, neg);
