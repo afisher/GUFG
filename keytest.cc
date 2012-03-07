@@ -8,7 +8,7 @@
 
 #include "interface.h"
 
-const int GRAV = 1;
+const int GRAV = 3;
 
 int main(int argc, char* argv[])
 {
@@ -66,6 +66,7 @@ int main(int argc, char* argv[])
 
 	/*Loop of everything*/
 	while (!gameover){
+		while(SDL_GetTicks() % 17 != 1);
 		/*Seek out event*/
 		for(int i = 0; i < 14; i++){
 			if (SDL_PollEvent(&event)){
@@ -158,10 +159,10 @@ int main(int argc, char* argv[])
 		if(s1Rect.y == 330 && aerial == 1)  
 			aerial = 0; 
 		if(!aerial){
-			if(sAxis[0]) deltaY = -23;
+			if(sAxis[0]) deltaY = -30;
 			else deltaY = 0;
-			if(sAxis[3]) deltaX = 3;
-			if(sAxis[2]) deltaX = -3;
+			if(sAxis[3]) deltaX = 5;
+			if(sAxis[2]) deltaX = -5;
 			if((!sAxis[2] && !sAxis[3]) || sAxis[1] == 1) deltaX = 0;
 		}
 		if(aerial) deltaY += GRAV;
@@ -171,6 +172,7 @@ int main(int argc, char* argv[])
 		SDL_BlitSurface(p1sprite, NULL, screen, &s1Rect);
 		SDL_UpdateRect(screen, 0, 0, 0, 0);
 		game.pushInput(sAxis, sButton);
+		game.runTimer();
 		while(SDL_GetTicks() % 17 != 0);
 
 	}
