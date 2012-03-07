@@ -14,8 +14,8 @@ interface::interface()
 	pick = new character;
 	for(int i = 0; i < 15; i++)
 		inputBuffer[i] = 5;
-	/*Yeah yeah, I know, char* to literal conversion. I'm lazy right now. Will fix later. Maybe with cstring*/
 	timer = 5824;
+	/*Yeah yeah, I know, char* to literal conversion. I'm lazy right now. Will fix later. Maybe with cstring*/
 	inputName[0] = "Up\0";
 	inputName[1] = "Down\0";
 	inputName[2] = "Left\0";
@@ -39,13 +39,28 @@ void interface::keyConfig(int current)
 	/*Set up dummy event*/
 	SDL_Event temp; 
 
-	/*Ghetto flag for seeing if we have already config'd*/
+	/*Flag for breaking the loop*/
 	bool configFlag = 0;
 
 	/*Run a simple event poll*/
 	while (configFlag == 0){
 		if (SDL_PollEvent(&temp)) {
 			switch (temp.type) {
+			case SDL_JOYAXISMOTION:
+				if(temp.jaxis.value != 0)
+				{
+					input[current] = temp;
+					printf("Set to Joystick %i axis %i value %i\n", temp.jaxis.which, temp.jaxis.axis, temp.jaxis.value);
+					configFlag = 1;
+				}
+				break;
+			case SDL_JOYBUTTONDOWN:
+				{
+					input[current] = temp;
+					printf("Set to Joystick %i button %i\n", temp.jbutton.which, temp.jbutton.button);
+					configFlag = 1;
+				}
+				break;
 			case SDL_KEYDOWN:
 				input[current] = temp;
 				printf("Set to keyboard %s\n", SDL_GetKeyName(input[current].key.keysym.sym));
@@ -57,7 +72,6 @@ void interface::keyConfig(int current)
 			}
 		}
 	}
-	configFlag == 0;
 }
 
 void interface::runTimer()

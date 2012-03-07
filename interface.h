@@ -13,7 +13,7 @@
 struct interface
 {
 public:
-	interface(); 		//Constructor! Currently does almost nothing.
+	interface(); 		//Constructor!
 	void keyConfig(int);	//Keyconfig. Sets up buttons so they're all dynamic-y and such
 	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
 	char * inputName[10];	//Input names. This is really just for housekeeping.
@@ -24,11 +24,11 @@ public:
 	void runTimer();
 		
 private:
-	int inputBuffer[40];
+	int inputBuffer[30];
 	int state;
 	int timer;
-	/*
-	player p1;		//Obviously the idea here is that we'll reckon players separately within the interface eventually.
-	player p2;		//But as it stands, there is only one player, and player is not a class. Etc. 
-	*/
+/*
+	player p1;		
+	player p2;		
+*/
 };

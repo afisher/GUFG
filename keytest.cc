@@ -13,9 +13,6 @@ const int GRAV = 3;
 int main(int argc, char* argv[])
 {
 	/*Set up sprite stuff sprite*/
-	SDL_Init(SDL_INIT_JOYSTICK);
-	SDL_Joystick *stickTest;
-	stickTest = SDL_JoystickOpen(1);
 	SDL_Surface *p1sprite, *p2sprite, *sTemp, *bg;
 	SDL_Rect s1Rect, s2Rect;
 	int deltaX = 0, deltaY = 0;
@@ -36,6 +33,8 @@ int main(int argc, char* argv[])
 
 	/*Start SDL*/
 	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_JOYSTICK);
+	SDL_JoystickOpen(1);
 
 	/*WM stuff blah blah*/
 	SDL_WM_SetCaption("GUFG", "GUFG");
@@ -82,32 +81,33 @@ int main(int argc, char* argv[])
 					break;
 
 				/*Keyboard handler. Maybe I'll optimize such that the game knows if it even needs to check this (EG if sticks are used)*/
-				case SDL_JOYBUTTONUP:
-				case SDL_JOYBUTTONDOWN:
-				case SDL_JOYBALLMOTION:
-				case SDL_JOYHATMOTION:
 				case SDL_JOYAXISMOTION:
-					printf("JOYSTICKS EXIST!\n");
+					for(int i = 0; i < 4; i++)
+						if(event.jaxis.which == game.input[i].jaxis.which && event.jaxis.axis == game.input[i].jaxis.axis && event.jaxis.value == game.input[i].jaxis.value)
+							sAxis[i] = 1;
+
+					for(int i = 0; i < 4; i++)
+						if(event.jaxis.which == game.input[i].jaxis.which && event.jaxis.axis == game.input[i].jaxis.axis && event.jaxis.value == 0)
+							sAxis[i] = 0;
+					break;
+				case SDL_JOYBUTTONDOWN:
+					for(int i = 4; i < 9; i++)
+						if(event.jbutton.which == game.input[i].jbutton.which && event.jbutton.button == game.input[i].jbutton.button)
+							posEdge[i-4] = 1;
+					break;
+				case SDL_JOYBUTTONUP:
+					for(int i = 4; i < 9; i++)
+						if(event.jbutton.which == game.input[i].jbutton.which && event.jbutton.button == game.input[i].jbutton.button)
+							negEdge[i-4] = 1;
 					break;
 				case SDL_KEYDOWN:
-					if(event.key.keysym.sym == game.input[0].key.keysym.sym) 
-						sAxis[0] = 1;
-					if(event.key.keysym.sym == game.input[1].key.keysym.sym)
-						sAxis[1] = 1;
-					if(event.key.keysym.sym == game.input[2].key.keysym.sym)
-						sAxis[2] = 1;
-					if(event.key.keysym.sym == game.input[3].key.keysym.sym)
-						sAxis[3] = 1;
-					if(event.key.keysym.sym == game.input[4].key.keysym.sym)
-						posEdge[0] = 1;
-					if(event.key.keysym.sym == game.input[5].key.keysym.sym)
-						posEdge[1] = 1;
-					if(event.key.keysym.sym == game.input[6].key.keysym.sym)
-						posEdge[2] = 1;
-					if(event.key.keysym.sym == game.input[7].key.keysym.sym)
-						posEdge[3] = 1;
-					if(event.key.keysym.sym == game.input[8].key.keysym.sym)
-						posEdge[4] = 1;
+					for(int i = 0; i < 4; i++)
+						if(event.key.keysym.sym == game.input[i].key.keysym.sym) 
+							sAxis[i] = 1;
+
+					for(int i = 4; i < 9; i++)
+						if(event.key.keysym.sym == game.input[i].key.keysym.sym)
+							posEdge[i-4] = 1;
 					switch (event.key.keysym.sym) {
 					case SDLK_ESCAPE:
 					case SDLK_q:
@@ -117,19 +117,15 @@ int main(int argc, char* argv[])
 						break;
 					}
 					break;
-					case SDL_KEYUP:
-					if(event.key.keysym.sym == game.input[0].key.keysym.sym)
-						sAxis[0] = 0;
-					if(event.key.keysym.sym == game.input[1].key.keysym.sym)
-						sAxis[1] = 0;
-					if(event.key.keysym.sym == game.input[2].key.keysym.sym)
-						sAxis[2] = 0;
-					if(event.key.keysym.sym == game.input[3].key.keysym.sym) 
-						sAxis[3] = 0;
-					for(int i = 4; i < 9; i++){
+				case SDL_KEYUP:
+					for(int i = 0; i < 4; i++)
+						if(event.key.keysym.sym == game.input[i].key.keysym.sym)
+							sAxis[i] = 0;
+
+					for(int i = 4; i < 9; i++)
 						if(event.key.keysym.sym == game.input[i].key.keysym.sym)
 							negEdge[i-4] = 1;
-					}
+					
 					break;
 				}
 	
