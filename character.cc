@@ -5,12 +5,25 @@ character::character()
 {
 	moveTrie * curr;
 	move * temp;
+	
 	temp = new move("A\0", 5);
 	head = new moveTrie(temp);
+	
 	curr = head->insert(6);
 	temp = new move("236A\0", 236);
 	curr = curr->insert(3);
 	curr = curr->insert(2, temp); 
+	
+	curr = head->insert(2);
+	temp = new move("252A\0", 252);
+	curr = curr->insert(5);
+	curr = curr->insert(2, temp);
+
+	curr = head->insert(4);
+	temp = new move("214A\0", 214);
+	curr = curr->insert(1);
+	curr = curr->insert(2, temp);
+
 	//Empty for now
 }
 

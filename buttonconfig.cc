@@ -62,10 +62,6 @@ void interface::keyConfig(int current)
 
 void interface::runTimer()
 {
-	if(timer % 59 == 42){
-
-		system("clear");
-		printf("%i seconds\n", (timer * 17 / 1000));
-	}
-	timer--;
+	if(timer > 0) timer--;
 }
+

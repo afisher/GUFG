@@ -23,9 +23,13 @@ int main(int argc, char* argv[])
 	int sAxis[4]; 
 	for(int i = 0; i < 5; i++)
 		sAxis[i] = 0;
-	int sButton[5];
-	for(int i = 0; i < 5; i++)
-		sButton[i] = 0;
+	int posEdge[5];
+	int negEdge[5];
+	for(int i = 0; i < 5; i++){
+		posEdge[i] = 0;
+		negEdge[i] = 0;
+	}
+	
 
 	/*Ghetto alpha-value. Not sure why we can't alpha value. This might change*/
 	int colorKey;
@@ -95,15 +99,15 @@ int main(int argc, char* argv[])
 					if(event.key.keysym.sym == game.input[3].key.keysym.sym)
 						sAxis[3] = 1;
 					if(event.key.keysym.sym == game.input[4].key.keysym.sym)
-						sButton[0] = 1;
+						posEdge[0] = 1;
 					if(event.key.keysym.sym == game.input[5].key.keysym.sym)
-						sButton[1] = 1;
+						posEdge[1] = 1;
 					if(event.key.keysym.sym == game.input[6].key.keysym.sym)
-						sButton[2] = 1;
+						posEdge[2] = 1;
 					if(event.key.keysym.sym == game.input[7].key.keysym.sym)
-						sButton[3] = 1;
+						posEdge[3] = 1;
 					if(event.key.keysym.sym == game.input[8].key.keysym.sym)
-						sButton[4] = 1;
+						posEdge[4] = 1;
 					switch (event.key.keysym.sym) {
 					case SDLK_ESCAPE:
 					case SDLK_q:
@@ -124,7 +128,7 @@ int main(int argc, char* argv[])
 						sAxis[3] = 0;
 					for(int i = 4; i < 9; i++){
 						if(event.key.keysym.sym == game.input[i].key.keysym.sym)
-							sButton[i-4] = 0;
+							negEdge[i-4] = 1;
 					}
 					break;
 				}
@@ -171,7 +175,11 @@ int main(int argc, char* argv[])
 		SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
 		SDL_BlitSurface(p1sprite, NULL, screen, &s1Rect);
 		SDL_UpdateRect(screen, 0, 0, 0, 0);
-		game.pushInput(sAxis, sButton);
+		game.pushInput(sAxis, posEdge, negEdge);
+		for(int i = 0; i < 5; i++){
+			posEdge[i] = 0;
+			negEdge[i] = 0;
+		}
 		game.runTimer();
 		while(SDL_GetTicks() % 17 != 0);
 
