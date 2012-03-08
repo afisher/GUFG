@@ -11,17 +11,48 @@
 #include "interface.h"
 interface::interface()
 {
+	/*Start SDL*/
+	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_JOYSTICK);
+	/*WM stuff blah blah*/
+	SDL_WM_SetCaption("GUFG", "GUFG");
+	screen = SDL_SetVideoMode(640, 480, 0, 0);
+
+	/*Set up the p1sprite*/
+	SDL_Surface *sTemp = SDL_LoadBMP("SP.bmp");
+	p1sprite = SDL_DisplayFormat(sTemp);
+	SDL_FreeSurface(sTemp);
+
+	/*Background color, temporary until we have backgrounds*/
+	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
+
+	/*Ghetto alpha-value. Not sure why we can't alpha value. This might change*/
+	int colorKey;
+
+	/*Set the color key*/
+	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
+	SDL_SetColorKey(p1sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
+
+	/*Flag to kill the game*/
+	gameover = 0;
+
+	/*Build the character. Eventually this will probably be a function.*/
 	pick = new character;
-	for(int i = 0; i < 4; i++) 
-		sAxis[i] = 0;
+
+	/*Set up input buffers and joysticks*/
 	for(int i = 0; i < SDL_NumJoysticks(); i++)
 		SDL_JoystickOpen(i);
 	for(int i = 0; i < 30; i++)
 		inputBuffer[i] = 5;
+
+	/*Initialize input containers*/
+	for(int i = 0; i < 4; i++) 
+		sAxis[i] = 0;
 	for(int i = 0; i < 5; i++){
 		posEdge[i] = 0;
 		negEdge[i] = 0;
 	}
+
 	deltaX = 0;
 	s1Rect.x = 200;
 	s1Rect.y = 330;
@@ -195,4 +226,11 @@ void interface::readInput()
 			}
 		}
 	}
+}
+
+void interface::draw()
+{
+	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
+	SDL_BlitSurface(p1sprite, NULL, screen, &s1Rect);
+	SDL_UpdateRect(screen, 0, 0, 0, 0);
 }
