@@ -12,12 +12,21 @@
 interface::interface()
 {
 	pick = new character;
+	for(int i = 0; i < 4; i++) 
+		sAxis[i] = 0;
 	for(int i = 0; i < SDL_NumJoysticks(); i++)
 		SDL_JoystickOpen(i);
 	for(int i = 0; i < 30; i++)
 		inputBuffer[i] = 5;
+	for(int i = 0; i < 5; i++){
+		posEdge[i] = 0;
+		negEdge[i] = 0;
+	}
 	deltaX = 0;
+	s1Rect.x = 200;
+	s1Rect.y = 330;
 	deltaY = 0;
+	aerial = 0;
 	grav = 3;
 	timer = 5824;
 	/*Yeah yeah, I know, char* to literal conversion. I'm lazy right now. Will fix later. Maybe with cstring*/
@@ -84,3 +93,106 @@ void interface::runTimer()
 	if(timer > 0) timer--;
 }
 
+void interface::resolve()
+{
+	/* Movement currently determined by static deltas */
+	if(s1Rect.y < 330) aerial = 1;
+	s1Rect.x += deltaX;
+	s1Rect.y += deltaY;
+
+	/* No escaping the screen */
+	if (s1Rect.x < -10)
+	s1Rect.x = -10;
+	else if (s1Rect.x > 560)
+		s1Rect.x = 560;
+	if (s1Rect.y < 0)
+		s1Rect.y = 0;
+	else if (s1Rect.x > 560)
+		s1Rect.x = 560;
+	if (s1Rect.y < 0)
+		s1Rect.y = 0;
+	else if (s1Rect.x > 560)
+		s1Rect.x = 560;
+	if (s1Rect.y < 0)
+		s1Rect.y = 0;
+	else if (s1Rect.y > 330)
+		s1Rect.y = 330;
+
+	/*Enforcing gravity*/
+	if(s1Rect.y == 330 && aerial == 1)
+		aerial = 0;
+	if(!aerial){
+		if(sAxis[0]) deltaY = -35;
+		else deltaY = 0;
+		if(sAxis[3]) deltaX = 5;
+		if(sAxis[2]) deltaX = -5;
+		if((!sAxis[2] && !sAxis[3]) || sAxis[1] == 1) deltaX = 0;
+	}
+	if(aerial) deltaY += grav;
+	for(int i = 0; i < 5; i++){
+		posEdge[i] = 0;
+		negEdge[i] = 0;
+	}
+
+}
+
+void interface::readInput()
+
+{
+	/*Make our dummy event for polls*/
+	SDL_Event event;
+	for(int i = 0; i < 14; i++){
+		if (SDL_PollEvent(&event)){
+			/*Do stuff with event*/
+			switch (event.type){
+			/*Kill handler*/
+			case SDL_QUIT:
+				gameover = 1;
+				break;
+				/*Keyboard handler. Maybe I'll optimize such that the knows if it even needs to check this (EG if sticks are used)*/
+			case SDL_JOYAXISMOTION:
+				for(int i = 0; i < 4; i++)
+					if(event.jaxis.which == input[i].jaxis.which && event.jaxis.axis == input[i].jaxis.axis && event.jaxis.value == input[i].jaxis.value)
+						sAxis[i] = 1;
+					for(int i = 0; i < 4; i++)
+					if(event.jaxis.which == input[i].jaxis.which && event.jaxis.axis == input[i].jaxis.axis && event.jaxis.value == 0)
+						sAxis[i] = 0;
+				break;
+			case SDL_JOYBUTTONDOWN:
+				for(int i = 4; i < 9; i++)
+					if(event.jbutton.which == input[i].jbutton.which && event.jbutton.button == input[i].jbutton.button)
+						posEdge[i-4] = 1;
+				break;
+			case SDL_JOYBUTTONUP:
+				for(int i = 4; i < 9; i++)
+					if(event.jbutton.which == input[i].jbutton.which && event.jbutton.button == input[i].jbutton.button)
+						negEdge[i-4] = 1;
+				break;
+			case SDL_KEYDOWN:
+				for(int i = 0; i < 4; i++)
+					if(event.key.keysym.sym == input[i].key.keysym.sym) 
+						sAxis[i] = 1;
+					for(int i = 4; i < 9; i++)
+					if(event.key.keysym.sym == input[i].key.keysym.sym)
+						posEdge[i-4] = 1;
+				switch (event.key.keysym.sym) {
+				case SDLK_ESCAPE:
+				case SDLK_q:
+					gameover = 1;
+					break;
+				default:
+					break;
+				}
+				break;
+			case SDL_KEYUP:
+				for(int i = 0; i < 4; i++)
+					if(event.key.keysym.sym == input[i].key.keysym.sym)
+						sAxis[i] = 0;
+					for(int i = 4; i < 9; i++)
+					if(event.key.keysym.sym == input[i].key.keysym.sym)
+						negEdge[i-4] = 1;
+				break;
+			}
+		}
+	}
+}
