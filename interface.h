@@ -21,8 +21,10 @@ public:
 	void resolve();		//This will eventually resolve actions (Such as a move hitting a player.) With only one player, this is not currently possible.
 	void draw();		//This will eventually draw everything. Right now the drawing is done in the main loop.
 	character * pick;
-	void runTimer();
-		
+	void runTimer();	
+	int grav;
+	int deltaX;
+	int deltaY;
 private:
 	int inputBuffer[30];
 	int state;

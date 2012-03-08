@@ -8,14 +8,12 @@
 
 #include "interface.h"
 
-const int GRAV = 3;
 
 int main(int argc, char* argv[])
 {
 	/*Set up sprite stuff sprite*/
 	SDL_Surface *p1sprite, *p2sprite, *sTemp, *bg;
 	SDL_Rect s1Rect, s2Rect;
-	int deltaX = 0, deltaY = 0;
 	int aerial = 0;
 	int sAxis[4]; 
 	for(int i = 0; i < 5; i++)
@@ -34,7 +32,6 @@ int main(int argc, char* argv[])
 	/*Start SDL*/
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Init(SDL_INIT_JOYSTICK);
-	SDL_JoystickOpen(1);
 
 	/*WM stuff blah blah*/
 	SDL_WM_SetCaption("GUFG", "GUFG");
@@ -133,8 +130,8 @@ int main(int argc, char* argv[])
 
 		/* Movement currently determined by static deltas */
 		if(s1Rect.y < 330) aerial = 1;
-		s1Rect.x += deltaX;
-		s1Rect.y += deltaY;
+		s1Rect.x += game.deltaX;
+		s1Rect.y += game.deltaY;
 
 		/* No escaping the screen */
 		if (s1Rect.x < -10)
@@ -158,13 +155,13 @@ int main(int argc, char* argv[])
 		if(s1Rect.y == 330 && aerial == 1)
 			aerial = 0;
 		if(!aerial){
-			if(sAxis[0]) deltaY = -30;
-			else deltaY = 0;
-			if(sAxis[3]) deltaX = 5;
-			if(sAxis[2]) deltaX = -5;
-			if((!sAxis[2] && !sAxis[3]) || sAxis[1] == 1) deltaX = 0;
+			if(sAxis[0]) game.deltaY = -35;
+			else game.deltaY = 0;
+			if(sAxis[3]) game.deltaX = 5;
+			if(sAxis[2]) game.deltaX = -5;
+			if((!sAxis[2] && !sAxis[3]) || sAxis[1] == 1) game.deltaX = 0;
 		}
-		if(aerial) deltaY += GRAV;
+		if(aerial) game.deltaY += game.grav;
 
 		/*Refresh, not important just yet*/
 		SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));

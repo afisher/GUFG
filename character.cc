@@ -10,33 +10,28 @@ character::character()
 	temp = new move("A\0", "A\0", 0);
 	head = new moveTrie(temp);
 
-	temp = new move("6A\0", "A\0", 0);
+	temp = new move("B\0", "B\0", 0);
+	head->insert(temp);
+
+	temp = new move("C\0", "C\0", 0);
+	head->insert(temp);
+	
+	temp = new move("D\0", "D\0", 0);
+	head->insert(temp);
+	
+	temp = new move("E\0", "E\0", 0);
+	head->insert(temp);
+
+	temp = new move("6B\0", "B\0", 0);
 	curr = head->insert(6, temp, 1);
-
+	
 	temp = new move("236A\0", "A\0", 1);
-	curr = curr->insert(3);
-	curr->insert(2, temp); 
-	temp = new move("236BC\0", "BC\0", 1);
-	curr = curr->insert(2, temp);
-	
-	temp = new move("236236A\0", "A\0", 1);
-	curr = curr->insert(6);
+	curr = head->insert(6);
 	curr = curr->insert(3);
 	curr = curr->insert(2, temp);
-	
-	temp = new move("623A\0", "B\0", 1);
-	curr = head->insert(3);
-	curr = curr->insert(2);
-	curr = curr->insert(6, temp);
 
-
-	curr = head->insert(2);
-	temp = new move("22A\0", "A\0", 1);
-	curr = curr->insert(5);
-	curr = curr->insert(2, temp);
-
+	temp = new move("214B\0", "B\0", 1);
 	curr = head->insert(4);
-	temp = new move("214A\0", "A\0", 1);
 	curr = curr->insert(1);
 	curr = curr->insert(2, temp);
 
