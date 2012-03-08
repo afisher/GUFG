@@ -12,8 +12,13 @@
 interface::interface()
 {
 	pick = new character;
+	for(int i = 0; i < SDL_NumJoysticks(); i++)
+		SDL_JoystickOpen(i);
 	for(int i = 0; i < 30; i++)
 		inputBuffer[i] = 5;
+	deltaX = 0;
+	deltaY = 0;
+	grav = 3;
 	timer = 5824;
 	/*Yeah yeah, I know, char* to literal conversion. I'm lazy right now. Will fix later. Maybe with cstring*/
 	inputName[0] = "Up\0";
