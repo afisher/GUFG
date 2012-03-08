@@ -1,4 +1,5 @@
 #include "SDL.h"
+#include "frame.h"
 
 struct activeWindow{
 	int start;

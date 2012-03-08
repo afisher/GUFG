@@ -25,6 +25,7 @@ public:
 	void runTimer();
 
 
+	frame * current;
 	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
 	SDL_Surface *p1sprite, *p2sprite, *bg, *screen;
 	character * pick;
