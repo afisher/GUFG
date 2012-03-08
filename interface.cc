@@ -133,7 +133,7 @@ void interface::resolve()
 		posEdge[i] = 0;
 		negEdge[i] = 0;
 	}
-
+	runTimer();
 }
 
 void interface::readInput()
