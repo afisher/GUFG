@@ -59,11 +59,6 @@ int main(int argc, char* argv[])
 		SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
 		SDL_BlitSurface(p1sprite, NULL, screen, &game.s1Rect);
 		SDL_UpdateRect(screen, 0, 0, 0, 0);
-		for(int i = 0; i < 5; i++){
-			game.posEdge[i] = 0;
-			game.negEdge[i] = 0;
-		}
-		game.runTimer();
 		while(SDL_GetTicks() % 17 != 0);
 
 	}
