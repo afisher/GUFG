@@ -12,6 +12,8 @@ class move{
 public:
 	move();
 	move(char*);
+	move(char*, int);
+	move(char*, char*, bool, int);
 	move(char*, char*, bool);
 	~move();
 	void execute();			//Do the move. 

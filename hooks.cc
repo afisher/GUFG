@@ -12,7 +12,7 @@ void interface::pushInput(int axis[4], int down[5], int up[5])
 		inputBuffer[i] = inputBuffer[i-1];
 	}
 	t = pick->head->moveHook(inputBuffer, 0, 0, down, up);
-	if(t != NULL) t->execute();
+	if(t != NULL && current == NULL) t->execute(current);
 	
 
 /*	printf("Current input buffer: ");

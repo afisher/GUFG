@@ -23,6 +23,7 @@ public:
 	void resolve();		//This will eventually resolve actions (Such as a move hitting a player.) With only one player, this is not currently possible.
 	void draw();		//This will eventually draw everything. Right now the drawing is done in the main loop.
 	void runTimer();
+	void spriteInit();
 
 
 	frame * current;
@@ -31,6 +32,7 @@ public:
 	character * pick;
 	int grav;
 	char * inputName[10];	//Input names. This is really just for housekeeping.
+	int colorKey;
 	int deltaX;
 	SDL_Rect s1Rect, s2Rect;
 	int deltaY;
@@ -38,6 +40,7 @@ public:
 	int posEdge[5];
 	int negEdge[5];
 	int aerial;
+	int sFlag;
 	int gameover;
 private:
 	int inputBuffer[30];
