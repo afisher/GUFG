@@ -6,7 +6,7 @@ character::character()
 	/*Currently I'm using this as a test case for my move hooks*/
 	moveTrie * curr;
 	move * temp;
-	
+
 	temp = new move("A\0", "A\0", 0);
 	head = new moveTrie(temp);
 
@@ -21,8 +21,8 @@ character::character()
 	
 	temp = new move("E\0", "E\0", 0);
 	head->insert(temp);
-
-	temp = new move("6B\0", "B\0", 0);
+	
+	temp = new move("6B\0", "B\0", 0, 30);
 	curr = head->insert(6, temp, 1);
 	
 	temp = new move("236A\0", "A\0", 1);

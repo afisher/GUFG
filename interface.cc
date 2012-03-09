@@ -18,20 +18,12 @@ interface::interface()
 	SDL_WM_SetCaption("GUFG", "GUFG");
 	screen = SDL_SetVideoMode(640, 480, 0, 0);
 
+	current = NULL;
 	/*Set up the p1sprite*/
-	SDL_Surface *sTemp = SDL_LoadBMP("SP.bmp");
-	p1sprite = SDL_DisplayFormat(sTemp);
-	SDL_FreeSurface(sTemp);
+	spriteInit();
 
 	/*Background color, temporary until we have backgrounds*/
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
-
-	/*Ghetto alpha-value. Not sure why we can't alpha value. This might change*/
-	int colorKey;
-
-	/*Set the color key*/
-	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
-	SDL_SetColorKey(p1sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 
 	/*Flag to kill the game*/
 	gameover = 0;
@@ -79,7 +71,7 @@ interface::interface()
 	}
 }
 
-void interface::keyConfig(int current)
+void interface::keyConfig(int curr)
 {
 	/*Set up dummy event*/
 	SDL_Event temp; 
@@ -94,21 +86,19 @@ void interface::keyConfig(int current)
 			case SDL_JOYAXISMOTION:
 				if(temp.jaxis.value != 0)
 				{
-					input[current] = temp;
+					input[curr] = temp;
 					printf("Set to Joystick %i axis %i value %i\n", temp.jaxis.which, temp.jaxis.axis, temp.jaxis.value);
 					configFlag = 1;
 				}
 				break;
 			case SDL_JOYBUTTONDOWN:
-				{
-					input[current] = temp;
-					printf("Set to Joystick %i button %i\n", temp.jbutton.which, temp.jbutton.button);
-					configFlag = 1;
-				}
+				input[curr] = temp;
+				printf("Set to Joystick %i button %i\n", temp.jbutton.which, temp.jbutton.button);
+				configFlag = 1;
 				break;
 			case SDL_KEYDOWN:
-				input[current] = temp;
-				printf("Set to keyboard %s\n", SDL_GetKeyName(input[current].key.keysym.sym));
+				input[curr] = temp;
+				printf("Set to keyboard %s\n", SDL_GetKeyName(input[curr].key.keysym.sym));
 				configFlag = 1;
 				break;
 			default: 
@@ -164,6 +154,13 @@ void interface::resolve()
 		posEdge[i] = 0;
 		negEdge[i] = 0;
 	}
+	if(current != NULL){
+		p1sprite = SDL_DisplayFormat(current->sprite);
+		SDL_SetColorKey(p1sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
+		current = current->next;
+		sFlag = 0;
+	}
+	else if(!sFlag) spriteInit();
 	runTimer();
 }
 
@@ -233,4 +230,17 @@ void interface::draw()
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
 	SDL_BlitSurface(p1sprite, NULL, screen, &s1Rect);
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
+}
+
+void interface::spriteInit()
+{
+	SDL_Surface *sTemp = SDL_LoadBMP("SP.bmp");
+	p1sprite = SDL_DisplayFormat(sTemp);
+	SDL_FreeSurface(sTemp);
+	/*Ghetto alpha-value. Not sure why we can't alpha value. This might change*/
+
+	/*Set the color key*/
+	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
+	SDL_SetColorKey(p1sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
+	sFlag = 1;
 }

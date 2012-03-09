@@ -12,6 +12,46 @@ move::move(char * n)
 	for(int i = 0; i < 5; i++)
 		button[i] = 0;
 	special = 0;
+	start = NULL;
+}
+
+move::move(char * n, int l)
+{
+	name = n;
+	for(int i = 0; i < 5; i++)
+		button[i] = 0;
+	special = 0;
+	start = new frame(n, l);
+}
+
+move::move(char* n, char *b, bool s, int l)
+{
+	int r = strlen(b);
+	for(int i = 0; i < 5; i++)
+		button[i] = 0;
+	name = n;
+	for(int i = 0; i < r; i++){
+		switch(b[i]){
+		case 'A':
+			button[0] = 1;
+			break;
+		case 'B':
+			button[1] = 1;
+			break;
+		case 'C':
+			button[2] = 1;
+			break;
+		case 'D':
+			button[3] = 1;
+			break;
+		case 'E':
+			button[4] = 1;
+			break;
+		}
+
+	}
+	special = s;
+	start = new frame(n, l);
 }
 
 move::move(char* n, char * b, bool s)
@@ -41,12 +81,13 @@ move::move(char* n, char * b, bool s)
 
 	}
 	special = s;
-				
+	start = NULL;
 }
 
 move::~move()
 {
 	delete [] name;
+	delete start;
 }
 
 int move::check(int pos[5], int neg[5])
@@ -72,7 +113,8 @@ void move::execute()
 
 void move::execute(frame *& curr)
 {
-	curr = start;
+	if(start != NULL) curr = start;
+	else printf("Hook for %s detected\n", name);
 }
 
 moveTrie::moveTrie()
