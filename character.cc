@@ -9,7 +9,7 @@ character::character()
 
 	temp = new move("A\0", "A\0", 0);
 	head = new moveTrie(temp);
-
+/*
 	temp = new move("B\0", "B\0", 0);
 	head->insert(temp);
 
@@ -21,10 +21,10 @@ character::character()
 	
 	temp = new move("E\0", "E\0", 0);
 	head->insert(temp);
-	
+//*/
 	temp = new move("6B\0", "B\0", 0, 4);
 	curr = head->insert(6, temp, 1);
-	
+/*	
 	temp = new move("236A\0", "A\0", 1);
 	curr = head->insert(6);
 	curr = curr->insert(3);
@@ -34,7 +34,7 @@ character::character()
 	curr = head->insert(4);
 	curr = curr->insert(1);
 	curr = curr->insert(2, temp);
-
+*/
 }
 
 character::~character()

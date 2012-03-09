@@ -21,24 +21,21 @@ void frame::init(char * name)
 frame::frame(char * name, int n)
 {
 	int l = strlen(name);
-	char num[n];
-	char * bfName = new char[l+6+n];
+	char num[n/10+1];	
 	char * fName;
-	fName = new char[l+6+n/10];
-	strcpy(bfName, name);
-	strcat(bfName, "#");
-	strcpy(fName, bfName);
-	strcat(fName, "0.bmp");
+	fName = new char[l+7+n/10];
+	strcpy(fName, name);
+	strcat(fName, "#0");
 	init(fName);
 	delete [] fName;
 //	printf("%s: %i\n", fName, l);
 	frame * x = this;
 	for(int i = 1 ; i < n; i++){
 		fName = new char[l+6+n];
-		strcpy(fName, bfName);
+		strcpy(fName, name);
+		strcat(fName, "#");
 		sprintf(num, "%i", i);
 		strcat(fName, num);
-		strcat(fName, ".bmp");
 		printf("%s\n", fName);
 		ifstream z(fName);
 		if(z != NULL){
@@ -51,7 +48,6 @@ frame::frame(char * name, int n)
 		}
 		delete [] fName;
 	}
-	delete [] bfName;
 }
 
 frame::~frame()
