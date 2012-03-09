@@ -70,6 +70,11 @@ void move::execute()
 	printf("Hook for %s detected\n", name);
 }
 
+void move::execute(frame *& curr)
+{
+	curr = start;
+}
+
 moveTrie::moveTrie()
 {
 	for(int i = 0; i < 10; i++)
