@@ -3,7 +3,7 @@
 class frame{
 public:
 	frame();
-	frame(char *);
+	void init(char *);
 	frame(char *, int);
 	~frame();
 	frame * play(SDL_Surface *&);

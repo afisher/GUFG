@@ -1,49 +1,57 @@
 #include "frame.h"
 #include <cstring>
 #include <stdio.h>
+#include <iostream>
+using namespace std;
+#include <fstream>
 frame::frame()
 {
         sprite = NULL;
         next = NULL;
 }
 
-frame::frame(char * name)
+void frame::init(char * name)
 {
-	int l = strlen(name);
-	char * fName = new char[l+5];
-	strcpy(fName, name);
-	fName[l] = '.';
-	fName[l+1] = 'b';
-	fName[l+2] = 'm';
-	fName[l+3] = 'p';
-	fName[l+4] = '\0';
-        SDL_Surface * temp = SDL_LoadBMP(fName);
+        SDL_Surface * temp = SDL_LoadBMP(name);
         sprite = SDL_DisplayFormat(temp);
         SDL_FreeSurface(temp);
         next = NULL;
-	delete [] fName;
 }
 
 frame::frame(char * name, int n)
 {
 	int l = strlen(name);
-	char * fName = new char[l+5];
-	strcpy(fName, name);
-	fName[l] = '.';
-	fName[l+1] = 'b';
-	fName[l+2] = 'm';
-	fName[l+3] = 'p';
-	fName[l+4] = '\0';
+	char num[n];
+	char * bfName = new char[l+6+n];
+	char * fName;
+	fName = new char[l+6+n/10];
+	strcpy(bfName, name);
+	strcat(bfName, "#");
+	strcpy(fName, bfName);
+	strcat(fName, "0.bmp");
+	init(fName);
+	delete [] fName;
 //	printf("%s: %i\n", fName, l);
 	frame * x = this;
-        SDL_Surface * temp = SDL_LoadBMP(fName);
-        sprite = SDL_DisplayFormat(temp);
-        SDL_FreeSurface(temp);
-	for(int i = 0; i < n; i++){
-		x->next = new frame(name);
-		x = x->next;
+	for(int i = 1 ; i < n; i++){
+		fName = new char[l+6+n];
+		strcpy(fName, bfName);
+		sprintf(num, "%i", i);
+		strcat(fName, num);
+		strcat(fName, ".bmp");
+		printf("%s\n", fName);
+		ifstream z(fName);
+		if(z != NULL){
+			x->next = new frame();
+			x = x->next;
+			x->init(fName);
+		} else {
+			x->next = NULL;
+			i = n;
+		}
+		delete [] fName;
 	}
-	delete [] fName;
+	delete [] bfName;
 }
 
 frame::~frame()
