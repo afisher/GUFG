@@ -14,9 +14,11 @@ public:
 	move(char*);
 	move(char*, char*, bool);
 	~move();
-	void execute();	//Do the move. The char arg is just for testing.
+	void execute();			//Do the move. 
 	int check(int[], int[]);	//Check to see if the move is possible right now.
+	void execute(frame *&);
 	int input;
+	frame * start;
 private:
 	int frames;	//Number of frames.
 //	SDL_Surface *sprite, *hit, *hittable, *collision;
