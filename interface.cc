@@ -117,23 +117,15 @@ void interface::runTimer()
 void interface::resolve()
 {
 	/* Movement currently determined by static deltas */
-	if(s1Rect.y < 330) aerial = 1;
+	if(s1Rect.y < 480 - s1Rect.h) aerial = 1;
 	s1Rect.x += deltaX;
 	s1Rect.y += deltaY;
 
 	/* No escaping the screen */
-	if (s1Rect.x < -10)
-	s1Rect.x = -10;
-	else if (s1Rect.x > 560)
-		s1Rect.x = 560;
-	if (s1Rect.y < 0)
-		s1Rect.y = 0;
-	else if (s1Rect.x > 560)
-		s1Rect.x = 560;
-	if (s1Rect.y < 0)
-		s1Rect.y = 0;
-	else if (s1Rect.x > 560)
-		s1Rect.x = 560;
+	if (s1Rect.x < 0)
+		s1Rect.x = 0;
+	else if (s1Rect.x > 640 - s1Rect.w)
+		s1Rect.x = 640 - s1Rect.w;
 	if (s1Rect.y < 0)
 		s1Rect.y = 0;
 	else if (s1Rect.y > 330)
@@ -159,6 +151,9 @@ void interface::resolve()
 		SDL_SetColorKey(p1sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 		current = current->next;
 		sFlag = 0;
+/*		Testing stuff, to be deleted later.
+		deltaX = 0;
+//*/
 	}
 	else if(!sFlag) spriteInit();
 	runTimer();

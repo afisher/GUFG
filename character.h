@@ -48,7 +48,7 @@ public:
 
 private:
 
-	char * directory; //The name of the directory from which the character spawns. This is important for loading into memory
+	char * name; //The name of the directory from which the character spawns. This is important for loading into memory
 	int state; 	//The current state of the character. This might need to be more variables. We'll see.
 
 
