@@ -7,7 +7,7 @@ public:
 	frame(char *, int);
 	~frame();
 	frame * play(SDL_Surface *&);
-	SDL_Surface *sprite;
+	SDL_Surface *sprite, *fSprite;
 //	SDL_Rect *hitbox, *collision, *hittable;
 	frame * next;
 };

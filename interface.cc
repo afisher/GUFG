@@ -9,6 +9,7 @@
  */
 
 #include "interface.h"
+#include <cstring>
 interface::interface()
 {
 	/*Start SDL*/
@@ -18,6 +19,9 @@ interface::interface()
 	SDL_WM_SetCaption("GUFG", "GUFG");
 	screen = SDL_SetVideoMode(640, 480, 0, 0);
 
+	/*Build the character. Eventually this will probably be a function.*/
+	pick = new character;
+	
 	current = NULL;
 	/*Set up the p1sprite*/
 	spriteInit();
@@ -28,8 +32,6 @@ interface::interface()
 	/*Flag to kill the game*/
 	gameover = 0;
 
-	/*Build the character. Eventually this will probably be a function.*/
-	pick = new character;
 
 	/*Set up input buffers and joysticks*/
 	for(int i = 0; i < SDL_NumJoysticks(); i++)
@@ -52,6 +54,7 @@ interface::interface()
 	aerial = 0;
 	grav = 3;
 	timer = 5824;
+	facing = 1;
 	/*Yeah yeah, I know, char* to literal conversion. I'm lazy right now. Will fix later. Maybe with cstring*/
 	inputName[0] = "Up\0";
 	inputName[1] = "Down\0";
@@ -130,6 +133,8 @@ void interface::resolve()
 		s1Rect.y = 0;
 	else if (s1Rect.y > 330)
 		s1Rect.y = 330;
+	if (s1Rect.x < 250 && facing == -1) { facing = 1; sFlag = 0;}
+	else if (s1Rect.x > 250 && facing == 1) { facing = -1; sFlag = 0;}
 
 	/*Enforcing gravity*/
 	if(s1Rect.y == 330 && aerial == 1)
@@ -147,7 +152,12 @@ void interface::resolve()
 		negEdge[i] = 0;
 	}
 	if(current != NULL){
-		p1sprite = SDL_DisplayFormat(current->sprite);
+		int displacement = p1sprite->w;
+		if(facing == -1) { 
+			p1sprite = SDL_DisplayFormat(current->fSprite);
+			s1Rect.x += (displacement - p1sprite->w);
+		}
+		else p1sprite = SDL_DisplayFormat(current->sprite);
 		SDL_SetColorKey(p1sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 		current = current->next;
 		sFlag = 0;
@@ -229,7 +239,12 @@ void interface::draw()
 
 void interface::spriteInit()
 {
-	SDL_Surface *sTemp = SDL_LoadBMP("SP.bmp");
+	char nsprt[strlen(pick->name)+4];
+	strcpy(nsprt, pick->name);
+	strcat(nsprt, "/");
+	strcat(nsprt, "N");
+	if(facing == -1) strcat(nsprt, "F");
+	SDL_Surface *sTemp = SDL_LoadBMP(nsprt);
 	p1sprite = SDL_DisplayFormat(sTemp);
 	SDL_FreeSurface(sTemp);
 	/*Ghetto alpha-value. Not sure why we can't alpha value. This might change*/
@@ -239,3 +254,4 @@ void interface::spriteInit()
 	SDL_SetColorKey(p1sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 	sFlag = 1;
 }
+

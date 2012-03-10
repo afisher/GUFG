@@ -24,7 +24,7 @@ public:
 	void draw();		//This will eventually draw everything. Right now the drawing is done in the main loop.
 	void runTimer();
 	void spriteInit();
-
+	void flip();
 
 	frame * current;
 	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
@@ -42,6 +42,7 @@ public:
 	int aerial;
 	int sFlag;
 	int gameover;
+	int facing;
 private:
 	int inputBuffer[30];
 	int state;
