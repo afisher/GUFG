@@ -29,7 +29,6 @@ move::move(char* n, char *b, bool s, int l)
 	int r = strlen(b);
 	for(int i = 0; i < 5; i++)
 		button[i] = 0;
-	name = n;
 	for(int i = 0; i < r; i++){
 		switch(b[i]){
 		case 'A':
