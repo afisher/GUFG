@@ -12,9 +12,15 @@ frame::frame()
 
 void frame::init(char * name)
 {
+	char fName[strlen(name) + 2];
+	strcpy(fName, name);
+	strcat(fName, "F");
         SDL_Surface * temp = SDL_LoadBMP(name);
         sprite = SDL_DisplayFormat(temp);
         SDL_FreeSurface(temp);
+	temp = SDL_LoadBMP(fName);
+	fSprite = SDL_DisplayFormat(temp);
+	SDL_FreeSurface(temp);
         next = NULL;
 }
 

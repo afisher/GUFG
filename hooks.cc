@@ -3,7 +3,7 @@
 typedef void (*mv)(void);
 void interface::pushInput(int axis[4], int down[5], int up[5])
 {
-	int temp = 5 + axis[0]*3 - axis[1]*3 - axis[2] + axis[3];
+	int temp = 5 + axis[0]*3 - axis[1]*3 - axis[2]*facing + axis[3]*facing;
 	move * t = NULL;
 //	if(temp != 5){	
 	mv l = NULL;

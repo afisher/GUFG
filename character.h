@@ -45,10 +45,10 @@ public:
 
 	/*I'm writing a special move hook in here for testing purposes. White will not have special moves once we implement any characters*/
 	void m236A();
+	char * name; //The name of the directory from which the character spawns. This is important for loading into memory
 
 private:
 
-	char * name; //The name of the directory from which the character spawns. This is important for loading into memory
 	int state; 	//The current state of the character. This might need to be more variables. We'll see.
 
 
