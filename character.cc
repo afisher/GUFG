@@ -8,7 +8,7 @@ character::character()
 	moveTrie * curr;
 	move * temp;
 
-	temp = new move("A\0", "A\0", 0, 11);
+	temp = new move("White/A\0", "A\0", 0, 11);
 	head = new moveTrie(temp);
 
 	temp = new move("B\0", "B\0", 0);
@@ -17,7 +17,7 @@ character::character()
 	temp = new move("C\0", "C\0", 0);
 	head->insert(temp);
 	
-	temp = new move("D\0", "D\0", 0, 0);
+	temp = new move("White/D\0", "D\0", 0, 0);
 	head->insert(temp);
 	
 	temp = new move("E\0", "E\0", 0);
