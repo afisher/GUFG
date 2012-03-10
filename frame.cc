@@ -36,7 +36,6 @@ frame::frame(char * name, int n)
 		strcat(fName, "#");
 		sprintf(num, "%i", i);
 		strcat(fName, num);
-		printf("%s\n", fName);
 		ifstream z(fName);
 		if(z != NULL){
 			x->next = new frame();
