@@ -1,0 +1,3 @@
+class red : public character{
+	
+};

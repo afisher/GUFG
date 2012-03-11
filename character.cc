@@ -6,35 +6,21 @@ character::character()
 	name = "White";
 	/*Currently I'm using this as a test case for my move hooks*/
 	moveTrie * curr;
-	move * temp;
 
-	temp = new move("White/A\0", "A\0", 0, 11);
-	head = new moveTrie(temp);
+	head = new moveTrie(new move("White/A\0", "A\0", 0, 11));
+	head->insert(new move("B\0", "B\0", 0));
+	head->insert(new move("C\0", "C\0", 0));
+	head->insert(new move("White/D\0", "D\0", 0, 0));
+	head->insert(new move("E\0", "E\0", 0));
 
-	temp = new move("B\0", "B\0", 0);
-	head->insert(temp);
-
-	temp = new move("C\0", "C\0", 0);
-	head->insert(temp);
-	
-	temp = new move("White/D\0", "D\0", 0, 0);
-	head->insert(temp);
-	
-	temp = new move("E\0", "E\0", 0);
-	head->insert(temp);
-
-	temp = new move("6B\0", "B\0", 0);
-	curr = head->insert(6, temp, 1);
-	
-	temp = new move("236A\0", "A\0", 1);
+	curr = head->insert(6, new move("6B\0", "B\0", 0), 1);	
 	curr = head->insert(6);
 	curr = curr->insert(3);
-	curr = curr->insert(2, temp);
+	curr = curr->insert(2, new move("236A\0", "A\0", 1));
 
-	temp = new move("214B\0", "B\0", 1);
 	curr = head->insert(4);
 	curr = curr->insert(1);
-	curr = curr->insert(2, temp);
+	curr = curr->insert(2, new move("214B\0", "B\0", 1));
 
 }
 
