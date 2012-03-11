@@ -67,6 +67,8 @@ interface::interface()
 	aerial = 0;
 	grav = 3;
 	timer = 5824;
+	spriteInit();
+	draw();
 	/*Yeah yeah, I know, char* to literal conversion. I'm lazy right now. Will fix later. Maybe with cstring*/
 	inputName[0] = "Up\0";
 	inputName[1] = "Down\0";
@@ -86,7 +88,6 @@ interface::interface()
 	}
 	
 	/*Set up the p1sprite*/
-	spriteInit();
 }
 
 void interface::keyConfig(int curr)
