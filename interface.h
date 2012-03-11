@@ -10,7 +10,7 @@
 #include "SDL.h"
 #include <stdio.h>
 #include "player.h"
-struct interface
+class interface
 {
 public:
 	interface(); 		//Constructor!
@@ -26,7 +26,7 @@ public:
 	void spriteInit();
 	void flip();
 
-	player p1, p2;
+	player *p1, *p2;	
 	frame * current;
 	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
 	SDL_Surface *p1sprite, *p2sprite, *bg, *screen;
@@ -34,12 +34,11 @@ public:
 	int grav;
 	char * inputName[10];	//Input names. This is really just for housekeeping.
 	int colorKey;
-	int deltaX;
+	int deltaX, deltaY;
 	SDL_Rect s1Rect, s2Rect;
-	int deltaY;
-	int sAxis[4]; 
-	int posEdge[5];
-	int negEdge[5];
+	int sAxis1[4], sAxis2[4]; 
+	int posEdge1[5], posEdge2[4];
+	int negEdge1[5], negEdge2[4];
 	int aerial;
 	int sFlag;
 	int gameover;
