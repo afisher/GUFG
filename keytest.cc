@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 	while (!game.gameover){
 		while(SDL_GetTicks() % 17 != 1);
 		game.readInput();
-		game.pushInput(game.sAxis, game.posEdge, game.negEdge);
+		game.pushInput(game.sAxis1, game.posEdge1, game.negEdge1);
 		game.resolve();
 		game.draw();
 		while(SDL_GetTicks() % 17 != 0);

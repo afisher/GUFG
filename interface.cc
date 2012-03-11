@@ -19,12 +19,25 @@ interface::interface()
 	SDL_WM_SetCaption("GUFG", "GUFG");
 	screen = SDL_SetVideoMode(640, 480, 0, 0);
 
+	/*Set up input buffers and joysticks*/
+	for(int i = 0; i < SDL_NumJoysticks(); i++)
+		SDL_JoystickOpen(i);
+
+	for(int i = 0; i < 30; i++)
+		inputBuffer[i] = 5;
+
+/*	printf("Player 1:\n");
+	p1 = new player;
+
+	printf("Player 2:\n");
+	p2 = new player;*/
+
 	/*Build the character. Eventually this will probably be a function.*/
 	pick = new character;
-	
+	p1sprite = NULL;
+	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
 	current = NULL;
-	/*Set up the p1sprite*/
-	spriteInit();
+	facing = 1;
 
 	/*Background color, temporary until we have backgrounds*/
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
@@ -33,28 +46,27 @@ interface::interface()
 	gameover = 0;
 
 
-	/*Set up input buffers and joysticks*/
-	for(int i = 0; i < SDL_NumJoysticks(); i++)
-		SDL_JoystickOpen(i);
-	for(int i = 0; i < 30; i++)
-		inputBuffer[i] = 5;
 
 	/*Initialize input containers*/
 	for(int i = 0; i < 4; i++) 
-		sAxis[i] = 0;
+	{
+		sAxis1[i] = 0;
+		sAxis2[i] = 0;
+	}
 	for(int i = 0; i < 5; i++){
-		posEdge[i] = 0;
-		negEdge[i] = 0;
+		posEdge1[i] = 0;
+		negEdge1[i] = 0;
+		posEdge2[i] = 0;
+		negEdge2[i] = 0;
 	}
 
 	deltaX = 0;
-	s1Rect.x = 200;
+	s1Rect.x = 100;
 	s1Rect.y = 330;
 	deltaY = 0;
 	aerial = 0;
 	grav = 3;
 	timer = 5824;
-	facing = 1;
 	/*Yeah yeah, I know, char* to literal conversion. I'm lazy right now. Will fix later. Maybe with cstring*/
 	inputName[0] = "Up\0";
 	inputName[1] = "Down\0";
@@ -72,6 +84,9 @@ interface::interface()
 		printf("Please enter a command for %s\n", inputName[i]);
 		keyConfig(i);
 	}
+	
+	/*Set up the p1sprite*/
+	spriteInit();
 }
 
 void interface::keyConfig(int curr)
@@ -112,6 +127,7 @@ void interface::keyConfig(int curr)
 	}
 }
 
+
 void interface::runTimer()
 {
 	if(timer > 0) timer--;
@@ -120,37 +136,41 @@ void interface::runTimer()
 void interface::resolve()
 {
 	/* Movement currently determined by static deltas */
-	if(s1Rect.y < 480 - s1Rect.h) aerial = 1;
+	if(s1Rect.y + s1Rect.h < 480) aerial = 1;
 	s1Rect.x += deltaX;
 	s1Rect.y += deltaY;
 
 	/* No escaping the screen */
 	if (s1Rect.x < 0)
 		s1Rect.x = 0;
-	else if (s1Rect.x > 640 - s1Rect.w)
+	else if (s1Rect.x + s1Rect.w > 640)
 		s1Rect.x = 640 - s1Rect.w;
 	if (s1Rect.y < 0)
 		s1Rect.y = 0;
-	else if (s1Rect.y > 330)
-		s1Rect.y = 330;
+	else if (s1Rect.y + s1Rect.h > 480)
+		s1Rect.y = 480 - s1Rect.h;
 	if (s1Rect.x < 250 && facing == -1) { facing = 1; sFlag = 0;}
 	else if (s1Rect.x > 250 && facing == 1) { facing = -1; sFlag = 0;}
 
 	/*Enforcing gravity*/
-	if(s1Rect.y == 330 && aerial == 1)
+	if(s1Rect.y + s1Rect.h == 480 && aerial == 1)
 		aerial = 0;
 	if(!aerial){
-		if(sAxis[0]) deltaY = -35;
+		if(sAxis1[0]) deltaY = -35;
 		else deltaY = 0;
-		if(sAxis[3]) deltaX = 5;
-		if(sAxis[2]) deltaX = -5;
-		if((!sAxis[2] && !sAxis[3]) || sAxis[1] == 1) deltaX = 0;
+		if(sAxis1[3]) deltaX = 5;
+		if(sAxis1[2]) deltaX = -5;
+		if((!sAxis1[2] && !sAxis1[3]) || sAxis1[1] == 1) deltaX = 0;
 	}
 	if(aerial) deltaY += grav;
+	
+	/*Reinitialize inputs*/
 	for(int i = 0; i < 5; i++){
-		posEdge[i] = 0;
-		negEdge[i] = 0;
+		posEdge1[i] = 0;
+		negEdge1[i] = 0;
 	}
+
+	/*Doing moves*/
 	if(current != NULL){
 		int displacement = p1sprite->w;
 		if(facing == -1) { 
@@ -158,7 +178,6 @@ void interface::resolve()
 			s1Rect.x += (displacement - p1sprite->w);
 		}
 		else p1sprite = SDL_DisplayFormat(current->sprite);
-		SDL_SetColorKey(p1sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 		current = current->next;
 		sFlag = 0;
 /*		Testing stuff, to be deleted later.
@@ -170,7 +189,6 @@ void interface::resolve()
 }
 
 void interface::readInput()
-
 {
 	/*Make our dummy event for polls*/
 	SDL_Event event;
@@ -186,28 +204,28 @@ void interface::readInput()
 			case SDL_JOYAXISMOTION:
 				for(int i = 0; i < 4; i++)
 					if(event.jaxis.which == input[i].jaxis.which && event.jaxis.axis == input[i].jaxis.axis && event.jaxis.value == input[i].jaxis.value)
-						sAxis[i] = 1;
+						sAxis1[i] = 1;
 					for(int i = 0; i < 4; i++)
 					if(event.jaxis.which == input[i].jaxis.which && event.jaxis.axis == input[i].jaxis.axis && event.jaxis.value == 0)
-						sAxis[i] = 0;
+						sAxis1[i] = 0;
 				break;
 			case SDL_JOYBUTTONDOWN:
 				for(int i = 4; i < 9; i++)
 					if(event.jbutton.which == input[i].jbutton.which && event.jbutton.button == input[i].jbutton.button)
-						posEdge[i-4] = 1;
+						posEdge1[i-4] = 1;
 				break;
 			case SDL_JOYBUTTONUP:
 				for(int i = 4; i < 9; i++)
 					if(event.jbutton.which == input[i].jbutton.which && event.jbutton.button == input[i].jbutton.button)
-						negEdge[i-4] = 1;
+						negEdge1[i-4] = 1;
 				break;
 			case SDL_KEYDOWN:
 				for(int i = 0; i < 4; i++)
 					if(event.key.keysym.sym == input[i].key.keysym.sym) 
-						sAxis[i] = 1;
+						sAxis1[i] = 1;
 					for(int i = 4; i < 9; i++)
 					if(event.key.keysym.sym == input[i].key.keysym.sym)
-						posEdge[i-4] = 1;
+						posEdge1[i-4] = 1;
 				switch (event.key.keysym.sym) {
 				case SDLK_ESCAPE:
 				case SDLK_q:
@@ -220,10 +238,10 @@ void interface::readInput()
 			case SDL_KEYUP:
 				for(int i = 0; i < 4; i++)
 					if(event.key.keysym.sym == input[i].key.keysym.sym)
-						sAxis[i] = 0;
+						sAxis1[i] = 0;
 					for(int i = 4; i < 9; i++)
 					if(event.key.keysym.sym == input[i].key.keysym.sym)
-						negEdge[i-4] = 1;
+						negEdge1[i-4] = 1;
 				break;
 			}
 		}
@@ -232,6 +250,7 @@ void interface::readInput()
 
 void interface::draw()
 {
+	SDL_SetColorKey(p1sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
 	SDL_BlitSurface(p1sprite, NULL, screen, &s1Rect);
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
@@ -244,14 +263,16 @@ void interface::spriteInit()
 	strcat(nsprt, "/");
 	strcat(nsprt, "N");
 	if(facing == -1) strcat(nsprt, "F");
+	int displacement;
+	if(p1sprite) displacement = p1sprite->w;
 	SDL_Surface *sTemp = SDL_LoadBMP(nsprt);
 	p1sprite = SDL_DisplayFormat(sTemp);
+	if(facing == -1)
+		s1Rect.x += (displacement - p1sprite->w);
 	SDL_FreeSurface(sTemp);
 	/*Ghetto alpha-value. Not sure why we can't alpha value. This might change*/
 
 	/*Set the color key*/
-	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
-	SDL_SetColorKey(p1sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 	sFlag = 1;
 }
 
