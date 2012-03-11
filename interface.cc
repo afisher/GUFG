@@ -26,18 +26,18 @@ interface::interface()
 	for(int i = 0; i < 30; i++)
 		inputBuffer[i] = 5;
 
-/*	printf("Player 1:\n");
+	facing = 1;
+	printf("Player 1:\n");
 	p1 = new player;
 
-	printf("Player 2:\n");
-	p2 = new player;*/
+/*	printf("Player 2:\n");
+	p2 = new player;
 
 	/*Build the character. Eventually this will probably be a function.*/
 	pick = new character;
 	p1sprite = NULL;
 	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
 	current = NULL;
-	facing = 1;
 
 	/*Background color, temporary until we have backgrounds*/
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
@@ -69,25 +69,6 @@ interface::interface()
 	timer = 5824;
 	spriteInit();
 	draw();
-	/*Yeah yeah, I know, char* to literal conversion. I'm lazy right now. Will fix later. Maybe with cstring*/
-	inputName[0] = "Up\0";
-	inputName[1] = "Down\0";
-	inputName[2] = "Left\0";
-	inputName[3] = "Right\0";
-	inputName[4] = "A\0";
-	inputName[5] = "B\0";
-	inputName[6] = "C\0";
-	inputName[7] = "D\0";
-	inputName[8] = "E\0";
-	inputName[9] = "Start\0";
-
-	/*Set up ALL the inputs*/
-	for(int i = 0; i < 10; i++){
-		printf("Please enter a command for %s\n", inputName[i]);
-		keyConfig(i);
-	}
-	
-	/*Set up the p1sprite*/
 }
 
 void interface::keyConfig(int curr)
@@ -150,6 +131,8 @@ void interface::resolve()
 		s1Rect.y = 0;
 	else if (s1Rect.y + s1Rect.h > 480)
 		s1Rect.y = 480 - s1Rect.h;
+	if (s1Rect.x < 250 && p1->facing == -1) { p1->facing = 1; sFlag = 0;}
+	else if (s1Rect.x > 250 && p1->facing == 1) { p1->facing = -1; sFlag = 0;}
 	if (s1Rect.x < 250 && facing == -1) { facing = 1; sFlag = 0;}
 	else if (s1Rect.x > 250 && facing == 1) { facing = -1; sFlag = 0;}
 
@@ -172,14 +155,14 @@ void interface::resolve()
 	}
 
 	/*Doing moves*/
-	if(current != NULL){
+	if(p1->current != NULL){
 		int displacement = p1sprite->w;
 		if(facing == -1) { 
-			p1sprite = SDL_DisplayFormat(current->fSprite);
+			p1sprite = SDL_DisplayFormat(p1->current->fSprite);
 			s1Rect.x += (displacement - p1sprite->w);
 		}
-		else p1sprite = SDL_DisplayFormat(current->sprite);
-		current = current->next;
+		else p1sprite = SDL_DisplayFormat(p1->current->sprite);
+		p1->current = p1->current->next;
 		sFlag = 0;
 /*		Testing stuff, to be deleted later.
 		deltaX = 0;
@@ -204,28 +187,28 @@ void interface::readInput()
 				/*Keyboard handler. Maybe I'll optimize such that the knows if it even needs to check this (EG if sticks are used)*/
 			case SDL_JOYAXISMOTION:
 				for(int i = 0; i < 4; i++)
-					if(event.jaxis.which == input[i].jaxis.which && event.jaxis.axis == input[i].jaxis.axis && event.jaxis.value == input[i].jaxis.value)
+					if(event.jaxis.which == p1->input[i].jaxis.which && event.jaxis.axis == input[i].jaxis.axis && event.jaxis.value == input[i].jaxis.value)
 						sAxis1[i] = 1;
 					for(int i = 0; i < 4; i++)
-					if(event.jaxis.which == input[i].jaxis.which && event.jaxis.axis == input[i].jaxis.axis && event.jaxis.value == 0)
+					if(event.jaxis.which == p1->input[i].jaxis.which && event.jaxis.axis == input[i].jaxis.axis && event.jaxis.value == 0)
 						sAxis1[i] = 0;
 				break;
 			case SDL_JOYBUTTONDOWN:
 				for(int i = 4; i < 9; i++)
-					if(event.jbutton.which == input[i].jbutton.which && event.jbutton.button == input[i].jbutton.button)
+					if(event.jbutton.which == p1->input[i].jbutton.which && event.jbutton.button == input[i].jbutton.button)
 						posEdge1[i-4] = 1;
 				break;
 			case SDL_JOYBUTTONUP:
 				for(int i = 4; i < 9; i++)
-					if(event.jbutton.which == input[i].jbutton.which && event.jbutton.button == input[i].jbutton.button)
+					if(event.jbutton.which == p1->input[i].jbutton.which && event.jbutton.button == input[i].jbutton.button)
 						negEdge1[i-4] = 1;
 				break;
 			case SDL_KEYDOWN:
 				for(int i = 0; i < 4; i++)
-					if(event.key.keysym.sym == input[i].key.keysym.sym) 
+					if(event.key.keysym.sym == p1->input[i].key.keysym.sym) 
 						sAxis1[i] = 1;
 					for(int i = 4; i < 9; i++)
-					if(event.key.keysym.sym == input[i].key.keysym.sym)
+					if(event.key.keysym.sym == p1->input[i].key.keysym.sym)
 						posEdge1[i-4] = 1;
 				switch (event.key.keysym.sym) {
 				case SDLK_ESCAPE:
@@ -238,10 +221,10 @@ void interface::readInput()
 				break;
 			case SDL_KEYUP:
 				for(int i = 0; i < 4; i++)
-					if(event.key.keysym.sym == input[i].key.keysym.sym)
+					if(event.key.keysym.sym == p1->input[i].key.keysym.sym)
 						sAxis1[i] = 0;
 					for(int i = 4; i < 9; i++)
-					if(event.key.keysym.sym == input[i].key.keysym.sym)
+					if(event.key.keysym.sym == p1->input[i].key.keysym.sym)
 						negEdge1[i-4] = 1;
 				break;
 			}

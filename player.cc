@@ -25,6 +25,7 @@ player::player()
 		keyConfig(i);
 	}
 
+	facing = 1;
 	current = NULL;
 	/*Set up the p1sprite*/
 	spriteInit();
