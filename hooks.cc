@@ -36,6 +36,6 @@ move * moveTrie::moveHook(int inputBuffer[30], int i, int delta, int pos[5], int
 	}
 	if(occupants != 0) 
 		for(int i = 0; i < occupants; i++)
-			if(fish[i].check(pos, neg) == 1 && delta <= tolerance) return &fish[i];
+			if(fish[i].check(pos, neg, delta) == 1) return &fish[i];
 	return NULL;
 }

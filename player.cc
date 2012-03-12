@@ -1,7 +1,6 @@
 #include "player.h"
 player::player()
 {
-	characterSelect(0);
 
 	/*Initialize input containers*/
 	for(int i = 0; i < 30; i++)
@@ -74,7 +73,11 @@ void player::keyConfig(int curr)
 
 void player::characterSelect(int i)
 {
+	pick = NULL;
 	switch(i){
+	case 1:
+		pick = new red;
+		break;
 	default:
 		pick = new character;
 		break;
