@@ -10,6 +10,7 @@
 
 #include "interface.h"
 #include <cstring>
+#include <math.h>
 interface::interface()
 {
 	/*Start SDL*/
@@ -80,36 +81,57 @@ void interface::resolve()
 	/* Movement currently determined by static deltas */
 	if(pos1.y + pos1.h < 500) p1->aerial = 1;
 	if(pos2.y + pos2.h < 500) p2->aerial = 1;
-	pos1.x += deltaX1;
-	pos1.y += deltaY1;
-	pos2.x += deltaX2;
-	pos2.y += deltaY2;
 	bool collision = 0;
 
-	if(hit(pos1, pos2)) collision = 1;
+	SDL_Rect a = pos1, b = pos2;
+	a.x += deltaX1;
+	b.x += deltaX2;
+	a.y += deltaY1;
+	b.y += deltaY2;
+	bool lock1, lock2 = 0;
+	collision = hit(a, b);
 	/* Some collision */
 
 	/* Floor and Cieling */
-	if (pos2.y < 0)
+	if (pos2.y + deltaY2 <= 0)
 		pos2.y = 0;
-	if (pos2.y + pos2.h > 500)
+	else if (pos2.y + deltaY2 + pos2.h >= 500)
 		pos2.y = 500 - pos2.h;
-	if (pos1.y < 0)
-		pos1.y = 0;
-	if (pos1.y + pos1.h > 500)
-		pos1.y = 500 - pos1.h;
+	else pos2.y += deltaY2;
 	
+	
+	
+	if (pos1.y + deltaY1 <= 0)
+		pos1.y = 0;
+	else if (pos1.y + pos1.h + deltaY1 >= 500)
+		pos1.y = 500 - pos1.h;
+	else pos1.y += deltaY1;
+
 	/* Walls */
 
-	if (pos1.x <= 100)
+	if (pos1.x + deltaX1 <= 100){
 		pos1.x = 100;
-	if (pos2.x <= 100)
-		pos2.x = 100;
-	if (pos1.x + pos1.w >= 700)
+		if(collision && p1->facing == 1) { pos2.x = pos1.x + pos1.w; lock2 = 1;}
+	} else if (pos1.x + deltaX1 + pos1.w >= 700){
 		pos1.x = 700 - pos1.w;
-	if (pos2.x + pos2.w >= 700)
+		if(collision && p1->facing == -1) { pos2.x = pos1.x - pos2.w; lock2 = 1;}
+	} else {
+		if(collision) pos1.x += deltaX2;
+		pos1.x += deltaX1;
+	}
+
+	if (pos2.x + deltaX2 <= 100){
+		pos2.x = 100;
+		if(collision && p2->facing == 1) pos1.x = pos2.x + pos2.w;
+	} else if (pos2.x + deltaX2 + pos2.w >= 700){
 		pos2.x = 700 - pos2.w;
-	
+		if(collision && p2->facing == -1) pos1.x = pos2.x - pos1.w;
+	} else { 
+		if(!lock2){
+			pos2.x += deltaX2;
+			if(collision) pos2.x += deltaX1;
+		}
+	}	
 	/* Inter-player collision */
 	
 /*	if (collision){
@@ -320,10 +342,10 @@ void interface::spriteInit()
 	}
 }
 
-int interface::hit(SDL_Rect alpha, SDL_Rect beta)
+int interface::hit(SDL_Rect a, SDL_Rect b)
 {
-	if(beta.x > alpha.x && beta.x < alpha.x + alpha.w && beta.y >= alpha.y && beta.y <= alpha.y + alpha.h) return 1;
-	if(alpha.x > beta.x && alpha.x < beta.x + beta.w && alpha.y >= beta.y && alpha.y <= beta.y + beta.h) return 1;
-	else return 0;
+	if(a.y + a.h - b.y <= 0 || b.y + b.h - a.y <= 0) return 0;
+	if(a.x + a.w - b.x <= 0 || b.x + b.w - a.x <= 0) return 0;
+	return 1;
 
 }
