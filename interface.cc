@@ -23,9 +23,6 @@ interface::interface()
 	for(int i = 0; i < SDL_NumJoysticks(); i++)
 		SDL_JoystickOpen(i);
 
-	for(int i = 0; i < 30; i++)
-		inputBuffer[i] = 5;
-
 	facing = 1;
 	printf("Player 1:\n");
 	p1 = new player;
@@ -34,10 +31,9 @@ interface::interface()
 	p2 = new player;
 
 	/*Build the character. Eventually this will probably be a function.*/
-	pick = new character;
 	p1sprite = NULL;
+	p2sprite = NULL;
 	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
-	current = NULL;
 
 	/*Background color, temporary until we have backgrounds*/
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
@@ -61,12 +57,13 @@ interface::interface()
 	}
 
 	deltaX = 0;
-	s1Rect.x = 100;
-	s1Rect.y = 330;
+	pos1.x = 100;
+	pos1.y = 330;
 	deltaY = 0;
 	aerial = 0;
 	grav = 3;
 	timer = 5824;
+	sFlag = 0;
 	spriteInit();
 	draw();
 }
@@ -118,26 +115,26 @@ void interface::runTimer()
 void interface::resolve()
 {
 	/* Movement currently determined by static deltas */
-	if(s1Rect.y + s1Rect.h < 480) aerial = 1;
-	s1Rect.x += deltaX;
-	s1Rect.y += deltaY;
+	if(pos1.y + pos1.h < 480) aerial = 1;
+	pos1.x += deltaX;
+	pos1.y += deltaY;
 
 	/* No escaping the screen */
-	if (s1Rect.x < 0)
-		s1Rect.x = 0;
-	else if (s1Rect.x + s1Rect.w > 640)
-		s1Rect.x = 640 - s1Rect.w;
-	if (s1Rect.y < 0)
-		s1Rect.y = 0;
-	else if (s1Rect.y + s1Rect.h > 480)
-		s1Rect.y = 480 - s1Rect.h;
-	if (s1Rect.x < 250 && p1->facing == -1) { p1->facing = 1; sFlag = 0;}
-	else if (s1Rect.x > 250 && p1->facing == 1) { p1->facing = -1; sFlag = 0;}
-	if (s1Rect.x < 250 && facing == -1) { facing = 1; sFlag = 0;}
-	else if (s1Rect.x > 250 && facing == 1) { facing = -1; sFlag = 0;}
+	if (pos1.x < 0)
+		pos1.x = 0;
+	else if (pos1.x + pos1.w > 640)
+		pos1.x = 640 - pos1.w;
+	if (pos1.y < 0)
+		pos1.y = 0;
+	else if (pos1.y + pos1.h > 480)
+		pos1.y = 480 - pos1.h;
+	if (pos1.x < 250 && p1->facing == -1) { p1->facing = 1; sFlag = 0;}
+	else if (pos1.x > 250 && p1->facing == 1) { p1->facing = -1; sFlag = 0;}
+	if (pos1.x < 250 && facing == -1) { facing = 1; sFlag = 0;}
+	else if (pos1.x > 250 && facing == 1) { facing = -1; sFlag = 0;}
 
 	/*Enforcing gravity*/
-	if(s1Rect.y + s1Rect.h == 480 && aerial == 1)
+	if(pos1.y + pos1.h == 480 && aerial == 1)
 		aerial = 0;
 	if(!aerial){
 		if(sAxis1[0]) deltaY = -35;
@@ -154,21 +151,7 @@ void interface::resolve()
 		negEdge1[i] = 0;
 	}
 
-	/*Doing moves*/
-	if(p1->current != NULL){
-		int displacement = p1sprite->w;
-		if(facing == -1) { 
-			p1sprite = SDL_DisplayFormat(p1->current->fSprite);
-			s1Rect.x += (displacement - p1sprite->w);
-		}
-		else p1sprite = SDL_DisplayFormat(p1->current->sprite);
-		p1->current = p1->current->next;
-		sFlag = 0;
-/*		Testing stuff, to be deleted later.
-		deltaX = 0;
-//*/
-	}
-	else if(!sFlag) spriteInit();
+	spriteInit();
 	runTimer();
 }
 
@@ -236,27 +219,36 @@ void interface::draw()
 {
 	SDL_SetColorKey(p1sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
-	SDL_BlitSurface(p1sprite, NULL, screen, &s1Rect);
+	SDL_BlitSurface(p1sprite, NULL, screen, &pos1);
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
 }
 
 void interface::spriteInit()
 {
-	char nsprt[strlen(pick->name)+4];
-	strcpy(nsprt, pick->name);
-	strcat(nsprt, "/");
-	strcat(nsprt, "N");
-	if(facing == -1) strcat(nsprt, "F");
 	int displacement;
 	if(p1sprite) displacement = p1sprite->w;
-	SDL_Surface *sTemp = SDL_LoadBMP(nsprt);
-	p1sprite = SDL_DisplayFormat(sTemp);
-	if(facing == -1)
-		s1Rect.x += (displacement - p1sprite->w);
-	SDL_FreeSurface(sTemp);
-	/*Ghetto alpha-value. Not sure why we can't alpha value. This might change*/
-
-	/*Set the color key*/
-	sFlag = 1;
+	/*Doing moves*/
+	if(p1->current != NULL){
+		if(facing == -1) { 
+			p1sprite = SDL_DisplayFormat(p1->current->fSprite);
+			pos1.x += (displacement - p1sprite->w);
+		}
+		else p1sprite = SDL_DisplayFormat(p1->current->sprite);
+		p1->current = p1->current->next;
+		sFlag = 0;
+	}
+	else if(!sFlag){
+		char nsprt[strlen(p1->pick->name)+4];
+		strcpy(nsprt, p1->pick->name);
+		strcat(nsprt, "/");
+		strcat(nsprt, "N");
+		if(facing == -1) strcat(nsprt, "F");
+		SDL_Surface *sTemp = SDL_LoadBMP(nsprt);
+		p1sprite = SDL_DisplayFormat(sTemp);
+		if(facing == -1)
+			pos1.x += (displacement - p1sprite->w);
+		SDL_FreeSurface(sTemp);
+		sFlag = 1;
+	}
 }
 

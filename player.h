@@ -3,9 +3,6 @@ class player{
 public:
 	player();
 
-
-	SDL_Rect pos;
-	SDL_Surface *sprite;
 	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
 	frame * current;
 	character * pick;
@@ -16,7 +13,6 @@ public:
 	int gameover;
 	int facing;
 	void init();
-	void spriteInit();
 	void keyConfig(int);
 	void characterSelect(int);
 	void pushInput(int*, int*, int*);

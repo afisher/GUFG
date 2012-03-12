@@ -1,25 +1,5 @@
 #include "interface.h"
 
-void interface::pushInput(int axis[4], int down[5], int up[5])
-{
-	int temp = 5 + axis[0]*3 - axis[1]*3 - axis[2]*facing + axis[3]*facing;
-	move * t = NULL;
-//	if(temp != 5){	
-	inputBuffer[0] = temp;
-	for(int i = 30; i > 0; i--){
-		inputBuffer[i] = inputBuffer[i-1];
-	}
-	t = pick->head->moveHook(inputBuffer, 0, 0, down, up);
-	if(t != NULL && current == NULL) t->execute(current);
-	
-
-/*	printf("Current input buffer: ");
-	for(int i = 16; i > 0; i--)
-		printf("%i", inputBuffer[i]);
-	printf("\n");
-*/
-}
-
 void player::pushInput(int axis[4], int down[5], int up[5])
 {
 	int temp = 5 + axis[0]*3 - axis[1]*3 - axis[2]*facing + axis[3]*facing;
