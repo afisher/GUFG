@@ -17,7 +17,7 @@ interface::interface()
 	SDL_Init(SDL_INIT_JOYSTICK);
 	/*WM stuff blah blah*/
 	SDL_WM_SetCaption("GUFG", "GUFG");
-	screen = SDL_SetVideoMode(640, 480, 0, 0);
+	screen = SDL_SetVideoMode(800, 600, 0, 0);
 
 	/*Set up input buffers and joysticks*/
 	for(int i = 0; i < SDL_NumJoysticks(); i++)
@@ -62,10 +62,10 @@ interface::interface()
 	sFlag1 = 0; 
 	sFlag2 = 0;
 	spriteInit();
-	pos1.x = 100;
-	pos2.x = 475;
-	pos1.y = 330;
-	pos2.y = 330;
+	pos1.x = 200;
+	pos2.x = 500;
+	pos1.y = 350;
+	pos2.y = 350;
 	draw();
 }
 
@@ -78,37 +78,56 @@ void interface::runTimer()
 void interface::resolve()
 {
 	/* Movement currently determined by static deltas */
-	if(pos1.y + pos1.h < 480) p1->aerial = 1;
-	if(pos2.y + pos2.h < 480) p2->aerial = 1;
+	if(pos1.y + pos1.h < 500) p1->aerial = 1;
+	if(pos2.y + pos2.h < 500) p2->aerial = 1;
 	pos1.x += deltaX1;
 	pos1.y += deltaY1;
 	pos2.x += deltaX2;
 	pos2.y += deltaY2;
+	bool collision = 0;
 
+	if(hit(pos1, pos2)) collision = 1;
+	/* Some collision */
 
-	/* No escaping the screen */
-	if (pos1.x < 0)
-		pos1.x = 0;
-	else if (pos1.x + pos1.w > 640)
-		pos1.x = 640 - pos1.w;
+	/* Floor and Cieling */
+	if (pos2.y < 0)
+		pos2.y = 0;
+	if (pos2.y + pos2.h > 500)
+		pos2.y = 500 - pos2.h;
 	if (pos1.y < 0)
 		pos1.y = 0;
-	else if (pos1.y + pos1.h > 480)
-		pos1.y = 480 - pos1.h;
+	if (pos1.y + pos1.h > 500)
+		pos1.y = 500 - pos1.h;
+	
+	/* Walls */
 
-			/*Player 2*/
+	if (pos1.x <= 100)
+		pos1.x = 100;
+	if (pos2.x <= 100)
+		pos2.x = 100;
+	if (pos1.x + pos1.w >= 700)
+		pos1.x = 700 - pos1.w;
+	if (pos2.x + pos2.w >= 700)
+		pos2.x = 700 - pos2.w;
+	
+	/* Inter-player collision */
+	
+/*	if (collision){
+		if(pos1.x > pos2.x){
+			pos2.x = pos2.x + deltaX1;
+			pos1.x = pos2.x + pos2.w;
+		} else if(pos2.x > pos1.x){
+			pos1.x = pos1.x + deltaX2;
+			pos2.x = pos1.x + pos1.w;
+		} else {
+//			if(p1->facing == 1) pos1.x = pos2.x + pos1.w + deltaX2;
+//			else pos2.x = pos1.x + pos2.w + deltaX1;
+		}
+	}
 
-	if (pos2.x < 0)
-		pos2.x = 0;
-	else if (pos2.x + pos2.w > 640)
-		pos2.x = 640 - pos2.w;
-	if (pos1.y < 0)
-		pos2.y = 0;
-	else if (pos2.y + pos2.h > 480)
-		pos2.y = 480 - pos2.h;
 
 	/*Enforcing gravity*/
-	if(pos1.y + pos1.h == 480 && p1->aerial == 1)
+	if(pos1.y + pos1.h >= 500 && p1->aerial == 1)
 		p1->aerial = 0;
 	if(!p1->aerial){
 		if(sAxis1[0]) deltaY1 = -35;
@@ -124,7 +143,7 @@ void interface::resolve()
 			/*Player 2*/
 
 
-	if(pos2.y + pos2.h == 480 && p2->aerial == 1)
+	if(pos2.y + pos2.h >= 500 && p2->aerial == 1)
 		p2->aerial = 0;
 	if(!p2->aerial){
 		if(sAxis2[0]) deltaY2 = -35;
@@ -301,3 +320,10 @@ void interface::spriteInit()
 	}
 }
 
+int interface::hit(SDL_Rect alpha, SDL_Rect beta)
+{
+	if(beta.x > alpha.x && beta.x < alpha.x + alpha.w && beta.y >= alpha.y && beta.y <= alpha.y + alpha.h) return 1;
+	if(alpha.x > beta.x && alpha.x < beta.x + beta.w && alpha.y >= beta.y && alpha.y <= beta.y + beta.h) return 1;
+	else return 0;
+
+}
