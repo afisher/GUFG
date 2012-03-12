@@ -13,6 +13,7 @@ move::move(char * n)
 		button[i] = 0;
 	special = 0;
 	start = NULL;
+	tolerance = 30;
 }
 
 move::move(char * n, int l)
@@ -22,6 +23,7 @@ move::move(char * n, int l)
 		button[i] = 0;
 	special = 0;
 	start = new frame(n, l);
+	tolerance = 30;
 }
 
 move::move(char* n, char *b, bool s, int l)
@@ -51,6 +53,12 @@ move::move(char* n, char *b, bool s, int l)
 	}
 	special = s;
 	start = new frame(n, l);
+	tolerance = 30;
+}
+
+void move::setTolerance(int t)
+{
+	tolerance = t;
 }
 
 move::move(char* n, char * b, bool s)
@@ -81,6 +89,7 @@ move::move(char* n, char * b, bool s)
 	}
 	special = s;
 	start = NULL;
+	tolerance = 30;
 }
 
 move::~move()
@@ -89,7 +98,7 @@ move::~move()
 	delete start;
 }
 
-int move::check(int pos[5], int neg[5])
+int move::check(int pos[5], int neg[5], int t)
 {
 	//if(meter < cost) return 0;
 //	if(state != allowedState) return 0;
@@ -102,6 +111,7 @@ int move::check(int pos[5], int neg[5])
 		}
 				
 	}
+	if(t > tolerance) return 0;
 	return 1;
 }
 
@@ -121,12 +131,8 @@ moveTrie::moveTrie()
 	for(int i = 0; i < 10; i++)
 		child[i] = NULL;
 	fish = NULL;
-	tolerance = 30;
 	occupants = 0;
 }
-
-
-
 
 
 moveTrie::moveTrie(move * a)
@@ -134,28 +140,7 @@ moveTrie::moveTrie(move * a)
 	for(int i = 0; i < 10; i++)
 		child[i] = NULL;
 	fish = a;
-	tolerance = 30;
 	occupants = 1;
-}
-
-moveTrie::moveTrie(move * a, int t)
-{
-	for(int i = 0; i < 10; i++)
-		child[i] = NULL;
-	fish = a;
-	tolerance = t;
-	occupants = 1;
-}
-
-moveTrie * moveTrie::insert(int a, move * b, int t)
-{
-	move * temp;
-	if(a < 10 && a > 0){
-		if(!child[a]) child[a] = new moveTrie(b, t);
-		else child[a]->insert(b);
-		return child[a];
-	}
-	else return NULL;
 }
 
 void moveTrie::insert(move * b)

@@ -1,4 +1,4 @@
-#include "character.h"
+#include "charlist.h"
 class player{
 public:
 	player();
