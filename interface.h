@@ -44,6 +44,7 @@ private:
 	int inputBuffer[30];
 	int state;
 	int timer;
+	int screenHeight, screenWidth, floor, wall;
 /*
 	player p1;		
 	player p2;		
