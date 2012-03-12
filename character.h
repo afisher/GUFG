@@ -2,15 +2,16 @@
 #include "move.h"
 #include <stdio.h>
 
-
-class character
-{
+class character{
 public:
 	character(); 	//Load the entire character into memory
 	~character();	//Free stuff
-
+	typedef void (character::*mHook)(int, SDL_Rect&, SDL_Rect&, SDL_Rect&, frame *&);
+	
+	void (*current)(int, SDL_Rect&, SDL_Rect&, SDL_Rect&, frame *&);
 	moveTrie * head;
-
+	void run(int, SDL_Rect&, SDL_Rect&, SDL_Rect&, frame *&);
+	mHook aba;
 	/*Movement options. For now they are just moves, might treat them separately if it turns out that's 
 	better*/
 	
@@ -27,7 +28,10 @@ public:
 	and command normals. I might end up making move a class rather than a function, depending on whether 
 	it's needed.*/
 	
-	void m5A(); 
+	void getMove(int, mHook&); 
+	frame * a5A;
+
+	void m5A(int, SDL_Rect&, SDL_Rect&, SDL_Rect&, frame *&);
 	void m5B();
 	void m5C();
 	void m5D();

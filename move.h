@@ -20,6 +20,7 @@ public:
 	int check(int[], int[], int);	//Check to see if the move is possible right now.
 	void setTolerance(int);
 	void execute(frame *&);
+	void execute(int, SDL_Surface *&, SDL_Rect&, SDL_Rect&);
 	int input;
 	frame * start;
 private:
