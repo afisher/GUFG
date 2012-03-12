@@ -29,23 +29,37 @@ public:
 	it's needed.*/
 	
 	void getMove(int, mHook&); 
-	frame * a5A;
 
 	void m5A(int, SDL_Rect&, SDL_Rect&, SDL_Rect&, frame *&);
+	frame * a5A;
 	void m5B();
+	frame * a5B;
 	void m5C();
+	frame * a5C;
 	void m5D();
+	frame * a5D;
 	void m5E();
+	frame * a5E;
 	void m2A();
+	frame * a2A;
 	void m2B();
+	frame * a2B;
 	void m2C();
+	frame * a2C;
 	void m2D();
+	frame * a2D;
 	void m2E();
-	void j5A();
-	void j5B();
-	void j5C();
-	void j5D();
-	void j5E();
+	frame * a2E;
+	void mj5A();
+	frame * ajA;
+	void mj5B();
+	frame * ajB;
+	void mj5C();
+	frame * ajC;
+	void mj5D();
+	frame * ajD;
+	void mj5E();
+	frame * ajE;
 
 	/*I'm writing a special move hook in here for testing purposes. White will not have special moves once we implement any characters*/
 	void m236A();
