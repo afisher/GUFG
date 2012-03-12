@@ -18,7 +18,6 @@ public:
 	/*Important interface functions that will remain interface functions*/
 	
 	void keyConfig(int);	//Keyconfig. Sets up buttons so they're all dynamic-y and such
-	void pushInput(int[], int[], int[]); //I know I know this is pretty ugly. Currently just exists to test the input buffer. Eventually will not be shit.
 	void readInput();	//Reads input from players. 
 	void resolve();		//This will eventually resolve actions (Such as a move hitting a player.) With only one player, this is not currently possible.
 	void draw();		//This will eventually draw everything. Right now the drawing is done in the main loop.
@@ -27,7 +26,6 @@ public:
 	void flip();
 
 	player *p1, *p2;	
-	frame * current;
 	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
 	SDL_Surface *p1sprite, *p2sprite, *bg, *screen;
 	character * pick;
@@ -35,7 +33,7 @@ public:
 	char * inputName[10];	//Input names. This is really just for housekeeping.
 	int colorKey;
 	int deltaX, deltaY;
-	SDL_Rect s1Rect, s2Rect;
+	SDL_Rect pos1, pos2;
 	int sAxis1[4], sAxis2[4]; 
 	int posEdge1[5], posEdge2[4];
 	int negEdge1[5], negEdge2[4];

@@ -27,13 +27,10 @@ player::player()
 
 	facing = 1;
 	current = NULL;
-	/*Set up the p1sprite*/
-	spriteInit();
+	/*Set up the sprite*/
 
 	deltaX = 0;
 	deltaY = 0;
-	pos.x = 200;
-	pos.y = 330;
 	aerial = 0;
 }
 
@@ -82,24 +79,5 @@ void player::characterSelect(int i)
 		pick = new character;
 		break;
 	}
-}
-
-void player::spriteInit()
-{
-	char nsprt[strlen(pick->name)+4];
-	strcpy(nsprt, pick->name);
-	strcat(nsprt, "/");
-	strcat(nsprt, "N");
-	if(facing == -1) strcat(nsprt, "F");
-	int displacement = sprite->w;
-	SDL_Surface *sTemp = SDL_LoadBMP(nsprt);
-	sprite = SDL_DisplayFormat(sTemp);
-	if(facing == -1)
-		pos.x += (displacement - sprite->w);
-	SDL_FreeSurface(sTemp);
-	/*Ghetto alpha-value. Not sure why we can't alpha value. This might change*/
-
-	/*Set the color key*/
-	sFlag = 1;
 }
 
