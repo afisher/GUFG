@@ -33,11 +33,13 @@ public:
 	int colorKey;
 	int deltaX1, deltaX2, deltaY1, deltaY2;
 	SDL_Rect pos1, pos2;
+	int lockR, lockL;
 	int sAxis1[4], sAxis2[4]; 
 	int posEdge1[5], posEdge2[5];
 	int negEdge1[5], negEdge2[5];
 	int sFlag1, sFlag2;
 	int gameover;
+	int hit(SDL_Rect, SDL_Rect);
 private:
 	int inputBuffer[30];
 	int state;
