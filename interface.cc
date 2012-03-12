@@ -131,7 +131,17 @@ void interface::resolve()
 			pos2.x += deltaX2;
 			if(collision) pos2.x += deltaX1;
 		}
-	}	
+	}
+	if(hit(pos1, pos2)){
+		if(p1->aerial && !(p2->aerial)){
+			if(p2->facing == 1) pos1.x = pos2.x + pos2.w;
+			else pos1.x = pos2.x - pos1.w;
+		}
+		if(p2->aerial && !(p1->aerial)){
+			if(p1->facing == 1) pos2.x = pos1.x + pos1.w;
+			else pos2.x = pos1.x - pos2.w;
+		}
+	}
 	/* Inter-player collision */
 	
 /*	if (collision){
