@@ -78,3 +78,4 @@ frame * frame::operator[](int x)
 		temp = temp->next;
 	return temp;
 }
+
