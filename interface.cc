@@ -86,6 +86,15 @@ void interface::runTimer()
 
 void interface::resolve()
 {
+	SDL_Rect hitbox1, hittable1, delta1, collision1;
+	SDL_Rect hitbox2, hittable2, delta2, collision2;
+	frame * dummy;
+	if(p1->cMove != NULL) 
+		if(!p1->cMove->step(delta1, hitbox1, hittable1, collision1, dummy)) p1->cMove = NULL;
+	if(p2->cMove != NULL) 
+		if(!p2->cMove->step(delta2, hitbox2, hittable2, collision1, dummy)) p2->cMove = NULL;
+		
+
 	/* Movement currently determined by static deltas */
 	if(pos1.y + pos1.h < floor) p1->aerial = 1;
 	if(pos2.y + pos2.h < floor) p2->aerial = 1;
@@ -190,7 +199,6 @@ void interface::resolve()
 		negEdge1[i] = 0;
 		negEdge2[i] = 0;
 	}
-
 	spriteInit();
 	runTimer();
 }

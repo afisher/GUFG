@@ -26,6 +26,7 @@ player::player()
 
 	facing = 1;
 	current = NULL;
+	cMove = NULL;
 	/*Set up the sprite*/
 
 	deltaX = 0;
