@@ -12,16 +12,8 @@ void player::pushInput(int axis[4], int down[5], int up[5])
 	for(int i = 30; i > 0; i--){
 		inputBuffer[i] = inputBuffer[i-1];
 	}
-/* FOR TESTING PURPOSES: A FUNCTION-GRABBING HOOK*/
 	
-	SDL_Rect dummy;
-	if(down[0]){ 
-		pick->getMove(1, pick->aba);
-		pick->run(0, dummy, dummy, dummy, current);
-	}	
-	
-	
-	else t = pick->head->moveHook(inputBuffer, 0, 0, down, up);
+	t = pick->head->moveHook(inputBuffer, 0, 0, down, up);
 	
 	if(t != NULL && current == NULL) t->execute(current);
 	
