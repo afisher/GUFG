@@ -148,20 +148,32 @@ void move::execute(frame *& curr)
 	else printf("Hook for %s detected\n", name);
 }
 
-void move::step(SDL_Rect &d, SDL_Rect &coll, SDL_Rect &hit, SDL_Rect &hbox, frame * &anim)
+bool move::step(SDL_Rect &d, SDL_Rect &coll, SDL_Rect &hit, SDL_Rect &hbox, frame * &anim)
 {
-	d = delta[currentFrame];
-	coll = collision[currentFrame];
-	hit = hittable[currentFrame];
-	hbox = hitbox[currentFrame];
-	*anim = start[currentFrame];
-	if(currentFrame == frames-1) init();
-	else currentFrame++;
+
+	if(frames > 0){
+		d = delta[currentFrame];
+		coll = collision[currentFrame];
+		hit = hittable[currentFrame];
+		hbox = hitbox[currentFrame];
+		anim = start;
+		if(currentFrame == frames-1) {
+			init();
+			return 0;
+		}
+		else {
+			currentFrame++;
+			return 1;
+		}
+	}
+	else return 0;
+
 }
 
 bool move::operator==(move * x)
 {
-	if(state[currentFrame] == x->allowed) return 1;
+	if(frames < 1 || x->frames < 1) return 0;
+	else if(state[currentFrame] == x->allowed) return 1;
 	else return 0;
 }
 
@@ -177,6 +189,40 @@ void move::debugStateInit(int q, int r)
 		state[i] = q;
 	allowed = r;
 }
+
+void move::debugRectsInit()
+{
+	for(int i = 0; i < frames; i++){
+		hitbox[i].y = 0;
+		hitbox[i].x = 0;
+		hitbox[i].w = 1;
+		hitbox[i].h = 1;
+		delta[i].y = 0;
+		delta[i].x = 0;
+		delta[i].w = 1;
+		delta[i].h = 1;
+		collision[i].y = 0;
+		collision[i].x = 0;
+		collision[i].w = 1;
+		collision[i].h = 1;
+		hittable[i].y = 0;
+		hittable[i].x = 0;
+		hittable[i].w = 1;
+		hittable[i].h = 1;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 moveTrie::moveTrie()
 {
