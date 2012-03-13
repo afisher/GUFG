@@ -15,7 +15,10 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 	
 	t = pick->head->moveHook(inputBuffer, 0, 0, down, up);
 	
-	if(t != NULL && current == NULL) t->execute(current);
+	if(t != NULL){
+		t->execute(current);
+		cMove = t;
+	}
 	
 
 /*	printf("Current input buffer: ");
@@ -41,6 +44,8 @@ move * moveTrie::moveHook(int inputBuffer[30], int i, int delta, bool pos[5], bo
 	}
 	if(occupants != 0) 
 		for(int i = 0; i < occupants; i++)
-			if(fish[i].check(pos, neg, delta) == 1) return &fish[i];
+			if(fish[i].check(pos, neg, delta) == 1)
+			//Testing!
+				return &fish[i];
 	return NULL;
 }

@@ -3,7 +3,7 @@
 move::move()
 {
 	name = NULL;
-	cost = 0;
+	state = NULL;
 }
 
 move::move(char * n)
@@ -14,6 +14,7 @@ move::move(char * n)
 	special = 0;
 	start = NULL;
 	tolerance = 30;
+	state = NULL;
 }
 
 move::move(char * n, int l)
@@ -25,7 +26,12 @@ move::move(char * n, int l)
 	start = new frame(n, l);
 	tolerance = 30;
 	frames = l;
-	currentFrame = 0;
+	state = new int[l];
+	collision = new SDL_Rect[l];
+	hitbox = new SDL_Rect[l];
+	hittable = new SDL_Rect[l];
+	delta = new SDL_Rect[l];
+	init();
 }
 
 move::move(char* n, char *b, bool s, int l)
@@ -56,8 +62,13 @@ move::move(char* n, char *b, bool s, int l)
 	special = s;
 	start = new frame(n, l);
 	tolerance = 30;
-	currentFrame = 0;
 	frames = l;
+	init();
+	state = new int[l];
+	collision = new SDL_Rect[l];
+	hitbox = new SDL_Rect[l];
+	hittable = new SDL_Rect[l];
+	delta = new SDL_Rect[l];
 }
 
 void move::setTolerance(int t)
@@ -94,13 +105,19 @@ move::move(char* n, char * b, bool s)
 	special = s;
 	start = NULL;
 	tolerance = 30;
+	frames = 0;
 
 }
 
 move::~move()
 {
-	delete [] name;
-	delete start;
+	if(name) delete [] name;
+	if(start) delete start;
+	if(state) delete [] state;
+	if(collision) delete [] collision;
+	if(hitbox) delete [] hitbox;
+	if(hittable) delete [] hittable;
+	if(delta) delete [] delta;
 }
 
 bool move::check(bool pos[5], bool neg[5], int t)
@@ -131,9 +148,34 @@ void move::execute(frame *& curr)
 	else printf("Hook for %s detected\n", name);
 }
 
-void move::step(SDL_Rect &pos, SDL_Rect &collision, SDL_Rect &hittable, SDL_Rect &hitbox, frame * &anim)
+void move::step(SDL_Rect &d, SDL_Rect &coll, SDL_Rect &hit, SDL_Rect &hbox, frame * &anim)
 {
+	d = delta[currentFrame];
+	coll = collision[currentFrame];
+	hit = hittable[currentFrame];
+	hbox = hitbox[currentFrame];
+	*anim = start[currentFrame];
+	if(currentFrame == frames-1) init();
+	else currentFrame++;
+}
 
+bool move::operator==(move * x)
+{
+	if(state[currentFrame] == x->allowed) return 1;
+	else return 0;
+}
+
+void move::init()
+{
+	currentFrame = 0;
+}
+
+/*Testing stuff for now, thus it becomes necessary to set all states to stuff*/
+void move::debugStateInit(int q, int r)
+{
+	for(int i = 0; i < frames; i++)
+		state[i] = q;
+	allowed = r;
 }
 
 moveTrie::moveTrie()
@@ -197,3 +239,4 @@ moveTrie::~moveTrie()
 	delete fish;
 	fish = NULL;
 }
+
