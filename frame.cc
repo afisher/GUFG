@@ -36,7 +36,7 @@ frame::frame(char * name, int n)
 	delete [] fName;
 //	printf("%s: %i\n", fName, l);
 	frame * x = this;
-	for(int i = 1 ; i < n; i++){
+	for(int i = 1; i < n; i++){
 		fName = new char[l+6+n];
 		strcpy(fName, name);
 		strcat(fName, "#");

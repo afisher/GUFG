@@ -317,7 +317,6 @@ void interface::spriteInit()
 		strcat(nsprt, "/");
 		strcat(nsprt, "N");
 		if(p1->facing == -1) strcat(nsprt, "F");
-		strcat(nsprt, "\0");
 		sTemp = SDL_LoadBMP(nsprt);
 		p1sprite = SDL_DisplayFormat(sTemp);
 		if(p1->facing == -1)
@@ -344,7 +343,6 @@ void interface::spriteInit()
 		strcat(nsprt, "/");
 		strcat(nsprt, "N");
 		if(p2->facing == -1) strcat(nsprt, "F");
-		strcat(nsprt, "\0");
 		sTemp = SDL_LoadBMP(nsprt);
 		p2sprite = SDL_DisplayFormat(sTemp);
 		if(p2->facing == -1)

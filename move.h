@@ -14,7 +14,7 @@ public:
 	void setTolerance(int);
 	void execute(frame *&);			//Currently what we're using to send the first frame to the animation routines. This will likely change.
 	bool step(SDL_Rect&, SDL_Rect&, SDL_Rect&, SDL_Rect&, frame *&); //Return the relevant information needed for interface::resolve(), then step to the next frame.
-	bool operator==(move*); //An operator to compare allowed start states versus a move's current state; Basically a cancel mechanism.
+	bool operator==(move*); //Cancel allowed check. Essentially: is move Lvalue allowed given the current state of move Rvalue?
 	void init();		//Really just sets current frame to 0. I wanted current frame to be private for now, so I don't break anything.
 		
 	frame * start;		//The first frame of the move's sprite.
@@ -26,11 +26,11 @@ public:
 private:
 	int frames;	//Number of frames.
 //	SDL_Surface *sprite, *hit, *hittable, *collision;
-	char * name;
 	bool special;
 	int cost;
 	int tolerance;
 	int button[5];
+	char * name;
 	int currentFrame; 	//The frame that is currently running.
 	SDL_Rect * collision;	//This will be an array of rects that are the collision boxes for the move per frame
 	SDL_Rect * hitbox;	//Same but for hitboxes

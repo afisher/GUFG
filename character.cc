@@ -24,7 +24,7 @@ character::character()
 	head->fish[2].debugStateInit(1, 0);
 	head->fish[2].debugRectsInit();
 	
-	head->insert(new move("White/D", "D", 0, 0));
+	head->insert(new move("White/D", "D", 0, 1));
 	head->fish[3].debugStateInit(1, 1);
 	head->fish[3].debugRectsInit();
 	
