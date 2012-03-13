@@ -1,6 +1,6 @@
 #include "interface.h"
 
-void player::pushInput(int axis[4], int down[5], int up[5])
+void player::pushInput(bool axis[4], bool down[5], bool up[5])
 {
 	int temp = 5 + axis[0]*3 - axis[1]*3 - axis[2]*facing + axis[3]*facing;
 	move * t = NULL;
@@ -25,7 +25,7 @@ void player::pushInput(int axis[4], int down[5], int up[5])
 */
 }
 
-move * moveTrie::moveHook(int inputBuffer[30], int i, int delta, int pos[5], int neg[5])
+move * moveTrie::moveHook(int inputBuffer[30], int i, int delta, bool pos[5], bool neg[5])
 {
 	moveTrie * test = NULL;
 	move * result = NULL;
