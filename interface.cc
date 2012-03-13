@@ -195,6 +195,7 @@ void interface::resolve()
 	runTimer();
 }
 
+
 void interface::readInput()
 {
 	/*Make our dummy event for polls*/

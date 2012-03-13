@@ -37,6 +37,9 @@ public:
 	bool sAxis1[4], sAxis2[4]; 
 	bool posEdge1[5], posEdge2[5];
 	bool negEdge1[5], negEdge2[5];
+	void readStick(SDL_Event&);
+	void readKey(SDL_Event&);
+	
 	bool sFlag1, sFlag2;
 	bool gameover;
 	bool hit(SDL_Rect, SDL_Rect);
