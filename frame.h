@@ -10,4 +10,5 @@ public:
 	SDL_Surface *sprite, *fSprite;
 //	SDL_Rect *hitbox, *collision, *hittable;
 	frame * next;
+	frame * operator[](int);
 };

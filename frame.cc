@@ -70,3 +70,11 @@ frame * frame::play(SDL_Surface *& gameSprite)
 	gameSprite = sprite;
 	return next;
 }
+
+frame * frame::operator[](int x)
+{
+	frame * temp = this;
+	for(int i = 0; i < x; i++)
+		temp = temp->next;
+	return temp;
+}

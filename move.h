@@ -1,13 +1,6 @@
 #include "SDL.h"
 #include "frame.h"
 
-struct activeWindow{
-	int start;
-	int end;
-	int damage;
-	int stun;
-};
-
 class move{
 public:
 	move();
@@ -16,13 +9,16 @@ public:
 	move(char*, char*, bool, int);
 	move(char*, char*, bool);
 	~move();
-	void execute();			//Do the move. 
+	int currentFrame;
+	void execute();				//Do the move. 
 	bool check(bool[], bool[], int);	//Check to see if the move is possible right now.
 	void setTolerance(int);
 	void execute(frame *&);
-	void execute(int, SDL_Surface *&, SDL_Rect&, SDL_Rect&);
+	void step(SDL_Rect&, SDL_Rect&, SDL_Rect&, SDL_Rect&, frame *&);
 	int input;
+	bool operator==(move*); //An operator to compare allowed start states versus a move's current state; Basically a cancel mechanism.
 	frame * start;
+	int * state;	//An array of states. If the states are single integers, the array is the same size as the number of frames.
 private:
 	int frames;	//Number of frames.
 //	SDL_Surface *sprite, *hit, *hittable, *collision;
@@ -31,6 +27,10 @@ private:
 	int cost;
 	int tolerance;
 	int button[5];
+	SDL_Rect * collision;	//This will be an array of rects that are the collision boxes for the move per frame
+	SDL_Rect ** hitbox;	//Same but for hitboxes
+	SDL_Rect ** hittable;	//Same but for hittable boxes
+	SDL_Rect * deltaPos;	//Same but for position on the screen.
 };
 
 class moveTrie{

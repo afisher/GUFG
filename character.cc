@@ -9,18 +9,17 @@ character::character()
 {
 	name = "White";
 	moveTrie * curr;
-	a5A = new frame("White/A\0", 11);
 
 	/*Currently I'm using this as a test case for my move hooks*/
 	
-	head = new moveTrie(new move("White/A\0", "A\0", 0, 11));
-	head->insert(new move("B\0", "B\0", 0));
-	head->insert(new move("C\0", "C\0", 0));
-	head->insert(new move("White/D\0", "D\0", 0, 0));
-	head->insert(new move("E\0", "E\0", 0));
+	head = new moveTrie(new move("White/A", "A", 0, 11));
+	head->insert(new move("B", "B", 0));
+	head->insert(new move("C", "C", 0));
+	head->insert(new move("White/D", "D", 0, 0));
+	head->insert(new move("E", "E", 0));
 	curr = head->insert(6);
 	curr = curr->insert(3);
-	curr = curr->insert(2, new move("236B\0", "B\0", 1));
+	curr = curr->insert(2, new move("236B", "B", 1));
 
 }
 
@@ -33,17 +32,3 @@ character::~character()
 
 /*Here begin move functions. Actually contemplating making this a class instead, but this might be simpler for now*/
 
-void character::run(int f, SDL_Rect &a, SDL_Rect &b, SDL_Rect &c, frame *& d)
-{
-	(this->*aba)(f, a, b, c, d);
-}
-void character::m5A(int f, SDL_Rect &collBox, SDL_Rect &hitBox, SDL_Rect &hittable, frame *& anim)
-{
-	if(f == 0) anim = a5A;
-	
-}
-
-void character::getMove(int key, mHook &bait)
-{
-	if(key = 1) bait = &character::m5A;
-}

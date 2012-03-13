@@ -1,7 +1,7 @@
 #include "red.h"
 red::red()
 {
-	name = "Red\0";
+	name = "Red";
 	head = new moveTrie;
-	head->insert(new move("Red/A\0", "A", 0, 10));
+	head->insert(new move("Red/A", "A", 0, 10));
 }

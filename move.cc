@@ -24,6 +24,8 @@ move::move(char * n, int l)
 	special = 0;
 	start = new frame(n, l);
 	tolerance = 30;
+	frames = l;
+	currentFrame = 0;
 }
 
 move::move(char* n, char *b, bool s, int l)
@@ -54,6 +56,8 @@ move::move(char* n, char *b, bool s, int l)
 	special = s;
 	start = new frame(n, l);
 	tolerance = 30;
+	currentFrame = 0;
+	frames = l;
 }
 
 void move::setTolerance(int t)
@@ -90,6 +94,7 @@ move::move(char* n, char * b, bool s)
 	special = s;
 	start = NULL;
 	tolerance = 30;
+
 }
 
 move::~move()
@@ -124,6 +129,11 @@ void move::execute(frame *& curr)
 {
 	if(start != NULL) curr = start;
 	else printf("Hook for %s detected\n", name);
+}
+
+void move::step(SDL_Rect &pos, SDL_Rect &collision, SDL_Rect &hittable, SDL_Rect &hitbox, frame * &anim)
+{
+
 }
 
 moveTrie::moveTrie()
