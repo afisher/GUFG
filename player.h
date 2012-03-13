@@ -8,8 +8,8 @@ public:
 	character * pick;
 	int deltaX, deltaY;
 	char * inputName[10];	//Input names. This is really just for housekeeping.
-	int aerial;
-	int sFlag;
+	bool aerial;
+	bool sFlag;
 	int gameover;
 	int facing;
 	void init();

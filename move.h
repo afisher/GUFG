@@ -17,7 +17,7 @@ public:
 	move(char*, char*, bool);
 	~move();
 	void execute();			//Do the move. 
-	int check(bool[], bool[], int);	//Check to see if the move is possible right now.
+	bool check(bool[], bool[], int);	//Check to see if the move is possible right now.
 	void setTolerance(int);
 	void execute(frame *&);
 	void execute(int, SDL_Surface *&, SDL_Rect&, SDL_Rect&);
