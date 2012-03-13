@@ -7,17 +7,15 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 //	if(temp != 5){	
 	inputBuffer[0] = temp;
 
-	
-
 	for(int i = 30; i > 0; i--){
 		inputBuffer[i] = inputBuffer[i-1];
 	}
 	
 	t = pick->head->moveHook(inputBuffer, 0, 0, down, up, cMove);
 	
-	if(t != NULL && current == NULL){
-		t->execute(current);
+	if(t != NULL){
 		cMove = t;
+		cMove->execute(current);
 	}
 	
 
@@ -48,8 +46,10 @@ move * moveTrie::moveHook(int inputBuffer[30], int i, int delta, bool pos[5], bo
 			//Testing!
 				if(c == NULL)
 					return &fish[i];
-				else if(fish[i] == c)
+				else if(fish[i] == c){
+					printf("Cancel successful\n");
 					return &fish[i];
+				}
 			}
 		}
 	return NULL;

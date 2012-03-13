@@ -106,7 +106,6 @@ move::move(char* n, char * b, bool s)
 	start = NULL;
 	tolerance = 30;
 	frames = 0;
-
 }
 
 move::~move()
@@ -172,8 +171,8 @@ bool move::step(SDL_Rect &d, SDL_Rect &coll, SDL_Rect &hit, SDL_Rect &hbox, fram
 
 bool move::operator==(move * x)
 {
-	if(frames < 1 || x->frames < 1) return 0;
-	else if(state[currentFrame] == x->allowed) return 1;
+	if(frames == 0 || x->frames == 0) return 0;
+	else if(allowed == x->state[currentFrame]) return 1;
 	else return 0;
 }
 
