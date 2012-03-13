@@ -98,7 +98,7 @@ move::~move()
 	delete start;
 }
 
-int move::check(int pos[5], int neg[5], int t)
+int move::check(bool pos[5], bool neg[5], int t)
 {
 	//if(meter < cost) return 0;
 //	if(state != allowedState) return 0;

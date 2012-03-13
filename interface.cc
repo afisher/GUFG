@@ -347,7 +347,7 @@ void interface::spriteInit()
 	}
 }
 
-int interface::hit(SDL_Rect a, SDL_Rect b)
+bool interface::hit(SDL_Rect a, SDL_Rect b)
 {
 	if(a.y + a.h - b.y <= 0 || b.y + b.h - a.y <= 0) return 0;
 	if(a.x + a.w - b.x < 0 || b.x + b.w - a.x < 0) return 0;

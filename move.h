@@ -17,7 +17,7 @@ public:
 	move(char*, char*, bool);
 	~move();
 	void execute();			//Do the move. 
-	int check(int[], int[], int);	//Check to see if the move is possible right now.
+	int check(bool[], bool[], int);	//Check to see if the move is possible right now.
 	void setTolerance(int);
 	void execute(frame *&);
 	void execute(int, SDL_Surface *&, SDL_Rect&, SDL_Rect&);
@@ -39,7 +39,7 @@ public:
 	moveTrie(move*);
 	moveTrie(move*, char*);
 	~moveTrie();
-	move * moveHook(int[40], int, int, int[5], int[5]);
+	move * moveHook(int[40], int, int, bool[5], bool[5]);
 	moveTrie * child[10];
 	move * fish; 		//Because it's what a hook catches! Okay, this name probably needs to change.
 	moveTrie * insert(int);

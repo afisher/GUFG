@@ -15,7 +15,7 @@ public:
 	void init();
 	void keyConfig(int);
 	void characterSelect(int);
-	void pushInput(int*, int*, int*);
+	void pushInput(bool*, bool*, bool*);
 	int colorkey;
 private:
 	int inputBuffer[29];
