@@ -4,7 +4,7 @@
  *round timer.
  *
  *Written by Alex Kelly in 2012
- *License to come
+ *Licensed under MIT OSI: Additional information in the file "COPYING"
  */
 
 #include "SDL.h"

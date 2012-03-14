@@ -1,9 +1,10 @@
 /*Key Test for GUFG
- *This program is intended to do some of the initial SDL engine testing for
+ *This tiny program is intended to do some of the initial SDL engine testing for
  *Project: Ground Up Fighting Game.
  *
  *Written by Alex Kelly in 2012
- *License to come
+ *Under the MIT OSI license
+ *For detailed licensing information, see the COPYING file in this directory.
  */
 
 #include "interface.h"

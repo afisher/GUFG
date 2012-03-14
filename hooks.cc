@@ -1,3 +1,5 @@
+/*Move hook infrastructure file for project: GUFG*/
+
 #include "interface.h"
 
 void player::pushInput(bool axis[4], bool down[5], bool up[5])

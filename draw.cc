@@ -1,3 +1,9 @@
+/*Drawing routines for project: Ground Up Fighting Game
+ *
+ *Written by Alex Kelly in 2012, under MIT OSI
+ *For detailed license information, see the file COPYING in this directory
+ */
+
 #include "interface.h"
 void interface::draw()
 {
