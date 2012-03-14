@@ -15,8 +15,11 @@ character::character()
 	head = new moveTrie(new move("White/A", "A", 0, 11));
 	head->fish[0].debugStateInit(1, 0);
 	head->fish[0].debugRectsInit();
+	head->fish[0].debugDamageInit(10);
+	head->fish[0].debugHitboxInit(45, 55, 100, 30);
 	head->fish[0].xLock = 1;
 	head->fish[0].yLock = 1;
+
 
 	head->insert(new move("B", "B", 0));
 	head->fish[1].debugStateInit(1, 0);
@@ -40,6 +43,8 @@ character::character()
 	curr->fish[0].debugStateInit(1, 1);
 	curr->fish[0].debugRectsInit();
 
+	health = 100;
+	meter = 0;
 }
 
 character::~character()
@@ -51,3 +56,13 @@ character::~character()
 
 /*Here begin move functions. Actually contemplating making this a class instead, but this might be simpler for now*/
 
+move * character::hit(move * attack)
+{
+	/*All the important logic like blocking and stuff will go here later.*/
+
+	/*Damage scaling logic will factor into this later*/
+	health -= attack->damage;
+
+	/*It will eventually return the "move" that the hit causes, usually a hit- or blockstun animation*/
+	return NULL;
+}
