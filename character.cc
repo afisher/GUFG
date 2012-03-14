@@ -16,7 +16,7 @@ character::character()
 	head->fish[0].debugStateInit(1, 0);
 	head->fish[0].debugRectsInit();
 	head->fish[0].debugDamageInit(10);
-	head->fish[0].debugHitboxInit(45, 55, 100, 30);
+	head->fish[0].debugHitboxInit(55, 45, 30, 30);
 	head->fish[0].xLock = 1;
 	head->fish[0].yLock = 1;
 
@@ -62,7 +62,8 @@ move * character::hit(move * attack)
 
 	/*Damage scaling logic will factor into this later*/
 	health -= attack->damage;
-
+	if(health < 0) health = 0;
+	attack->connect();
 	/*It will eventually return the "move" that the hit causes, usually a hit- or blockstun animation*/
 	return NULL;
 }
