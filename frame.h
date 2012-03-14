@@ -1,3 +1,10 @@
+/*Header for frame class for project: Ground Up Fighting Game
+ *
+ *Written by Alex Kelly in 2012
+ *Under the MIT OSI software license.
+ *For more licensing information, see the file COPYING in this directory
+ */
+
 #include "SDL.h"
 
 class frame{
@@ -8,7 +15,6 @@ public:
 	~frame();
 	frame * play(SDL_Surface *&);
 	SDL_Surface *sprite, *fSprite;
-//	SDL_Rect *hitbox, *collision, *hittable;
 	frame * next;
 	frame * operator[](int);
 };

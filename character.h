@@ -1,3 +1,9 @@
+/*Header file for character class in project Ground Up Fighting Game
+ *
+ *Written by Alex Kelly in 2012
+ *Under MIT OSI license, see "COPYING" for details
+ */
+
 #include "SDL.h"
 #include "move.h"
 #include <stdio.h>

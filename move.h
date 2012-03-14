@@ -1,3 +1,9 @@
+/*Header file for "move" class in project Ground Up Fighting Game
+ *
+ *Written by Alex Kelly in 2012. 
+ *Licensed under MIT OSI, see "COPYING" for details
+ */
+
 #include "SDL.h"
 #include "frame.h"
 
