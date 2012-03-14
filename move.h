@@ -21,9 +21,19 @@ public:
 	int * state;		//An array of states. If the states are single integers, the array is the same size as the number of frames.
 	int allowed;		//The state in which the move is allowed. Depending on how we handle states, this may need to be an array of states or something.
 	bool xLock, yLock;
+	int damage;		//How much damage the move does
+	int stun;		//How much stun the move does
+	int blockMask;		//High, Low, Mid, Unblockable, and Air Block check. Basically a 3-digit binary number expressed as an integer from 0-7
 
-	void debugStateInit(int, int); //State initialization function for testing purposes. Once we work out the finalized constructor this will be obviated.
+
+	//Some initialization functions for testing purposes. Once we work out the finalized constructor this will be obviated.
+	void debugStateInit(int, int); 	
 	void debugRectsInit();
+	void debugDamageInit(int);
+	void debugHittableInit(int, int, int, int);
+	void debugHitboxInit(int, int, int, int);
+	void debugDeltaInit(int, int, int, int);
+	void debugCollisionInit(int, int, int, int);
 private:
 	int frames;	//Number of frames.
 //	SDL_Surface *sprite, *hit, *hittable, *collision;

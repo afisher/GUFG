@@ -213,9 +213,44 @@ void move::debugRectsInit()
 	}
 }
 
+void move::debugHitboxInit(int y, int x, int w, int h)
+{
+	for(int i = 0; i < frames; i++){
+		hitbox[i].y = y;
+		hitbox[i].x = x;
+		hitbox[i].w = w;
+		hitbox[i].h = h;
+	}
+}
 
-
-
+void move::debugHittableInit(int y, int x, int w, int h)
+{
+	for(int i = 0; i < frames; i++){
+		hittable[i].y = y;
+		hittable[i].x = x;
+		hittable[i].w = w;
+		hittable[i].h = h;
+	}
+}
+void move::debugCollisionInit(int y, int x, int w, int h)
+{	
+	for(int i = 0; i < frames; i++){
+		collision[i].y = y;
+		collision[i].x = x;
+		collision[i].w = w;
+		collision[i].h = h;
+	}
+}
+void move::debugDeltaInit(int y, int x, int w, int h) 
+{
+	for(int i = 0; i < frames; i++){
+		delta[i].y = y;
+		delta[i].x = x;
+		delta[i].w = w;
+		delta[i].h = h;
+	}
+}
+void move::debugDamageInit(int d) { damage = d; }
 
 
 
