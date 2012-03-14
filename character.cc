@@ -15,7 +15,9 @@ character::character()
 	head = new moveTrie(new move("White/A", "A", 0, 11));
 	head->fish[0].debugStateInit(1, 0);
 	head->fish[0].debugRectsInit();
-	
+	head->fish[0].xLock = 1;
+	head->fish[0].yLock = 1;
+
 	head->insert(new move("B", "B", 0));
 	head->fish[1].debugStateInit(1, 0);
 	head->fish[1].debugRectsInit();

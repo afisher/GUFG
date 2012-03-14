@@ -31,6 +31,7 @@ move::move(char * n, int l)
 	hitbox = new SDL_Rect[l];
 	hittable = new SDL_Rect[l];
 	delta = new SDL_Rect[l];
+	xLock = 0;
 	init();
 }
 
@@ -64,6 +65,7 @@ move::move(char* n, char *b, bool s, int l)
 	tolerance = 30;
 	frames = l;
 	init();
+	xLock = 0;
 	state = new int[l];
 	collision = new SDL_Rect[l];
 	hitbox = new SDL_Rect[l];

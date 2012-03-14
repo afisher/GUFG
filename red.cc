@@ -5,4 +5,7 @@ red::red()
 	head = new moveTrie;
 	head->insert(new move("Red/A", "A", 0, 10));
 	head->fish[0].debugStateInit(1, 1);
+	head->fish[0].debugRectsInit();
+	head->fish[0].xLock = 1;
+	head->fish[0].yLock = 1;
 }

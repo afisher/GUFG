@@ -26,21 +26,18 @@ public:
 
 	player *p1, *p2;	
 	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
-	SDL_Surface *p1sprite, *p2sprite, *bg, *screen;
+	SDL_Surface *bg, *screen;
 	character * pick;
 	int grav;
 	char * inputName[10];	//Input names. This is really just for housekeeping.
 	int colorKey;
 	int deltaX1, deltaX2, deltaY1, deltaY2;
-	SDL_Rect pos1, pos2;
-	bool lockR, lockL;
 	bool sAxis1[4], sAxis2[4]; 
 	bool posEdge1[5], posEdge2[5];
 	bool negEdge1[5], negEdge2[5];
 	void readStick(SDL_Event&);
 	void readKey(SDL_Event&);
 	
-	bool sFlag1, sFlag2;
 	bool gameover;
 	bool hit(SDL_Rect, SDL_Rect);
 private:
