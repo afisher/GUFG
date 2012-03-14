@@ -43,6 +43,7 @@ character::character()
 	curr->fish[0].debugStateInit(1, 1);
 	curr->fish[0].debugRectsInit();
 
+	cMove = NULL;
 	health = 100;
 	meter = 0;
 }

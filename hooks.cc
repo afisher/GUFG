@@ -1,5 +1,8 @@
-/*Move hook infrastructure file for project: GUFG*/
-
+/*Move hook infrastructure file for project: GUFG
+ *
+ *Written by Alex Kelly in 2012 under MIT OSI License
+ *See the file COPYING for details
+ */
 #include "interface.h"
 
 void player::pushInput(bool axis[4], bool down[5], bool up[5])
@@ -13,19 +16,13 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 		inputBuffer[i] = inputBuffer[i-1];
 	}
 	
-	t = pick->head->moveHook(inputBuffer, 0, 0, down, up, cMove);
+	t = pick->head->moveHook(inputBuffer, 0, 0, down, up, pick->cMove);
 	
 	if(t != NULL){
-		cMove = t;
-		cMove->execute(current);
+		pick->cMove = t;
+		pick->cMove->execute(current);
 	}
 	
-
-/*	printf("Current input buffer: ");
-	for(int i = 16; i > 0; i--)
-		printf("%i", inputBuffer[i]);
-	printf("\n");
-*/
 }
 
 move * moveTrie::moveHook(int inputBuffer[30], int i, int delta, bool pos[5], bool neg[5], move * c)
