@@ -47,7 +47,6 @@ move * moveTrie::moveHook(int inputBuffer[30], int i, int delta, bool pos[5], bo
 				if(c == NULL)
 					return &fish[i];
 				else if(fish[i] == c){
-					printf("Cancel successful\n");
 					return &fish[i];
 				}
 			}

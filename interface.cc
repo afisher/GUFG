@@ -39,8 +39,8 @@ interface::interface()
 	p2->characterSelect(1);
 
 	/*Build the character. Eventually this will probably be a function.*/
-	p1sprite = NULL;
-	p2sprite = NULL;
+	p1->sprite = NULL;
+	p2->sprite = NULL;
 	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
 
 	/*Background color, temporary until we have backgrounds*/
@@ -72,11 +72,13 @@ interface::interface()
 	p2->sFlag = 0;
 	p2->facing = -1;
 	p1->facing = 1;
-	spriteInit();
+	p1->spriteInit();
+	p2->spriteInit();
+	draw();
 	p1->pos.x = wall*4;
-	p2->pos.x = screenWidth - wall*4 - p2sprite->w;
-	p1->pos.y = floor - p1sprite->h;
-	p2->pos.y = floor - p2sprite->h;
+	p2->pos.x = screenWidth - wall*4 - p2->sprite->w;
+	p1->pos.y = floor - p1->sprite->h;
+	p2->pos.y = floor - p2->sprite->h;
 	draw();
 }
 
@@ -87,8 +89,7 @@ void interface::runTimer()
 }
 
 void interface::resolve()
-{
-	
+{	
 	SDL_Rect hitbox1, hittable1, delta1, collision1;
 	SDL_Rect hitbox2, hittable2, delta2, collision2;
 	frame * dummy;
@@ -100,7 +101,7 @@ void interface::resolve()
 		}
 	}
 	if(p2->cMove != NULL) { 
-		if(!p2->cMove->step(delta2, hitbox2, hittable2, collision1, dummy)) p2->cMove = NULL;
+		if(!p2->cMove->step(delta2, hitbox2, hittable2, collision1, dummy)) p2->cMove = NULL; 
 		else {
 			if(p2->cMove->xLock) deltaX2 = delta2.x;
 			if(p2->cMove->yLock) deltaY2 = delta2.y;
@@ -225,7 +226,8 @@ void interface::resolve()
 		if(p2->facing == -1 && p2->pos.x < p1->pos.x) p2->facing = 1;
 		else if(p2->facing == 1 && p2->pos.x > p1->pos.x) p2->facing = -1;
 	}
-	spriteInit();
+	p1->spriteInit();
+	p2->spriteInit();
 	runTimer();
 }
 
