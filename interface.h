@@ -39,7 +39,7 @@ public:
 	void readKey(SDL_Event&);
 	
 	bool gameover;
-	bool hit(SDL_Rect, SDL_Rect);
+	bool checkCollision(SDL_Rect, SDL_Rect);
 private:
 	int inputBuffer[30];
 	int state;

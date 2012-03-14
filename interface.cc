@@ -90,37 +90,31 @@ void interface::runTimer()
 
 void interface::resolve()
 {
-	bool dflag1 = 0, dflag2 = 0;
-	SDL_Rect hitbox1, hittable1, delta1, collision1;
-	SDL_Rect hitbox2, hittable2, delta2, collision2;
+	bool dflag1, dflag2;
+	SDL_Rect hitbox1, hitreg1, delta1, collision1;
+	SDL_Rect hitbox2, hitreg2, delta2, collision2;
 	frame * dummy;
 	if(p1->cMove != NULL) {
-		if(!p1->cMove->step(delta1, hitbox1, hittable1, collision1, dummy)) dflag1 = 1;
-		if(p1->cMove->xLock) deltaX1 = delta1.x; else deltaX1 += delta1.x;
-		if(p1->cMove->yLock) deltaY1 = delta1.y; else deltaY1 += delta1.y;
+		dflag1 = 1 - p1->cMove->step(delta1, collision1, hitreg1, hitbox1);
+		if(p1->cMove->yLock) deltaX1 = delta1.x; else deltaX1 += delta1.x;
+		if(p1->cMove->xLock) deltaY1 = delta1.y; else deltaY1 += delta1.y;
 		if(p1->facing == -1) hitbox1.x = p1->pos.x + p1->pos.w - hitbox1.x - hitbox1.w;
 		else hitbox1.x += p1->pos.x;
 		hitbox1.y += p1->pos.y;
-		if(p1->facing == -1) hittable1.x = p1->pos.x + p1->pos.w - hittable1.x - hittable1.w;
-		else hittable1.x += p1->pos.x;
-		hittable1.y += p1->pos.y;
+		if(p1->facing == -1) hitreg1.x = p1->pos.x + p1->pos.w - hitreg1.x - hitreg1.w;
+		else hitreg1.x += p1->pos.x;
+		hitreg1.y += p1->pos.y;
 		if(p1->facing == -1) collision1.x = p1->pos.x + p1->pos.w - collision1.x - collision1.w;
 		else collision1.x += p1->pos.x;
-		collision1.y += p1->pos.y;		
+		collision1.y += p1->pos.y;
 	}
 	if(p2->cMove != NULL) { 
-		if(!p2->cMove->step(delta2, hitbox2, hittable2, collision1, dummy)) dflag2 = 1; 
-		if(p2->cMove->xLock) deltaX2 = delta2.x; else deltaX2 += delta2.x;
-		if(p2->cMove->yLock) deltaY2 = delta2.y; else deltaY2 += delta2.y;
-		if(p2->facing == -1) hitbox2.x = p2->pos.x + p2->pos.w - hitbox2.x - hitbox2.w;
-		else hitbox2.x += p2->pos.x;
-		hitbox2.y += p2->pos.y;
-		if(p2->facing == -1) hittable2.x = p2->pos.x + p2->pos.w - hittable2.x - hittable2.w;
-		else hittable2.x += p2->pos.x;
-		hittable2.y += p2->pos.y;
-		if(p2->facing == -1) collision2.x = p2->pos.x + p2->pos.w - collision2.x - collision2.w;
-		else collision2.x += p2->pos.x;
-		collision2.y += p2->pos.y;
+		dflag2 = 1 - p2->cMove->step(delta2, collision2, hitreg2, hitbox2); 
+		if(p2->cMove->yLock) deltaX2 = delta2.x; else deltaX2 += delta1.x;
+		if(p2->cMove->xLock) deltaY2 = delta2.y; else deltaY1 += delta1.y;
+		if(p2->facing == -1) hitreg2.x = p2->pos.x + p2->pos.w - hitreg2.x - hitreg2.w;
+		else hitreg2.x += p2->pos.x;
+		hitreg2.y += p2->pos.y;
 	}
 			
 
@@ -128,8 +122,6 @@ void interface::resolve()
 	if(p1->pos.y + p1->pos.h < floor) p1->aerial = 1; 
 	if(p2->pos.y + p2->pos.h < floor) p2->aerial = 1;
 	bool collision = 0;
-	if(hit(hitbox1, hittable2)) {printf("!\n"); p2->pick->health -= 10;} // p2->pick->hit(p1->cMove);
-	if(hit(hitbox2, hittable1)) p1->pick->health -= 10;// p1->pick->hit(p2->cMove);
 
 	SDL_Rect a = p1->pos, b = p2->pos;
 	a.x += deltaX1;
@@ -137,10 +129,11 @@ void interface::resolve()
 	a.y += deltaY1;
 	b.y += deltaY2;
 	bool lock1, lock2 = 0;
-	collision = hit(a, b);
+	collision = checkCollision(a, b);
 	/* Some collision */
 
-	if(collision) p2->pick->health -= 10;
+	if(checkCollision(hitbox1, hitreg2)) p2->pick->hit(p1->cMove);
+	if(checkCollision(hitbox2, hitreg1)) p1->pick->hit(p2->cMove);
 
 	/* Floor and Cieling */
 	if (p2->pos.y + deltaY2 <= 0)
@@ -183,7 +176,7 @@ void interface::resolve()
 		}
 	}
 
-	if(hit(p1->pos, p2->pos)){
+	if(checkCollision(p1->pos, p2->pos)){
 		if(p1->aerial && !(p2->aerial)){
 			if(p2->facing == 1) p1->pos.x = p2->pos.x + p2->pos.w;
 			else p1->pos.x = p2->pos.x - p1->pos.w;
@@ -336,7 +329,7 @@ void interface::readInput()
 }
 
 
-bool interface::hit(SDL_Rect a, SDL_Rect b)
+bool interface::checkCollision(SDL_Rect a, SDL_Rect b)
 {
 	if(a.y + a.h - b.y <= 0 || b.y + b.h - a.y <= 0) return 0;
 	if(a.x + a.w - b.x < 0 || b.x + b.w - a.x < 0) return 0;

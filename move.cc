@@ -29,9 +29,10 @@ move::move(char * n, int l)
 	state = new int[l];
 	collision = new SDL_Rect[l];
 	hitbox = new SDL_Rect[l];
-	hittable = new SDL_Rect[l];
+	hitreg = new SDL_Rect[l];
 	delta = new SDL_Rect[l];
 	xLock = 0;
+	damage = 0;
 	init();
 }
 
@@ -64,12 +65,13 @@ move::move(char* n, char *b, bool s, int l)
 	start = new frame(n, l);
 	tolerance = 30;
 	frames = l;
+	damage = 0;
 	init();
 	xLock = 0;
 	state = new int[l];
 	collision = new SDL_Rect[l];
 	hitbox = new SDL_Rect[l];
-	hittable = new SDL_Rect[l];
+	hitreg = new SDL_Rect[l];
 	delta = new SDL_Rect[l];
 }
 
@@ -117,7 +119,7 @@ move::~move()
 	if(state) delete [] state;
 	if(collision) delete [] collision;
 	if(hitbox) delete [] hitbox;
-	if(hittable) delete [] hittable;
+	if(hitreg) delete [] hitreg;
 	if(delta) delete [] delta;
 }
 
@@ -149,15 +151,22 @@ void move::execute(frame *& curr)
 	else printf("Hook for %s detected\n", name);
 }
 
-bool move::step(SDL_Rect &d, SDL_Rect &coll, SDL_Rect &hit, SDL_Rect &hbox, frame * &anim)
+bool move::step(SDL_Rect &d, SDL_Rect &c, SDL_Rect &r, SDL_Rect &b)
 {
 
-	if(frames > 0){
-		d = delta[currentFrame];
-		coll = collision[currentFrame];
-		hit = hittable[currentFrame];
-		hbox = hitbox[currentFrame];
-		anim = start;
+	if(start){
+		d.x = delta[currentFrame].x; d.y = delta[currentFrame].y;
+		c.x = collision[currentFrame].x; c.w = collision[currentFrame].w;
+		c.y = collision[currentFrame].y; c.h = collision[currentFrame].h;
+		r.x = hitreg[currentFrame].x; r.w = hitreg[currentFrame].w;
+		r.y = hitreg[currentFrame].y; r.h = hitreg[currentFrame].h;
+		if(!cFlag) { 
+			b.x = hitbox[currentFrame].x; b.w = hitbox[currentFrame].w; 
+			b.y = hitbox[currentFrame].y; b.h = hitbox[currentFrame].h;
+		}
+		else {
+			b.x = 0; b.y = 0; b.w = 0; b.h = 0;
+		}
 		if(currentFrame == frames-1) {
 			init();
 			return 0;
@@ -180,8 +189,16 @@ bool move::operator==(move * x)
 
 void move::init()
 {
+	cFlag = 0;
 	currentFrame = 0;
 }
+
+void move::connect()
+{
+	cFlag = 1;
+}
+
+
 
 /*Testing stuff for now, thus it becomes necessary to set all states to stuff*/
 void move::debugStateInit(int q, int r)
@@ -206,33 +223,33 @@ void move::debugRectsInit()
 		collision[i].x = 0;
 		collision[i].w = 1;
 		collision[i].h = 1;
-		hittable[i].y = 0;
-		hittable[i].x = 0;
-		hittable[i].w = 1;
-		hittable[i].h = 1;
+		hitreg[i].y = 0;
+		hitreg[i].x = 0;
+		hitreg[i].w = 1;
+		hitreg[i].h = 1;
 	}
 }
 
-void move::debugHitboxInit(int y, int x, int w, int h)
+void move::debugHitboxInit(int x, int y, int w, int h)
 {
 	for(int i = 0; i < frames; i++){
-		hitbox[i].y = y;
 		hitbox[i].x = x;
+		hitbox[i].y = y;
 		hitbox[i].w = w;
 		hitbox[i].h = h;
 	}
 }
 
-void move::debugHittableInit(int y, int x, int w, int h)
+void move::debugHittableInit(int x, int y, int w, int h)
 {
 	for(int i = 0; i < frames; i++){
-		hittable[i].y = y;
-		hittable[i].x = x;
-		hittable[i].w = w;
-		hittable[i].h = h;
+		hitreg[i].y = y;
+		hitreg[i].x = x;
+		hitreg[i].w = w;
+		hitreg[i].h = h;
 	}
 }
-void move::debugCollisionInit(int y, int x, int w, int h)
+void move::debugCollisionInit(int x, int y, int w, int h)
 {	
 	for(int i = 0; i < frames; i++){
 		collision[i].y = y;
@@ -241,7 +258,7 @@ void move::debugCollisionInit(int y, int x, int w, int h)
 		collision[i].h = h;
 	}
 }
-void move::debugDeltaInit(int y, int x, int w, int h) 
+void move::debugDeltaInit(int x, int y, int w, int h) 
 {
 	for(int i = 0; i < frames; i++){
 		delta[i].y = y;
