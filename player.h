@@ -5,6 +5,7 @@ public:
 
 	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
 	frame * current;
+	SDL_Surface * sprite;
 	move * cMove;
 	character * pick;
 	int deltaX, deltaY;
@@ -18,6 +19,9 @@ public:
 	void characterSelect(int);
 	void pushInput(bool*, bool*, bool*);
 	int colorkey;
+	void draw();
+	void spriteInit();
+	SDL_Rect pos;
 private:
 	int inputBuffer[29];
 };

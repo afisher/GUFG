@@ -20,6 +20,7 @@ public:
 	frame * start;		//The first frame of the move's sprite.
 	int * state;		//An array of states. If the states are single integers, the array is the same size as the number of frames.
 	int allowed;		//The state in which the move is allowed. Depending on how we handle states, this may need to be an array of states or something.
+	bool xLock, yLock;
 
 	void debugStateInit(int, int); //State initialization function for testing purposes. Once we work out the finalized constructor this will be obviated.
 	void debugRectsInit();

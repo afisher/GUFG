@@ -39,8 +39,8 @@ interface::interface()
 	p2->characterSelect(1);
 
 	/*Build the character. Eventually this will probably be a function.*/
-	p1sprite = NULL;
-	p2sprite = NULL;
+	p1->sprite = NULL;
+	p2->sprite = NULL;
 	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
 
 	/*Background color, temporary until we have backgrounds*/
@@ -68,13 +68,16 @@ interface::interface()
 	deltaY2 = 0;
 	grav = 3;
 	timer = 5824;
-	sFlag1 = 0; 
-	sFlag2 = 0;
-	spriteInit();
-	pos1.x = wall*4;
-	pos2.x = screenWidth - wall*4 - p2sprite->w;
-	pos1.y = floor - p1sprite->h;
-	pos2.y = floor - p1sprite->h;
+	p1->sFlag = 0; 
+	p2->sFlag = 0;
+	p2->facing = -1;
+	p1->facing = 1;
+	p1->spriteInit();
+	p2->spriteInit();
+	p1->pos.x = wall*4;
+	p2->pos.x = screenWidth - wall*4 - p2->sprite->w;
+	p1->pos.y = floor - p1->sprite->h;
+	p2->pos.y = floor - p2->sprite->h;
 	draw();
 }
 
@@ -86,21 +89,32 @@ void interface::runTimer()
 
 void interface::resolve()
 {
+	
 	SDL_Rect hitbox1, hittable1, delta1, collision1;
 	SDL_Rect hitbox2, hittable2, delta2, collision2;
 	frame * dummy;
-	if(p1->cMove != NULL) 
+	if(p1->cMove != NULL) {
 		if(!p1->cMove->step(delta1, hitbox1, hittable1, collision1, dummy)) p1->cMove = NULL;
-	if(p2->cMove != NULL) 
+		else {
+			if(p1->cMove->xLock) deltaX1 = delta1.x;
+			if(p1->cMove->yLock) deltaY1 = delta1.y;
+		}
+	}
+	if(p2->cMove != NULL) { 
 		if(!p2->cMove->step(delta2, hitbox2, hittable2, collision1, dummy)) p2->cMove = NULL;
-		
+		else {
+			if(p2->cMove->xLock) deltaX2 = delta2.x;
+			if(p2->cMove->yLock) deltaY2 = delta2.y;
+		}
+	}
+			
 
 	/* Movement currently determined by static deltas */
-	if(pos1.y + pos1.h < floor) p1->aerial = 1;
-	if(pos2.y + pos2.h < floor) p2->aerial = 1;
+	if(p1->pos.y + p1->pos.h < floor) p1->aerial = 1; 
+	if(p2->pos.y + p2->pos.h < floor) p2->aerial = 1;
 	bool collision = 0;
 
-	SDL_Rect a = pos1, b = pos2;
+	SDL_Rect a = p1->pos, b = p2->pos;
 	a.x += deltaX1;
 	b.x += deltaX2;
 	a.y += deltaY1;
@@ -110,85 +124,90 @@ void interface::resolve()
 	/* Some collision */
 
 	/* Floor and Cieling */
-	if (pos2.y + deltaY2 <= 0)
-		pos2.y = 0;
-	else if (pos2.y + deltaY2 + pos2.h >= floor)
-		pos2.y = floor - pos2.h;
-	else pos2.y += deltaY2;
+	if (p2->pos.y + deltaY2 <= 0)
+		p2->pos.y = 0;
+	else if (p2->pos.y + deltaY2 + p2->pos.h >= floor)
+		p2->pos.y = floor - p2->pos.h;
+	else p2->pos.y += deltaY2;
 	
 	
 	
-	if (pos1.y + deltaY1 <= 0)
-		pos1.y = 0;
-	else if (pos1.y + pos1.h + deltaY1 >= floor)
-		pos1.y = floor - pos1.h;
-	else pos1.y += deltaY1;
+	if (p1->pos.y + deltaY1 <= 0)
+		p1->pos.y = 0;
+	else if (p1->pos.y + p1->pos.h + deltaY1 >= floor)
+		p1->pos.y = floor - p1->pos.h;
+	else p1->pos.y += deltaY1;
 
 	/* Walls */
 
-	if (pos1.x + deltaX1 <= wall){
-		pos1.x = wall;
-		if(collision && p1->facing == 1) { pos2.x = pos1.x + pos1.w; lock2 = 1;}
-	} else if (pos1.x + deltaX1 + pos1.w >= screenWidth - wall){
-		pos1.x = screenWidth - wall - pos1.w;
-		if(collision && p1->facing == -1) { pos2.x = pos1.x - pos2.w; lock2 = 1;}
+	if (p1->pos.x + deltaX1 <= wall){
+		p1->pos.x = wall;
+		if(collision && p1->facing == 1) { p2->pos.x = p1->pos.x + p1->pos.w; lock2 = 1;}
+	} else if (p1->pos.x + deltaX1 + p1->pos.w >= screenWidth - wall){
+		p1->pos.x = screenWidth - wall - p1->pos.w;
+		if(collision && p1->facing == -1) { p2->pos.x = p1->pos.x - p2->pos.w; lock2 = 1;}
 	} else {
-		if(collision) pos1.x += deltaX2;
-		pos1.x += deltaX1;
+		if(collision) p1->pos.x += deltaX2;
+		p1->pos.x += deltaX1;
 	}
 
-	if (pos2.x + deltaX2 <= wall){
-		pos2.x = wall;
-		if(collision && p2->facing == 1) pos1.x = pos2.x + pos2.w;
-	} else if (pos2.x + deltaX2 + pos2.w >= screenWidth - wall){
-		pos2.x = screenWidth - wall - pos2.w;
-		if(collision && p2->facing == -1) pos1.x = pos2.x - pos1.w;
+	if (p2->pos.x + deltaX2 <= wall){
+		p2->pos.x = wall;
+		if(collision && p2->facing == 1) p1->pos.x = p2->pos.x + p2->pos.w;
+	} else if (p2->pos.x + deltaX2 + p2->pos.w >= screenWidth - wall){
+		p2->pos.x = screenWidth - wall - p2->pos.w;
+		if(collision && p2->facing == -1) p1->pos.x = p2->pos.x - p1->pos.w;
 	} else { 
 		if(!lock2){
-			pos2.x += deltaX2;
-			if(collision) pos2.x += deltaX1;
+			p2->pos.x += deltaX2;
+			if(collision) p2->pos.x += deltaX1;
 		}
 	}
 
-	if(hit(pos1, pos2)){
+	if(hit(p1->pos, p2->pos)){
 		if(p1->aerial && !(p2->aerial)){
-			if(p2->facing == 1) pos1.x = pos2.x + pos2.w;
-			else pos1.x = pos2.x - pos1.w;
+			if(p2->facing == 1) p1->pos.x = p2->pos.x + p2->pos.w;
+			else p1->pos.x = p2->pos.x - p1->pos.w;
 		}
 		if(p2->aerial && !(p1->aerial)){
-			if(p1->facing == 1) pos2.x = pos1.x + pos1.w;
-			else pos2.x = pos1.x - pos2.w;
+			if(p1->facing == 1) p2->pos.x = p1->pos.x + p1->pos.w;
+			else p2->pos.x = p1->pos.x - p2->pos.w;
 		}
 	}
 
 
 	/*Enforcing gravity*/
-	if(pos1.y + pos1.h >= floor && p1->aerial == 1)
+	if(p1->pos.y + p1->pos.h >= floor && p1->aerial == 1){
 		p1->aerial = 0;
+	}
 	if(!p1->aerial){
-		if(sAxis1[0]) deltaY1 = -35;
-		else deltaY1 = 0;
-		if(sAxis1[3]) deltaX1 = 5;
-		if(sAxis1[2]) deltaX1 = -5;
-		if((!sAxis1[2] && !sAxis1[3]) || sAxis1[1] == 1) deltaX1 = 0;
-		if (pos1.x < pos2.x && p1->facing == -1) { p1->facing = 1; sFlag1 = 0;}
-		else if (pos1.x > pos2.x && p1->facing == 1) { p1->facing = -1; sFlag1 = 0; }
+		if(p1->cMove == NULL){
+			if(sAxis1[0]) deltaY1 = -35;
+			else deltaY1 = 0;
+			if(sAxis1[3]) deltaX1 = 5;
+			if(sAxis1[2]) deltaX1 = -5;
+			if((!sAxis1[2] && !sAxis1[3]) || sAxis1[1] == 1) deltaX1 = 0;
+		}
+		if (p1->pos.x < p2->pos.x && p1->facing == -1) { p1->facing = 1; p1->sFlag = 0;}
+		else if (p1->pos.x > p2->pos.x && p1->facing == 1) { p1->facing = -1; p1->sFlag = 0;}
 	}
 	if(p1->aerial) deltaY1 += grav;
 
 			/*Player 2*/
 
 
-	if(pos2.y + pos2.h >= floor && p2->aerial == 1)
+	if(p2->pos.y + p2->pos.h >= floor && p2->aerial == 1)
 		p2->aerial = 0;
 	if(!p2->aerial){
-		if(sAxis2[0]) deltaY2 = -35;
-		else deltaY2 = 0;
-		if(sAxis2[3]) deltaX2 = 5;
-		if(sAxis2[2]) deltaX2 = -5;
-		if((!sAxis2[2] && !sAxis2[3]) || sAxis2[1] == 1) deltaX2 = 0;
-		if (pos2.x < pos1.x && p2->facing == -1) { p2->facing = 1; sFlag2 = 0;}
-		else if (pos2.x > pos1.x && p2->facing == 1) { p2->facing = -1; sFlag2 = 0; }
+		if(p2->cMove == NULL){
+			if(sAxis2[0]) deltaY2 = -35;
+			else deltaY2 = 0;
+			if(sAxis2[3]) deltaX2 = 5;
+			if(sAxis2[2]) deltaX2 = -5;
+			if((!sAxis2[2] && !sAxis2[3]) || sAxis2[1] == 1) deltaX2 = 0;
+		}
+		if (p2->pos.x < p1->pos.x && p2->facing == -1) { p2->facing = 1; p2->sFlag = 0;}
+		else if (p2->pos.x > p1->pos.x && p2->facing == 1) { p2->facing = -1; p2->sFlag = 0; }
 	}
 	if(p2->aerial) deltaY2 += grav;
 
@@ -199,7 +218,16 @@ void interface::resolve()
 		negEdge1[i] = 0;
 		negEdge2[i] = 0;
 	}
-	spriteInit();
+	if(!p1->aerial && !p1->cMove){
+		if(p1->facing == -1 && p1->pos.x < p2->pos.x) p1->facing = 1;
+		else if(p1->facing == 1 && p1->pos.x > p2->pos.x) p1->facing = -1;
+	}
+	if(!p2->aerial && !p2->cMove){
+		if(p2->facing == -1 && p2->pos.x < p1->pos.x) p2->facing = 1;
+		else if(p2->facing == 1 && p2->pos.x > p1->pos.x) p2->facing = -1;
+	}
+	p1->spriteInit();
+	p2->spriteInit();
 	runTimer();
 }
 
@@ -288,69 +316,42 @@ void interface::readInput()
 
 void interface::draw()
 {
-	SDL_SetColorKey(p1sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
-	SDL_SetColorKey(p2sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
+	SDL_SetColorKey(p1->sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
+	SDL_SetColorKey(p2->sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
-	SDL_BlitSurface(p1sprite, NULL, screen, &pos1);
-	SDL_BlitSurface(p2sprite, NULL, screen, &pos2);
+	SDL_BlitSurface(p1->sprite, NULL, screen, &p1->pos);
+	SDL_BlitSurface(p2->sprite, NULL, screen, &p2->pos);
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
 }
 
-void interface::spriteInit()
+void player::spriteInit()
 {
 	int displacement;
 	SDL_Surface *sTemp;
-	if(p1sprite) displacement = p1sprite->w;
-	/*Doing moves*/
-	if(p1->current != NULL){
-		if(p1->facing == -1) { 
-			p1sprite = SDL_DisplayFormat(p1->current->fSprite);
-			pos1.x += (displacement - p1sprite->w);
-		}
-		else p1sprite = SDL_DisplayFormat(p1->current->sprite);
-		p1->current = p1->current->next;
-		sFlag1 = 0;
-	}
-	else if(!sFlag1){
-		char nsprt[strlen(p1->pick->name)+4];
-		strcpy(nsprt, p1->pick->name);
-		strcat(nsprt, "/");
-		strcat(nsprt, "N");
-		if(p1->facing == -1) strcat(nsprt, "F");
-		sTemp = SDL_LoadBMP(nsprt);
-		p1sprite = SDL_DisplayFormat(sTemp);
-		if(p1->facing == -1)
-			if (pos1.x < pos2.x && p1->facing == -1) { p1->facing = 1; sFlag1 = 0;}
-		else if (pos1.x > pos2.x && p1->facing == 1) { p1->facing = -1; sFlag1 = 0;}
-			pos1.x += (displacement - p1sprite->w);
-		SDL_FreeSurface(sTemp);
-		sFlag1 = 1;
-	}
+	if(sprite) displacement = sprite->w;
 
-	if(p2sprite) displacement = p2sprite->w;
-	if(p2->current != NULL){
-		if(p2->facing == -1) { 
-			p2sprite = SDL_DisplayFormat(p2->current->fSprite);
-			pos2.x += (displacement - p2sprite->w);
+	/*Doing moves*/
+	if(cMove != NULL){
+		if(facing == -1) { 
+			sprite = SDL_DisplayFormat(current->fSprite);
+			pos.x += (displacement - sprite->w);
 		}
-		else p2sprite = SDL_DisplayFormat(p2->current->sprite);
-		p2->current = p2->current->next;
-		sFlag2 = 0;
+		else sprite = SDL_DisplayFormat(current->sprite);
+		current = current->next;
+		sFlag = 0;
 	}
-	else if (!sFlag2){
-		char nsprt[strlen(p2->pick->name)+4];
-		strcpy(nsprt, p2->pick->name);
+	else if(!sFlag){
+		char nsprt[strlen(pick->name)+4];
+		strcpy(nsprt, pick->name);
 		strcat(nsprt, "/");
 		strcat(nsprt, "N");
-		if(p2->facing == -1) strcat(nsprt, "F");
+		if(facing == -1) strcat(nsprt, "F");
 		sTemp = SDL_LoadBMP(nsprt);
-		p2sprite = SDL_DisplayFormat(sTemp);
-		if(p2->facing == -1)
-			if (pos2.x < pos1.x && p2->facing == -1) { p2->facing = 1; sFlag2 = 0;}
-		else if (pos2.x > pos1.x && p2->facing == 1) { p2->facing = -1; sFlag2 = 0;}
-			pos2.x += (displacement - p2sprite->w);
+		sprite = SDL_DisplayFormat(sTemp);
+		if (facing == -1)
+			pos.x += (displacement - sprite->w);
 		SDL_FreeSurface(sTemp);
-		sFlag2 = 1;
+		sFlag = 1;
 	}
 }
 
