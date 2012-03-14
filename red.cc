@@ -9,4 +9,5 @@ red::red()
 	head->fish[0].debugHittableInit(0, 0, 100, 150);
 	head->fish[0].xLock = 1;
 	head->fish[0].yLock = 1;
+	neutral = new move("Red/N", 1);
 }

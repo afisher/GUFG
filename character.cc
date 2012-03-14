@@ -43,6 +43,8 @@ character::character()
 	curr->fish[0].debugStateInit(1, 1);
 	curr->fish[0].debugRectsInit();
 
+	neutral = new move("White/N", 1);
+
 	cMove = NULL;
 	health = 100;
 	meter = 0;
@@ -57,7 +59,7 @@ character::~character()
 
 /*Here begin move functions. Actually contemplating making this a class instead, but this might be simpler for now*/
 
-move * character::hit(move * attack)
+int * character::takeHit(move * attack)
 {
 	/*All the important logic like blocking and stuff will go here later.*/
 

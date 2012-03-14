@@ -132,8 +132,8 @@ void interface::resolve()
 	collision = checkCollision(a, b);
 	/* Some collision */
 
-	if(checkCollision(hitbox1, hitreg2)) p2->pick->hit(p1->pick->cMove);
-	if(checkCollision(hitbox2, hitreg1)) p1->pick->hit(p2->pick->cMove);
+	if(checkCollision(hitbox1, hitreg2)) p2->pick->takeHit(p1->pick->cMove);
+	if(checkCollision(hitbox2, hitreg1)) p1->pick->takeHit(p2->pick->cMove);
 
 	/* Floor and Cieling */
 	if (p2->pos.y + deltaY2 <= 0)

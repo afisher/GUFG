@@ -24,7 +24,6 @@ player::player()
 		keyConfig(i);
 	}
 
-	facing = 1;
 	current = NULL;
 	/*Set up the sprite*/
 
