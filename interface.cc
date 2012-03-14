@@ -94,10 +94,10 @@ void interface::resolve()
 	SDL_Rect hitbox1, hitreg1, delta1, collision1;
 	SDL_Rect hitbox2, hitreg2, delta2, collision2;
 	frame * dummy;
-	if(p1->cMove != NULL) {
-		dflag1 = 1 - p1->cMove->step(delta1, collision1, hitreg1, hitbox1);
-		if(p1->cMove->yLock) deltaX1 = delta1.x; else deltaX1 += delta1.x;
-		if(p1->cMove->xLock) deltaY1 = delta1.y; else deltaY1 += delta1.y;
+	if(p1->pick->cMove != NULL) {
+		dflag1 = 1 - p1->pick->cMove->step(delta1, collision1, hitreg1, hitbox1);
+		if(p1->pick->cMove->yLock) deltaX1 = delta1.x; else deltaX1 += delta1.x;
+		if(p1->pick->cMove->xLock) deltaY1 = delta1.y; else deltaY1 += delta1.y;
 		if(p1->facing == -1) hitbox1.x = p1->pos.x + p1->pos.w - hitbox1.x - hitbox1.w;
 		else hitbox1.x += p1->pos.x;
 		hitbox1.y += p1->pos.y;
@@ -108,10 +108,10 @@ void interface::resolve()
 		else collision1.x += p1->pos.x;
 		collision1.y += p1->pos.y;
 	}
-	if(p2->cMove != NULL) { 
-		dflag2 = 1 - p2->cMove->step(delta2, collision2, hitreg2, hitbox2); 
-		if(p2->cMove->yLock) deltaX2 = delta2.x; else deltaX2 += delta1.x;
-		if(p2->cMove->xLock) deltaY2 = delta2.y; else deltaY1 += delta1.y;
+	if(p2->pick->cMove != NULL) { 
+		dflag2 = 1 - p2->pick->cMove->step(delta2, collision2, hitreg2, hitbox2); 
+		if(p2->pick->cMove->yLock) deltaX2 = delta2.x; else deltaX2 += delta1.x;
+		if(p2->pick->cMove->xLock) deltaY2 = delta2.y; else deltaY1 += delta1.y;
 		if(p2->facing == -1) hitreg2.x = p2->pos.x + p2->pos.w - hitreg2.x - hitreg2.w;
 		else hitreg2.x += p2->pos.x;
 		hitreg2.y += p2->pos.y;
@@ -132,8 +132,8 @@ void interface::resolve()
 	collision = checkCollision(a, b);
 	/* Some collision */
 
-	if(checkCollision(hitbox1, hitreg2)) p2->pick->hit(p1->cMove);
-	if(checkCollision(hitbox2, hitreg1)) p1->pick->hit(p2->cMove);
+	if(checkCollision(hitbox1, hitreg2)) p2->pick->hit(p1->pick->cMove);
+	if(checkCollision(hitbox2, hitreg1)) p1->pick->hit(p2->pick->cMove);
 
 	/* Floor and Cieling */
 	if (p2->pos.y + deltaY2 <= 0)
@@ -193,7 +193,7 @@ void interface::resolve()
 		p1->aerial = 0;
 	}
 	if(!p1->aerial){
-		if(p1->cMove == NULL){
+		if(p1->pick->cMove == NULL){
 			if(sAxis1[0]) deltaY1 = -35;
 			else deltaY1 = 0;
 			if(sAxis1[3]) deltaX1 = 5;
@@ -211,7 +211,7 @@ void interface::resolve()
 	if(p2->pos.y + p2->pos.h >= floor && p2->aerial == 1)
 		p2->aerial = 0;
 	if(!p2->aerial){
-		if(p2->cMove == NULL){
+		if(p2->pick->cMove == NULL){
 			if(sAxis2[0]) deltaY2 = -35;
 			else deltaY2 = 0;
 			if(sAxis2[3]) deltaX2 = 5;
@@ -230,16 +230,16 @@ void interface::resolve()
 		negEdge1[i] = 0;
 		negEdge2[i] = 0;
 	}
-	if(!p1->aerial && !p1->cMove){
+	if(!p1->aerial && !p1->pick->cMove){
 		if(p1->facing == -1 && p1->pos.x < p2->pos.x) p1->facing = 1;
 		else if(p1->facing == 1 && p1->pos.x > p2->pos.x) p1->facing = -1;
 	}
-	if(!p2->aerial && !p2->cMove){
+	if(!p2->aerial && !p2->pick->cMove){
 		if(p2->facing == -1 && p2->pos.x < p1->pos.x) p2->facing = 1;
 		else if(p2->facing == 1 && p2->pos.x > p1->pos.x) p2->facing = -1;
 	}
-	if(dflag1) p1->cMove = NULL;
-	if(dflag2) p2->cMove = NULL;
+	if(dflag1) p1->pick->cMove = NULL;
+	if(dflag2) p2->pick->cMove = NULL;
 	p1->spriteInit();
 	p2->spriteInit();
 	runTimer();
