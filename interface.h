@@ -26,7 +26,7 @@ public:
 
 	player *p1, *p2;	
 	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
-	SDL_Surface *bg, *screen;
+	SDL_Surface *p1sprite, *p2sprite, *bg, *screen;
 	character * pick;
 	int grav;
 	char * inputName[10];	//Input names. This is really just for housekeeping.
