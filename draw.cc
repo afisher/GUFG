@@ -30,15 +30,14 @@ void player::spriteInit()
 	if(sprite) displacement = sprite->w;
 
 	/*Doing moves*/
-	if(current != NULL){
-		if(facing == -1) { 
-			sprite = SDL_DisplayFormat(current->fSprite);
-			pos.x += (displacement - sprite->w);
-		}
-		else sprite = SDL_DisplayFormat(current->sprite);
-		current = current->next;
-		sFlag = 0;
+	if(current == NULL) pick->neutral->execute(current);
+	if(facing == -1) { 
+		sprite = SDL_DisplayFormat(current->fSprite);
+		pos.x += (displacement - sprite->w);
 	}
+	else sprite = SDL_DisplayFormat(current->sprite);
+	current = current->next;
+	sFlag = 0;/*
 	else if(!sFlag){
 		char nsprt[strlen(pick->name)+4];
 		strcpy(nsprt, pick->name);
@@ -51,5 +50,5 @@ void player::spriteInit()
 			pos.x += (displacement - sprite->w);
 		SDL_FreeSurface(sTemp);
 		sFlag = 1;
-	}
+	}*/
 }

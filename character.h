@@ -17,8 +17,9 @@ public:
 		
 	char * name; //The name of the directory from which the character spawns. This is important for loading into memory
 	void draw();
-	move * hit(move *);
+	int * takeHit(move *);
 
+	move * neutral;
 	move * cMove;
 	int health;
 	int meter;
