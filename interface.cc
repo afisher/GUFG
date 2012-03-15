@@ -35,8 +35,8 @@ interface::interface()
 	p2 = new player;
 
 	/*Temporarily, this is where we do character select. Obviously this will become a menu later*/
-	p1->characterSelect(0);
-	p2->characterSelect(1);
+	p1->characterSelect(1);
+	p2->characterSelect(0);
 
 	/*Build the character. Eventually this will probably be a function.*/
 	p1->sprite = NULL;
