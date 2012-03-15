@@ -49,6 +49,32 @@ character::character()
 	neutral->debugStateInit(1, 31, 31);
 	neutral->debugHittableInit(0, 0, 100, 150);
 
+	walkBack = new move("White/WB", 1);
+	walkBack->debugRectsInit();
+	walkBack->debugStateInit(1, 31, 31);
+	walkBack->debugHittableInit(0, 0, 100, 150);
+	walkBack->debugDeltaInit(-5, 0, 0, 0);
+	walkBack->xLock = 1;
+
+	walk = new move("White/W", 1);
+	walk->debugRectsInit();
+	walk->debugStateInit(1, 31, 31);
+	walk->debugHittableInit(0, 0, 100, 150);
+	walk->debugDeltaInit(5, 0, 0, 0);
+	walk->setTolerance(1);
+	walk->xLock = 1;
+
+	jump = new move("White/J", 1);
+	jump->debugRectsInit();
+	jump->debugStateInit(5, 31, 31);
+	jump->debugHittableInit(0, 0, 100, 150);
+	jump->debugDeltaInit(0, -20, 0, 0);
+	jump->setTolerance(1);
+
+	head->insert(9, jump);
+	head->insert(8, jump);
+	head->insert(7, jump);
+
 	cMove = neutral;
 	health = 300;
 	meter = 0;

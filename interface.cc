@@ -93,8 +93,10 @@ void interface::resolve()
 	frame * dummy;
 	if(p1->pick->cMove != NULL) {
 		dflag1 = 1 - p1->pick->cMove->step(delta1, collision1, hitreg1, hitbox1);
-		if(p1->pick->cMove->yLock) deltaX1 = delta1.x; else deltaX1 += delta1.x;
-		if(p1->pick->cMove->xLock) deltaY1 = delta1.y; else deltaY1 += delta1.y;
+		if(p1->pick->cMove->xLock) deltaX1 = delta1.x*p1->facing; else deltaX1 += delta1.x*p1->facing;
+		if(!p1->aerial){
+			if(p1->pick->cMove->yLock) deltaY1 = delta1.y; 	else deltaY1 += delta1.y;
+		}
 		if(p1->facing == -1) hitbox1.x = p1->pos.x + p1->pos.w - hitbox1.x - hitbox1.w;
 		else hitbox1.x += p1->pos.x;
 		hitbox1.y += p1->pos.y;
@@ -107,8 +109,10 @@ void interface::resolve()
 	}
 	if(p2->pick->cMove != NULL) { 
 		dflag2 = 1 - p2->pick->cMove->step(delta2, collision2, hitreg2, hitbox2); 
-		if(p2->pick->cMove->yLock) deltaX2 = delta2.x; else deltaX2 += delta1.x;
-		if(p2->pick->cMove->xLock) deltaY2 = delta2.y; else deltaY2 += delta1.y;
+		if(p2->pick->cMove->xLock) deltaX2 = delta2.x*p2->facing; else deltaX2 += delta2.x*p2->facing;
+		if(!p2->aerial){
+			if(p2->pick->cMove->yLock) deltaY2 = delta2.y; else deltaY2 += delta2.y;
+		}
 		if(p2->facing == -1) hitbox2.x = p2->pos.x + p2->pos.w - hitbox2.x - hitbox2.w;
 		else hitbox2.x += p2->pos.x;
 		hitbox2.y += p2->pos.y;
@@ -142,16 +146,20 @@ void interface::resolve()
 	/* Floor and Cieling */
 	if (p2->pos.y + deltaY2 <= 0)
 		p2->pos.y = 0;
-	else if (p2->pos.y + deltaY2 + p2->pos.h >= floor)
+	else if (p2->pos.y + deltaY2 + p2->pos.h >= floor){
 		p2->pos.y = floor - p2->pos.h;
+		p2->aerial = 0; deltaY2 = 0;
+	}
 	else p2->pos.y += deltaY2;
 	
 	
 	
 	if (p1->pos.y + deltaY1 <= 0)
 		p1->pos.y = 0;
-	else if (p1->pos.y + p1->pos.h + deltaY1 >= floor)
+	else if (p1->pos.y + p1->pos.h + deltaY1 >= floor){
 		p1->pos.y = floor - p1->pos.h;
+		p1->aerial = 0; deltaY1 = 0;
+	}
 	else p1->pos.y += deltaY1;
 
 	/* Walls */
@@ -198,10 +206,10 @@ void interface::resolve()
 	}
 	if(!p1->aerial){
 		if(p1->pick->cMove == p1->pick->neutral){
-			if(sAxis1[0]) deltaY1 = -35;
-			else deltaY1 = 0;
-			if(sAxis1[3]) deltaX1 = 5;
-			if(sAxis1[2]) deltaX1 = -5;
+//			if(sAxis1[0]) deltaY1 = -35;
+//			else deltaY1 = 0;
+//			if(sAxis1[3] && p1->facing == 1 || sAxis1[2] && p1->facing == -1) { p1->pick->cMove = p1->pick->walk; p1->pick->cMove->execute(p1->current); }
+//			if(sAxis1[2] && p1->facing == 1 || sAxis1[3] && p1->facing == -1) { p1->pick->cMove = p1->pick->walkBack; p1->pick->cMove->execute(p1->current); }
 			if((!sAxis1[2] && !sAxis1[3]) || sAxis1[1] == 1) deltaX1 = 0;
 		}
 		if (p1->pos.x < p2->pos.x && p1->facing == -1) p1->facing = 1;
@@ -216,10 +224,10 @@ void interface::resolve()
 		p2->aerial = 0;
 	if(!p2->aerial){
 		if(p2->pick->cMove == p2->pick->neutral){
-			if(sAxis2[0]) deltaY2 = -35;
-			else deltaY2 = 0;
-			if(sAxis2[3]) deltaX2 = 5;
-			if(sAxis2[2]) deltaX2 = -5;
+//			if(sAxis2[0]) deltaY2 = -35;
+//			else deltaY2 = 0;
+//			if(sAxis2[3]) deltaX2 = 5;
+//			if(sAxis2[2]) deltaX2 = -5;
 			if((!sAxis2[2] && !sAxis2[3]) || sAxis2[1] == 1) deltaX2 = 0;
 		}
 		if (p2->pos.x < p1->pos.x && p2->facing == -1) p2->facing = 1; 
