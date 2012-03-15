@@ -50,7 +50,7 @@ character::character()
 	neutral->debugHittableInit(0, 0, 100, 150);
 
 	cMove = neutral;
-	health = 100;
+	health = 300;
 	meter = 0;
 }
 
