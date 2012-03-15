@@ -68,10 +68,8 @@ interface::interface()
 	deltaY2 = 0;
 	grav = 3;
 	timer = 5824;
-	p1->sFlag = 0; 
-	p2->sFlag = 0;
-	p2->facing = -1;
 	p1->facing = 1;
+	p2->facing = -1;
 	p1->spriteInit();
 	p2->spriteInit();
 	draw();
@@ -206,8 +204,8 @@ void interface::resolve()
 			if(sAxis1[2]) deltaX1 = -5;
 			if((!sAxis1[2] && !sAxis1[3]) || sAxis1[1] == 1) deltaX1 = 0;
 		}
-		if (p1->pos.x < p2->pos.x && p1->facing == -1) { p1->facing = 1; p1->sFlag = 0;}
-		else if (p1->pos.x > p2->pos.x && p1->facing == 1) { p1->facing = -1; p1->sFlag = 0;}
+		if (p1->pos.x < p2->pos.x && p1->facing == -1) p1->facing = 1;
+		else if (p1->pos.x > p2->pos.x && p1->facing == 1) p1->facing = -1; 
 	}
 	if(p1->aerial) deltaY1 += grav;
 
@@ -224,8 +222,8 @@ void interface::resolve()
 			if(sAxis2[2]) deltaX2 = -5;
 			if((!sAxis2[2] && !sAxis2[3]) || sAxis2[1] == 1) deltaX2 = 0;
 		}
-		if (p2->pos.x < p1->pos.x && p2->facing == -1) { p2->facing = 1; p2->sFlag = 0;}
-		else if (p2->pos.x > p1->pos.x && p2->facing == 1) { p2->facing = -1; p2->sFlag = 0; }
+		if (p2->pos.x < p1->pos.x && p2->facing == -1) p2->facing = 1; 
+		else if (p2->pos.x > p1->pos.x && p2->facing == 1) p2->facing = -1; 
 	}
 	if(p2->aerial) deltaY2 += grav;
 
