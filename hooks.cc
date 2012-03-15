@@ -18,8 +18,12 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 	
 	t = pick->head->moveHook(inputBuffer, 0, 0, down, up, pick->cMove);
 	
-	if(t != NULL){
+	if(t != NULL){ 
 		pick->cMove = t;
+		pick->cMove->execute(current);
+	}
+	else if (pick->cMove == NULL) {
+		pick->cMove = pick->neutral;
 		pick->cMove->execute(current);
 	}
 	

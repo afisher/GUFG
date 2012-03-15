@@ -183,8 +183,13 @@ bool move::step(SDL_Rect &d, SDL_Rect &c, SDL_Rect &r, SDL_Rect &b)
 bool move::operator==(move * x)
 {
 	if(frames == 0 || x->frames == 0) return 0;
-	else if(allowed == x->state[currentFrame]) return 1;
-	else return 0;
+	else{
+		if(x->cFlag == 1){
+			if(allowed & cState) return 1;
+		}
+		else if(allowed & x->state[currentFrame]) return 1;
+	}
+	return 0;
 }
 
 void move::init()
@@ -201,11 +206,12 @@ void move::connect()
 
 
 /*Testing stuff for now, thus it becomes necessary to set all states to stuff*/
-void move::debugStateInit(int q, int r)
+void move::debugStateInit(int q, int r, int s)
 {
+	allowed = q;
 	for(int i = 0; i < frames; i++)
-		state[i] = q;
-	allowed = r;
+		state[i] = r;
+	cState = s;
 }
 
 void move::debugRectsInit()

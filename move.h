@@ -31,10 +31,11 @@ public:
 	int damage;		//How much damage the move does
 	int stun;		//How much stun the move does
 	int blockMask;		//High, Low, Mid, Unblockable, and Air Block check. Basically a 3-digit binary number expressed as an integer from 0-7
-
+	bool cFlag;
+	int cState;
 
 	//Some initialization functions for testing purposes. Once we work out the finalized constructor this will be obviated.
-	void debugStateInit(int, int); 	
+	void debugStateInit(int, int, int); 	
 	void debugRectsInit();
 	void debugDamageInit(int);
 	void debugHittableInit(int, int, int, int);
@@ -45,7 +46,6 @@ private:
 	int frames;	//Number of frames.
 //	SDL_Surface *sprite, *hit, *hitreg, *collision;
 	bool special;
-	bool cFlag;
 	int cost;
 	int tolerance;
 	int button[5];
