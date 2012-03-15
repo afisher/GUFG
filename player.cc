@@ -82,5 +82,6 @@ void player::characterSelect(int i)
 		pick = new character;
 		break;
 	}
+	pick->cMove->execute(current);
 }
 

@@ -37,18 +37,4 @@ void player::spriteInit()
 	}
 	else sprite = SDL_DisplayFormat(current->sprite);
 	current = current->next;
-	sFlag = 0;/*
-	else if(!sFlag){
-		char nsprt[strlen(pick->name)+4];
-		strcpy(nsprt, pick->name);
-		strcat(nsprt, "/");
-		strcat(nsprt, "N");
-		if(facing == -1) strcat(nsprt, "F");
-		sTemp = SDL_LoadBMP(nsprt);
-		sprite = SDL_DisplayFormat(sTemp);
-		if (facing == -1)
-			pos.x += (displacement - sprite->w);
-		SDL_FreeSurface(sTemp);
-		sFlag = 1;
-	}*/
 }

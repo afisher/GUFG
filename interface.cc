@@ -82,7 +82,6 @@ interface::interface()
 	draw();
 }
 
-
 void interface::runTimer()
 {
 	if(timer > 0) timer--;
