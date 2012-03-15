@@ -32,6 +32,7 @@ move::move(char * n, int l)
 	hitreg = new SDL_Rect[l];
 	delta = new SDL_Rect[l];
 	xLock = 0;
+	yLock = 0;
 	damage = 0;
 	init();
 	blockMask = 7;
@@ -70,6 +71,7 @@ move::move(char* n, char *b, bool s, int l)
 	damage = 0;
 	init();
 	xLock = 0;
+	yLock = 0;
 	state = new int[l];
 	collision = new SDL_Rect[l];
 	hitbox = new SDL_Rect[l];
