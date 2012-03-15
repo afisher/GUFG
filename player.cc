@@ -27,7 +27,6 @@ player::player()
 	current = NULL;
 	/*Set up the sprite*/
 
-	sFlag = 0;
 	deltaX = 0;
 	deltaY = 0;
 	aerial = 0;
