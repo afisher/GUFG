@@ -206,10 +206,6 @@ void interface::resolve()
 	}
 	if(!p1->aerial){
 		if(p1->pick->cMove == p1->pick->neutral){
-//			if(sAxis1[0]) deltaY1 = -35;
-//			else deltaY1 = 0;
-//			if(sAxis1[3] && p1->facing == 1 || sAxis1[2] && p1->facing == -1) { p1->pick->cMove = p1->pick->walk; p1->pick->cMove->execute(p1->current); }
-//			if(sAxis1[2] && p1->facing == 1 || sAxis1[3] && p1->facing == -1) { p1->pick->cMove = p1->pick->walkBack; p1->pick->cMove->execute(p1->current); }
 			if((!sAxis1[2] && !sAxis1[3]) || sAxis1[1] == 1) deltaX1 = 0;
 		}
 		if (p1->pos.x < p2->pos.x && p1->facing == -1) p1->facing = 1;
@@ -224,10 +220,6 @@ void interface::resolve()
 		p2->aerial = 0;
 	if(!p2->aerial){
 		if(p2->pick->cMove == p2->pick->neutral){
-//			if(sAxis2[0]) deltaY2 = -35;
-//			else deltaY2 = 0;
-//			if(sAxis2[3]) deltaX2 = 5;
-//			if(sAxis2[2]) deltaX2 = -5;
 			if((!sAxis2[2] && !sAxis2[3]) || sAxis2[1] == 1) deltaX2 = 0;
 		}
 		if (p2->pos.x < p1->pos.x && p2->facing == -1) p2->facing = 1; 
