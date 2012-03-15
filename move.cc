@@ -15,6 +15,7 @@ move::move(char * n)
 	start = NULL;
 	tolerance = 30;
 	state = NULL;
+	init();
 }
 
 move::move(char * n, int l)
@@ -26,7 +27,7 @@ move::move(char * n, int l)
 	start = new frame(n, l);
 	tolerance = 30;
 	frames = l;
-	state = new int[l];
+	state = new unsigned int[l];
 	collision = new SDL_Rect[l];
 	hitbox = new SDL_Rect[l];
 	hitreg = new SDL_Rect[l];
@@ -74,7 +75,7 @@ move::move(char* n, char *b, bool s, int l)
 	xLock = 0;
 	yLock = 0;
 	stun = 10;
-	state = new int[l];
+	state = new unsigned int[l];
 	collision = new SDL_Rect[l];
 	hitbox = new SDL_Rect[l];
 	hitreg = new SDL_Rect[l];
@@ -118,6 +119,7 @@ move::move(char* n, char * b, bool s)
 	start = NULL;
 	tolerance = 30;
 	frames = 0;
+	init();
 }
 
 move::~move()
@@ -306,18 +308,26 @@ moveTrie::moveTrie(move * a)
 		child[i] = NULL;
 	fish = a;
 	occupants = 1;
+	tolerance = new int;
+	tolerance[0] = 30;
 }
 
 void moveTrie::insert(move * b)
 {
 	int i;
+	int * t;
 	move * temp;
 	occupants++;
 	temp = new move[occupants];
-	for(i = 0; i < occupants-1; i++)
+	t = new int[occupants];
+	for(i = 0; i < occupants-1; i++){
 		temp[i] = fish[i];
+		t[i] = tolerance[i];
+	}
+	t[i] = 30;
 	temp[i] = *b;
 	fish = temp;
+	tolerance = t;
 
 }
 
@@ -349,6 +359,7 @@ moveTrie::~moveTrie()
 			child[i] = NULL;
 		}
 	}
+	delete tolerance;
 	delete fish;
 	fish = NULL;
 }

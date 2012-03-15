@@ -25,8 +25,8 @@ public:
 	void connect();
 
 	frame * start;		//The first frame of the move's sprite.
-	int * state;		//An array of states. If the states are single integers, the array is the same size as the number of frames.
-	int allowed;		//The state in which the move is allowed. Depending on how we handle states, this may need to be an array of states or something.
+	unsigned int * state;		//An array of states. If the states are single integers, the array is the same size as the number of frames.
+	unsigned int allowed;		//The state in which the move is allowed. Depending on how we handle states, this may need to be an array of states or something.
 	bool xLock, yLock;
 	int push;		//How much pushback the move does
 	int damage;		//How much damage the move does
@@ -69,6 +69,7 @@ public:
 	move * moveHook(int[40], int, int, bool[5], bool[5], move *);
 	moveTrie * child[10];
 	move * fish; 		//Because it's what a hook catches! Okay, this name probably needs to change.
+	int * tolerance;
 	moveTrie * insert(int);
 	moveTrie * insert(int, move*);
 	void insert(move *);

@@ -16,17 +16,23 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 		inputBuffer[i] = inputBuffer[i-1];
 	}
 	
-	t = pick->head->moveHook(inputBuffer, 0, 0, down, up, pick->cMove);
-	
+	if(aerial) t = pick->airHead->moveHook(inputBuffer, 0, 0, down, up, pick->cMove);
+	else t = pick->head->moveHook(inputBuffer, 0, 0, down, up, pick->cMove);
+
 	if(t != NULL){ 
 		pick->cMove = t;
 		pick->cMove->execute(current);
 	}
 	else if (pick->cMove == NULL) {
-		if(!aerial && axis[0]) pick->cMove = pick->jump;
+		if(!aerial && axis[0]) 	pick->cMove = pick->jump;
 		else if(!aerial && inputBuffer[0] == 4) pick->cMove = pick->walkBack;
-		else if(!aerial && inputBuffer[0] == 6) pick->cMove = pick->walk;
-		else pick->cMove = pick->neutral;
+		else if(!aerial && inputBuffer[0] == 6) {
+//			if(current == pick->dash->start) pick->cMove = pick->dash; else
+			pick->cMove = pick->walk;
+		} else {
+//			if(current == pick->dash->start) pick->cMove = pick->brake; else
+			pick->cMove = pick->neutral;
+		}
 		pick->cMove->execute(current);
 	}
 	
