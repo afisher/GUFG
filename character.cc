@@ -27,14 +27,6 @@ character::character()
 	head->fish[1].debugRectsInit();
 	airHead = new moveTrie(temp);
 
-
-
-	curr = head->insert(6);
-	curr = curr->insert(3);
-	curr = curr->insert(2, new move("236B", "B", 1));
-	curr->fish[0].debugStateInit(8, 16, 16);
-	curr->fish[0].debugRectsInit();
-
 	neutral = new move("White/N", 1);
 	neutral->debugRectsInit();
 	neutral->debugStateInit(1, 31, 31);
