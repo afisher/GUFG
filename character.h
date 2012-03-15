@@ -14,7 +14,8 @@ public:
 	~character();	//Free stuff
 
 	moveTrie * head;
-		
+	moveTrie * airHead;
+
 	char * name; //The name of the directory from which the character spawns. This is important for loading into memory
 	void draw();
 	int * takeHit(move *);
@@ -22,6 +23,8 @@ public:
 	move * neutral;
 	move * walk;
 	move * jump;
+	move * dash;
+	move * brake;
 	move * walkBack;
 	move * cMove;
 	int health;

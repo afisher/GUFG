@@ -9,9 +9,10 @@ character::character()
 {
 	name = "White";
 	moveTrie * curr;
+	move * temp;
 
 	/*Currently I'm using this as a test case for my move hooks*/
-	
+
 	head = new moveTrie(new move("White/A", "A", 0, 11));
 	head->fish[0].debugStateInit(3, 16, 30);
 	head->fish[0].debugRectsInit();
@@ -19,25 +20,15 @@ character::character()
 	head->fish[0].debugHitboxInit(55, 45, 30, 30);
 	head->fish[0].debugHittableInit(0, 0, 100, 150);
 	head->fish[0].xLock = 1;
-	head->fish[0].yLock = 1;
 
-
-	head->insert(new move("B", "B", 0));
-	head->fish[1].debugStateInit(1, 16, 30);
+	temp = new move("White/D", "D", 0, 1);
+	head->insert(temp);
+	head->fish[1].debugStateInit(3, 16, 30);
 	head->fish[1].debugRectsInit();
-	
-	head->insert(new move("C", "C", 0));
-	head->fish[2].debugStateInit(1, 16, 30);
-	head->fish[2].debugRectsInit();
-	
-	head->insert(new move("White/D", "D", 0, 1));
-	head->fish[3].debugStateInit(3, 16, 30);
-	head->fish[3].debugRectsInit();
-	
-	head->insert(new move("E", "E", 0));
-	head->fish[4].debugStateInit(1, 16, 30);
-	head->fish[4].debugRectsInit();
-	
+	airHead = new moveTrie(temp);
+
+
+
 	curr = head->insert(6);
 	curr = curr->insert(3);
 	curr = curr->insert(2, new move("236B", "B", 1));
@@ -70,7 +61,7 @@ character::character()
 	jump->debugHittableInit(0, 0, 100, 150);
 	jump->debugDeltaInit(0, -20, 0, 0);
 	jump->setTolerance(1);
-
+	
 	head->insert(9, jump);
 	head->insert(8, jump);
 	head->insert(7, jump);
