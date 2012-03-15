@@ -23,7 +23,10 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 		pick->cMove->execute(current);
 	}
 	else if (pick->cMove == NULL) {
-		pick->cMove = pick->neutral;
+		if(!aerial && axis[0]) pick->cMove = pick->jump;
+		else if(!aerial && inputBuffer[0] == 4) pick->cMove = pick->walkBack;
+		else if(!aerial && inputBuffer[0] == 6) pick->cMove = pick->walk;
+		else pick->cMove = pick->neutral;
 		pick->cMove->execute(current);
 	}
 	

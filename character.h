@@ -20,6 +20,9 @@ public:
 	int * takeHit(move *);
 
 	move * neutral;
+	move * walk;
+	move * jump;
+	move * walkBack;
 	move * cMove;
 	int health;
 	int meter;
