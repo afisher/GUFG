@@ -111,10 +111,16 @@ void interface::resolve()
 	if(p2->pick->cMove != NULL) { 
 		dflag2 = 1 - p2->pick->cMove->step(delta2, collision2, hitreg2, hitbox2); 
 		if(p2->pick->cMove->yLock) deltaX2 = delta2.x; else deltaX2 += delta1.x;
-		if(p2->pick->cMove->xLock) deltaY2 = delta2.y; else deltaY1 += delta1.y;
+		if(p2->pick->cMove->xLock) deltaY2 = delta2.y; else deltaY2 += delta1.y;
+		if(p2->facing == -1) hitbox2.x = p2->pos.x + p2->pos.w - hitbox2.x - hitbox2.w;
+		else hitbox2.x += p2->pos.x;
+		hitbox2.y += p2->pos.y;
 		if(p2->facing == -1) hitreg2.x = p2->pos.x + p2->pos.w - hitreg2.x - hitreg2.w;
 		else hitreg2.x += p2->pos.x;
 		hitreg2.y += p2->pos.y;
+		if(p2->facing == -1) collision2.x = p2->pos.x + p2->pos.w - collision2.x - collision2.w;
+		else collision2.x += p2->pos.x;
+		collision2.y += p2->pos.y;
 	}
 			
 
@@ -133,6 +139,7 @@ void interface::resolve()
 	/* Some collision */
 
 	if(checkCollision(hitbox1, hitreg2)) p2->pick->takeHit(p1->pick->cMove);
+
 	if(checkCollision(hitbox2, hitreg1)) p1->pick->takeHit(p2->pick->cMove);
 
 	/* Floor and Cieling */
@@ -193,7 +200,7 @@ void interface::resolve()
 		p1->aerial = 0;
 	}
 	if(!p1->aerial){
-		if(p1->pick->cMove == NULL){
+		if(p1->pick->cMove == p1->pick->neutral){
 			if(sAxis1[0]) deltaY1 = -35;
 			else deltaY1 = 0;
 			if(sAxis1[3]) deltaX1 = 5;
@@ -211,7 +218,7 @@ void interface::resolve()
 	if(p2->pos.y + p2->pos.h >= floor && p2->aerial == 1)
 		p2->aerial = 0;
 	if(!p2->aerial){
-		if(p2->pick->cMove == NULL){
+		if(p2->pick->cMove == p2->pick->neutral){
 			if(sAxis2[0]) deltaY2 = -35;
 			else deltaY2 = 0;
 			if(sAxis2[3]) deltaX2 = 5;
