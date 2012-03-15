@@ -68,9 +68,37 @@ int * character::takeHit(move * attack)
 	/*All the important logic like blocking and stuff will go here later.*/
 
 	/*Damage scaling logic will factor into this later*/
-	health -= attack->damage;
-	if(health < 0) health = 0;
-	attack->connect();
-	/*It will eventually return the "move" that the hit causes, usually a hit- or blockstun animation*/
-	return NULL;
+	if(cMove->block & attack->blockMask){
+		/*Do blocking stuff. Specifically, we need to put the player in
+		block stun, a state in which they're frozen in the last block animation until blockstun ends.
+		During blockstun, generally the option available to everyone is to switch blocks, so as not
+		to allow mixup to be guaranteed. Some games have options like Alpha Counters (Any attack out of blockstun) 
+		or Rolls (Invulnerable movement option) that cost meter but can break out of blockstun state. These can
+		be universal or character-specific. Notably, characters are throw-invulnerable during blockstun,
+		for what should be obvious reasons. In MOST games, characters remain throw-invuln for a few frames after
+		coming out of blockstun.
+		*/		
+	}
+	else{
+		/*Do hitstun stuff. Specifically, the player needs to be put in a "hitstun" state for a number
+		of frames defined by the stun of the attacking move. Blockstun may be separate, or a function of the same
+		number. The hitstun state while standing generally has a "reeling" animation that can affect what hits them,
+		but unless we have a "burst-like" option, no actions can be taken by a player during hitstun. There will probably
+		also be a "launch" property, which knocks a grounded player into the air if hit by certain moves.
+		In the air, hitstun is slightly different. There is a "falling" animation the character is in, and they are launched
+		a little bit by any further move that hits them. Generally, there's some option to get out of aerial hitstun, most
+		easily referred to as a "Tech." Therefore, while falling state persists until they hit the ground, there's an amount of
+		"untechable" time associated with any move that hits them. This is not functionally different from hitstun in any other way.
+		*/
+		health -= attack->damage;
+		if(health < 0){
+			health = 0; 	//Healthbar can't go below 0;
+			//Reckon other KO stuff;
+		}
+	}
+	attack->connect(); 	//Tell the attack it's connected.
+
+	return NULL; 		
+	/*Eventually the plan is to have this return a combo count. This not only allows us to display a counter and do whatever scaling/combo 
+	mitigation we want to, but also allows us to do things like pushback ramping during blockstrings*/
 }

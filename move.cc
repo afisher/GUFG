@@ -34,6 +34,8 @@ move::move(char * n, int l)
 	xLock = 0;
 	damage = 0;
 	init();
+	blockMask = 7;
+	block = 0;
 }
 
 move::move(char* n, char *b, bool s, int l)
@@ -73,6 +75,8 @@ move::move(char* n, char *b, bool s, int l)
 	hitbox = new SDL_Rect[l];
 	hitreg = new SDL_Rect[l];
 	delta = new SDL_Rect[l];
+	blockMask = 7;
+	block = 0;
 }
 
 void move::setTolerance(int t)
