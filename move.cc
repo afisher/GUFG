@@ -150,15 +150,6 @@ bool move::check(bool pos[5], bool neg[5], int t)
 	return 1;
 }
 
-void move::execute()
-{
-	printf("Hook for %s detected\n", name);
-}
-
-void move::execute()
-{
-}
-
 bool move::step(SDL_Rect &d, SDL_Rect &c, SDL_Rect &r, SDL_Rect &b)
 {
 
@@ -184,8 +175,8 @@ bool move::step(SDL_Rect &d, SDL_Rect &c, SDL_Rect &r, SDL_Rect &b)
 SDL_Surface * move::draw(int facing)
 {
 	SDL_Surface * temp;
-	if(facing == -1) temp = start->get(currentFrame)->fSprite;
-	else temp = start->get(currentFrame)->sprite;
+	if(facing == -1) temp = (*start)[currentFrame]->fSprite;
+	else temp = (*start)[currentFrame]->sprite;
 	currentFrame++;
 	return temp;
 }
