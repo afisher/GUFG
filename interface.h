@@ -38,6 +38,8 @@ public:
 	bool negEdge1[5], negEdge2[5];
 	void readStick(SDL_Event&);
 	void readKey(SDL_Event&);
+	int combo1;
+	int combo2;
 	
 	bool gameover;
 	bool checkCollision(SDL_Rect, SDL_Rect);

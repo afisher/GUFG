@@ -62,6 +62,8 @@ interface::interface()
 		negEdge2[i] = 0;
 	}
 
+	combo1 = 0;
+	combo2 = 0;
 	deltaX1 = 0;
 	deltaY1 = 0;
 	deltaX2 = 0;
@@ -136,11 +138,17 @@ void interface::resolve()
 	bool lock1, lock2 = 0;
 	collision = checkCollision(a, b);
 	/* Some collision */
+	if(p1->pick->cMove != p1->pick->reel) combo2 = 0;
+	if(p2->pick->cMove != p2->pick->reel) combo1 = 0;
 
-	if(checkCollision(hitbox1, hitreg2)) p2->pick->takeHit(p1->pick->cMove);
-
-	if(checkCollision(hitbox2, hitreg1)) p1->pick->takeHit(p2->pick->cMove);
-
+	if(checkCollision(hitbox1, hitreg2)) {
+		combo1 += p2->pick->takeHit(p1->pick->cMove);
+		if(combo1 > 0) printf("p1: %i-hit combo\n", combo1+1);
+	}
+	if(checkCollision(hitbox2, hitreg1)) {
+		combo2 += p1->pick->takeHit(p2->pick->cMove);
+		if(combo2 > 0) printf("p2: %i-hit combo\n", combo2+1);
+	}
 	/* Floor and Cieling */
 	if (p2->pos.y + deltaY2 <= 0)
 		p2->pos.y = 0;
