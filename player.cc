@@ -24,7 +24,6 @@ player::player()
 		keyConfig(i);
 	}
 
-	current = NULL;
 	/*Set up the sprite*/
 
 	deltaX = 0;
@@ -81,6 +80,5 @@ void player::characterSelect(int i)
 		pick = new character;
 		break;
 	}
-	pick->cMove->execute(current);
 }
 

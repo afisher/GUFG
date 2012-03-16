@@ -111,3 +111,12 @@ int * character::takeHit(move * attack)
 	/*Eventually the plan is to have this return a combo count. This not only allows us to display a counter and do whatever scaling/combo 
 	mitigation we want to, but also allows us to do things like pushback ramping during blockstrings*/
 }
+
+SDL_Surface * character::draw(int facing){
+	SDL_Surface * temp = cMove->draw(facing);
+	if(cMove->currentFrame >= cMove->frames){
+		cMove->init();
+		cMove = NULL;
+	}
+	return temp;
+}
