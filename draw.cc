@@ -30,11 +30,8 @@ void player::spriteInit()
 	if(sprite) displacement = sprite->w;
 
 	/*Doing moves*/
-	if(current == NULL) pick->neutral->execute(current);
-	if(facing == -1) { 
-		sprite = SDL_DisplayFormat(current->fSprite);
-		pos.x += (displacement - sprite->w);
-	}
-	else sprite = SDL_DisplayFormat(current->sprite);
-	current = current->next;
+	if(pick->cMove == NULL) pick->cMove = pick->neutral;
+	sprite = SDL_DisplayFormat(pick->draw(facing));
+	if(facing == -1) pos.x += (displacement - sprite->w);
+	
 }

@@ -16,5 +16,6 @@ public:
 	frame * play(SDL_Surface *&);
 	SDL_Surface *sprite, *fSprite;
 	frame * next;
-	frame * operator[](int);
+	frame * operator[](const int&);
+	frame * get(int);
 };

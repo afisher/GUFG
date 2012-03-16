@@ -72,7 +72,6 @@ interface::interface()
 	p2->facing = -1;
 	p1->spriteInit();
 	p2->spriteInit();
-	draw();
 	p1->pos.x = wall*4;
 	p2->pos.x = screenWidth - wall*4 - p2->sprite->w;
 	p1->pos.y = floor - p1->sprite->h;
@@ -242,8 +241,8 @@ void interface::resolve()
 		if(p2->facing == -1 && p2->pos.x < p1->pos.x) p2->facing = 1;
 		else if(p2->facing == 1 && p2->pos.x > p1->pos.x) p2->facing = -1;
 	}
-	if(dflag1) p1->pick->cMove = NULL;
-	if(dflag2) p2->pick->cMove = NULL;
+//	if(dflag1) p1->pick->cMove = NULL;
+//	if(dflag2) p2->pick->cMove = NULL;
 	p1->spriteInit();
 	p2->spriteInit();
 	runTimer();

@@ -21,7 +21,6 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 
 	if(t != NULL){ 
 		pick->cMove = t;
-		pick->cMove->execute(current);
 	}
 	else if (pick->cMove == NULL) {
 		if(!aerial && axis[0]) 	pick->cMove = pick->jump;
@@ -33,7 +32,6 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 //			if(current == pick->dash->start) pick->cMove = pick->brake; else
 			pick->cMove = pick->neutral;
 		}
-		pick->cMove->execute(current);
 	}
 	
 }

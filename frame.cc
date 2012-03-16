@@ -71,11 +71,24 @@ frame * frame::play(SDL_Surface *& gameSprite)
 	return next;
 }
 
-frame * frame::operator[](int x)
+frame * frame::operator[](const int &x)
 {
-	frame * temp = this;
-	for(int i = 0; i < x; i++)
-		temp = temp->next;
-	return temp;
+	if(x == 0) return this;
+	else{
+		frame * temp = next;
+		for(int i = 1; i < x; i++)
+			if(temp->next) temp = temp->next;
+		return temp;
+	}
 }
 
+frame * frame::get(int x)
+{
+	if(x == 0) return this;
+	else{
+		frame * temp = next;
+		for(int i = 1; i < x; i++)
+			if(temp->next) temp = temp->next;
+		return temp;
+	}	
+}

@@ -17,7 +17,7 @@ public:
 	moveTrie * airHead;
 
 	char * name; //The name of the directory from which the character spawns. This is important for loading into memory
-	void draw();
+	SDL_Surface * draw(int);
 	int * takeHit(move *);
 
 	move * neutral;

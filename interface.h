@@ -46,8 +46,4 @@ private:
 	int state;
 	int timer;
 	int screenHeight, screenWidth, floor, wall;
-/*
-	player p1;		
-	player p2;		
-*/
 };

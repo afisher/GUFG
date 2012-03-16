@@ -23,6 +23,7 @@ public:
 	bool operator==(move*); //Cancel allowed check. Essentially: is move Lvalue allowed given the current state of move Rvalue?
 	void init();		//Really just sets current frame to 0. I wanted current frame to be private for now, so I don't break anything.
 	void connect();
+	SDL_Surface * draw(int);
 
 	frame * start;		//The first frame of the move's sprite.
 	unsigned int * state;		//An array of states. If the states are single integers, the array is the same size as the number of frames.
@@ -36,7 +37,9 @@ public:
 	int block;		//Partner to the blockmask. This variable is the move's actual "guard state." Usually it will only be one of the three.
 	bool cFlag;
 	int cState;
-
+	int currentFrame; 	//The frame that is currently running.
+	int frames;	//Number of frames.
+	
 	//Some initialization functions for testing purposes. Once we work out the finalized constructor this will be obviated.
 	void debugStateInit(int, int, int); 	
 	void debugRectsInit();
@@ -46,19 +49,19 @@ public:
 	void debugDeltaInit(int, int, int, int);
 	void debugCollisionInit(int, int, int, int);
 private:
-	int frames;	//Number of frames.
 //	SDL_Surface *sprite, *hit, *hitreg, *collision;
 	bool special;
 	int cost;
 	int tolerance;
 	int button[5];
 	char * name;
-	int currentFrame; 	//The frame that is currently running.
 	SDL_Rect * collision;	//This will be an array of rects that are the collision boxes for the move per frame
 	SDL_Rect * hitbox;	//Same but for hitboxes
 	SDL_Rect * hitreg;	//Same but for hitreg boxes
 	SDL_Rect * delta;	//Same but for position on the screen.
 };
+
+/*Move trie class. Essentially a recursive trie-search algorithm that looks for input hooks*/
 
 class moveTrie{
 public:
