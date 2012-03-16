@@ -5,7 +5,7 @@
  */
 
 #include "SDL.h"
-#include "move.h"
+#include "hitstun.h"
 #include <stdio.h>
 
 class character{
@@ -18,7 +18,7 @@ public:
 
 	char * name; //The name of the directory from which the character spawns. This is important for loading into memory
 	SDL_Surface * draw(int);
-	int * takeHit(move *);
+	int takeHit(move *);
 
 	move * neutral;
 	move * walk;
@@ -26,7 +26,10 @@ public:
 	move * dash;
 	move * brake;
 	move * walkBack;
+	hitstun * reel;	
+	
 	move * cMove;
+
 	int health;
 	int meter;
 

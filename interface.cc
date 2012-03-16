@@ -90,7 +90,7 @@ void interface::resolve()
 	SDL_Rect hitbox2, hitreg2, delta2, collision2;
 	frame * dummy;
 	if(p1->pick->cMove != NULL) {
-		p1->pick->cMove->step(delta1, collision1, hitreg1, hitbox1);
+		p1->pick->cMove->pollRects(delta1, collision1, hitreg1, hitbox1);
 		if(p1->pick->cMove->xLock) deltaX1 = delta1.x*p1->facing; else deltaX1 += delta1.x*p1->facing;
 		if(!p1->aerial){
 			if(p1->pick->cMove->yLock) deltaY1 = delta1.y; 	else deltaY1 += delta1.y;
@@ -106,7 +106,7 @@ void interface::resolve()
 		collision1.y += p1->pos.y;
 	}
 	if(p2->pick->cMove != NULL) { 
-		p2->pick->cMove->step(delta2, collision2, hitreg2, hitbox2); 
+		p2->pick->cMove->pollRects(delta2, collision2, hitreg2, hitbox2); 
 		if(p2->pick->cMove->xLock) deltaX2 = delta2.x*p2->facing; else deltaX2 += delta2.x*p2->facing;
 		if(!p2->aerial){
 			if(p2->pick->cMove->yLock) deltaY2 = delta2.y; else deltaY2 += delta2.y;

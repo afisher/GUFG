@@ -58,6 +58,10 @@ character::character()
 	head->insert(8, jump);
 	head->insert(7, jump);
 
+	reel = new hitstun("White/H", 1);
+	reel->debugRectsInit();
+	reel->debugHittableInit(0, 0, 100, 150);
+	
 	cMove = neutral;
 	health = 300;
 	meter = 0;
@@ -72,10 +76,10 @@ character::~character()
 
 /*Here begin move functions. Actually contemplating making this a class instead, but this might be simpler for now*/
 
-int * character::takeHit(move * attack)
+int character::takeHit(move * attack)
 {
 	/*All the important logic like blocking and stuff will go here later.*/
-
+	int ct = 0;
 	/*Damage scaling logic will factor into this later*/
 	if(cMove->block & attack->blockMask){
 		/*Do blocking stuff. Specifically, we need to put the player in
@@ -99,6 +103,9 @@ int * character::takeHit(move * attack)
 		easily referred to as a "Tech." Therefore, while falling state persists until they hit the ground, there's an amount of
 		"untechable" time associated with any move that hits them. This is not functionally different from hitstun in any other way.
 		*/
+		if(cMove == reel) ct++;
+		reel->init(attack->stun);
+		cMove = reel;
 		health -= attack->damage;
 		if(health < 0){
 			health = 0; 	//Healthbar can't go below 0;
@@ -106,15 +113,14 @@ int * character::takeHit(move * attack)
 		}
 	}
 	attack->connect(); 	//Tell the attack it's connected.
-
-	return NULL; 		
+ 	return ct;
 	/*Eventually the plan is to have this return a combo count. This not only allows us to display a counter and do whatever scaling/combo 
 	mitigation we want to, but also allows us to do things like pushback ramping during blockstrings*/
 }
 
 SDL_Surface * character::draw(int facing){
 	SDL_Surface * temp = cMove->draw(facing);
-	if(cMove->currentFrame >= cMove->frames){
+	if(cMove->currentFrame == cMove->frames){
 		cMove->init();
 		cMove = NULL;
 	}
