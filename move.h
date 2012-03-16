@@ -19,9 +19,10 @@ public:
 	bool check(bool[], bool[], int);	//Check to see if the move is possible right now.
 	void setTolerance(int);
 	void execute(frame *&);			//Currently what we're using to send the first frame to the animation routines. This will likely change.
-	bool step(SDL_Rect&, SDL_Rect&, SDL_Rect&, SDL_Rect&); //Return the relevant information needed for interface::resolve(), then step to the next frame.
+	void pollRects(SDL_Rect&, SDL_Rect&, SDL_Rect&, SDL_Rect&); //Return the relevant information needed for interface::resolve(), then step to the next frame.
 	bool operator==(move*); //Cancel allowed check. Essentially: is move Lvalue allowed given the current state of move Rvalue?
 	void init();		//Really just sets current frame to 0. I wanted current frame to be private for now, so I don't break anything.
+	virtual void step();
 	void connect();
 	SDL_Surface * draw(int);
 
@@ -48,13 +49,13 @@ public:
 	void debugHitboxInit(int, int, int, int);
 	void debugDeltaInit(int, int, int, int);
 	void debugCollisionInit(int, int, int, int);
-private:
+
 //	SDL_Surface *sprite, *hit, *hitreg, *collision;
+	int button[5];
+	char * name;
 	bool special;
 	int cost;
 	int tolerance;
-	int button[5];
-	char * name;
 	SDL_Rect * collision;	//This will be an array of rects that are the collision boxes for the move per frame
 	SDL_Rect * hitbox;	//Same but for hitboxes
 	SDL_Rect * hitreg;	//Same but for hitreg boxes

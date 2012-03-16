@@ -7,19 +7,19 @@ player::player()
 		inputBuffer[i] = 5;
 
 	/*Yeah yeah, I know, char* to literal conversion. I'm lazy right now. Will fix later. Maybe with cstring*/
-	inputName[0] = "Up\0";
-	inputName[1] = "Down\0";
-	inputName[2] = "Left\0";
-	inputName[3] = "Right\0";
-	inputName[4] = "A\0";
-	inputName[5] = "B\0";
-	inputName[6] = "C\0";
-	inputName[7] = "D\0";
-	inputName[8] = "E\0";
-	inputName[9] = "Start\0";
+	inputName[0] = "Up";
+	inputName[1] = "Down";
+	inputName[2] = "Left";
+	inputName[3] = "Right";
+	inputName[4] = "A";
+	inputName[5] = "B";
+	inputName[6] = "C";
+	inputName[7] = "D";
+	inputName[8] = "E";
+	inputName[9] = "Start";
 
 	/*Set up ALL the inputs*/
-	for(int i = 0; i < 10; i++){
+	for(int i = 0; i < 9; i++){
 		printf("Please enter a command for %s\n", inputName[i]);
 		keyConfig(i);
 	}

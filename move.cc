@@ -33,7 +33,7 @@ move::move(char * n, int l)
 	hitreg = new SDL_Rect[l];
 	delta = new SDL_Rect[l];
 	xLock = 0;
-	stun = 10;
+	stun = 15;
 	yLock = 0;
 	damage = 0;
 	init();
@@ -74,7 +74,7 @@ move::move(char* n, char *b, bool s, int l)
 	init();
 	xLock = 0;
 	yLock = 0;
-	stun = 10;
+	stun = 15;
 	state = new unsigned int[l];
 	collision = new SDL_Rect[l];
 	hitbox = new SDL_Rect[l];
@@ -150,7 +150,7 @@ bool move::check(bool pos[5], bool neg[5], int t)
 	return 1;
 }
 
-bool move::step(SDL_Rect &d, SDL_Rect &c, SDL_Rect &r, SDL_Rect &b)
+void move::pollRects(SDL_Rect &d, SDL_Rect &c, SDL_Rect &r, SDL_Rect &b)
 {
 
 	if(start){
@@ -166,10 +166,7 @@ bool move::step(SDL_Rect &d, SDL_Rect &c, SDL_Rect &r, SDL_Rect &b)
 		else {
 			b.x = 0; b.y = 0; b.w = 0; b.h = 0;
 		}
-		if(currentFrame == frames-1) return 0;
-		else return 1;
 	}
-	else return 0;
 }
 
 SDL_Surface * move::draw(int facing)
@@ -177,7 +174,7 @@ SDL_Surface * move::draw(int facing)
 	SDL_Surface * temp;
 	if(facing == -1) temp = (*start)[currentFrame]->fSprite;
 	else temp = (*start)[currentFrame]->sprite;
-	currentFrame++;
+	step();
 	return temp;
 }
 
@@ -191,6 +188,11 @@ bool move::operator==(move * x)
 		else if(allowed & x->state[currentFrame]) return 1;
 	}
 	return 0;
+}
+
+void move::step()
+{
+	currentFrame++;
 }
 
 void move::init()
