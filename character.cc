@@ -67,6 +67,7 @@ character::character()
 	meter = 0;
 	volitionX = 0;
 	volitionY = 0;
+	aerial = 0;
 }
 
 character::~character()
@@ -109,7 +110,8 @@ int character::takeHit(move * attack)
 		reel->init(attack->stun);
 		cMove = reel;
 		health -= attack->damage;
-		if(attack->launch) volitionY -= attack->lift;
+		if(!aerial && attack->launch) aerial = 1;
+		if(aerial) volitionY -= attack->lift;
 		if(health < 0){
 			health = 0; 	//Healthbar can't go below 0;
 			//Reckon other KO stuff;

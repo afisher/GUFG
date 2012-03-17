@@ -28,7 +28,6 @@ player::player()
 
 	deltaX = 0;
 	deltaY = 0;
-	aerial = 0;
 }
 
 void player::keyConfig(int curr)
