@@ -65,6 +65,8 @@ character::character()
 	cMove = neutral;
 	health = 300;
 	meter = 0;
+	volitionX = 0;
+	volitionY = 0;
 }
 
 character::~character()
@@ -107,11 +109,13 @@ int character::takeHit(move * attack)
 		reel->init(attack->stun);
 		cMove = reel;
 		health -= attack->damage;
+		if(attack->launch) volitionY -= attack->lift;
 		if(health < 0){
 			health = 0; 	//Healthbar can't go below 0;
 			//Reckon other KO stuff;
 		}
 	}
+	volitionX -= attack->push;
 	attack->connect(); 	//Tell the attack it's connected.
  	return ct;
 	/*Eventually the plan is to have this return a combo count. This not only allows us to display a counter and do whatever scaling/combo 

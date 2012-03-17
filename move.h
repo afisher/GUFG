@@ -31,6 +31,9 @@ public:
 	unsigned int allowed;		//The state in which the move is allowed. Depending on how we handle states, this may need to be an array of states or something.
 	bool xLock, yLock;
 	int push;		//How much pushback the move does
+	int lift;		//How much the move lifts an aerial opponent.
+	bool launch;		//Whether or not the move launches on hit
+
 	int damage;		//How much damage the move does
 	int stun;		//How much stun the move does
 	int blockMask;		//High, Low, Air Block. Basically a 3-digit binary number expressed as an integer from 0-7.

@@ -32,7 +32,9 @@ public:
 
 	int health;
 	int meter;
-
+	int volitionX;
+	int volitionY;
+	
 private:
 
 	int state; 	//The current state of the character. This might need to be more variables. We'll see.
