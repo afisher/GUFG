@@ -21,34 +21,34 @@ LIBS = `sdl-config --libs`
 keytest: $(OBJS)
 	g++ -o keytest $(OBJS) $(FLAGS) $(LIBS)
 
-keytest.o: keytest.cc
+keytest.o: 
 	g++ -c keytest.cc $(FLAGS)
 
-interface.o: interface.h interface.cc
+interface.o: 
 	g++ -c interface.cc $(FLAGS)
 
-hooks.o: hooks.cc
+hooks.o:
 	g++ -c hooks.cc $(FLAGS)
 
-move.o: move.h move.cc
+move.o:
 	g++ -c move.cc $(FLAGS)
 
-character.o: character.h character.cc
+character.o: 
 	g++ -c character.cc $(FLAGS)
 
-frame.o: frame.h frame.cc
+frame.o: 
 	g++ -c frame.cc $(FLAGS)
 
-player.o: player.h player.cc
+player.o: 
 	g++ -c player.cc $(FLAGS)
 
-draw.o: draw.cc
+draw.o: 
 	g++ -c draw.cc $(FLAGS)
 
-red.o: red.h red.cc
+red.o: 
 	g++ -c red.cc $(FLAGS)
 
-hitstun.o: hitstun.h hitstun.cc
+hitstun.o: 
 	g++ -c hitstun.cc $(FLAGS)
 
 # -f Is needed to avoid errors with missing files.
