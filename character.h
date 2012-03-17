@@ -34,7 +34,7 @@ public:
 	int meter;
 	int volitionX;
 	int volitionY;
-	
+	bool aerial;	
 private:
 
 	int state; 	//The current state of the character. This might need to be more variables. We'll see.

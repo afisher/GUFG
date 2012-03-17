@@ -37,7 +37,7 @@ move::move(char * n, int l)
 	yLock = 0;
 	damage = 0;
 	push = 1;
-	lift = 1;
+	lift = 3;
 	launch = 0;
 	init();
 	blockMask = 7;
@@ -84,7 +84,7 @@ move::move(char* n, char *b, bool s, int l)
 	hitreg = new SDL_Rect[l];
 	delta = new SDL_Rect[l];
 	push = 1;
-	lift = 1;
+	lift = 3;
 	launch = 0;
 	blockMask = 7;
 	block = 0;
