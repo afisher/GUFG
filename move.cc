@@ -228,8 +228,8 @@ void move::debugRectsInit()
 	for(int i = 0; i < frames; i++){
 		hitbox[i].y = 0;
 		hitbox[i].x = 0;
-		hitbox[i].w = 1;
-		hitbox[i].h = 1;
+		hitbox[i].w = 0;
+		hitbox[i].h = 0;
 		delta[i].y = 0;
 		delta[i].x = 0;
 		delta[i].w = 1;
@@ -240,8 +240,8 @@ void move::debugRectsInit()
 		collision[i].h = 1;
 		hitreg[i].y = 0;
 		hitreg[i].x = 0;
-		hitreg[i].w = 1;
-		hitreg[i].h = 1;
+		hitreg[i].w = 0;
+		hitreg[i].h = 0;
 	}
 }
 

@@ -27,6 +27,7 @@ public:
 	move * brake;
 	move * walkBack;
 	hitstun * reel;	
+	hitstun * fall;
 	
 	move * cMove;
 

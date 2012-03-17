@@ -17,8 +17,8 @@ character::character()
 	head->fish[0].debugStateInit(3, 16, 30);
 	head->fish[0].debugRectsInit();
 	head->fish[0].debugDamageInit(10);
-	head->fish[0].debugHitboxInit(55, 45, 30, 30);
-	head->fish[0].debugHittableInit(0, 0, 100, 150);
+	head->fish[0].debugHitboxInit(45, 45, 30, 30);
+	head->fish[0].debugHittableInit(0, 0, 80, 150);
 	head->fish[0].xLock = 1;
 
 	temp = new move("White/D", "D", 0, 1);
@@ -30,19 +30,19 @@ character::character()
 	neutral = new move("White/N", 1);
 	neutral->debugRectsInit();
 	neutral->debugStateInit(1, 31, 31);
-	neutral->debugHittableInit(0, 0, 100, 150);
+	neutral->debugHittableInit(0, 0, 65, 150);
 
 	walkBack = new move("White/WB", 1);
 	walkBack->debugRectsInit();
 	walkBack->debugStateInit(1, 31, 31);
-	walkBack->debugHittableInit(0, 0, 100, 150);
+	walkBack->debugHittableInit(0, 0, 65, 150);
 	walkBack->debugDeltaInit(-5, 0, 0, 0);
 	walkBack->xLock = 1;
 
 	walk = new move("White/W", 1);
 	walk->debugRectsInit();
 	walk->debugStateInit(1, 31, 31);
-	walk->debugHittableInit(0, 0, 100, 150);
+	walk->debugHittableInit(0, 0, 65, 150);
 	walk->debugDeltaInit(5, 0, 0, 0);
 	walk->setTolerance(1);
 	walk->xLock = 1;
@@ -50,7 +50,7 @@ character::character()
 	jump = new move("White/J", 1);
 	jump->debugRectsInit();
 	jump->debugStateInit(5, 31, 31);
-	jump->debugHittableInit(0, 0, 100, 150);
+	jump->debugHittableInit(0, 0, 65, 150);
 	jump->debugDeltaInit(0, -20, 0, 0);
 	jump->setTolerance(1);
 	
@@ -60,9 +60,14 @@ character::character()
 
 	reel = new hitstun("White/H", 1);
 	reel->debugRectsInit();
-	reel->debugHittableInit(0, 0, 100, 150);
-	
+	reel->debugHittableInit(0, 0, 65, 150);
+
+	fall = new hitstun("White/UT", 1);
+	reel->debugRectsInit();
+	reel->debugHittableInit(0, 0, 150, 65);
+
 	cMove = neutral;
+
 	health = 300;
 	meter = 0;
 	volitionX = 0;
@@ -84,7 +89,8 @@ int character::takeHit(move * attack)
 	/*All the important logic like blocking and stuff will go here later.*/
 	int ct = 0;
 	/*Damage scaling logic will factor into this later*/
-	if(cMove->block & attack->blockMask){
+	if(!attack->cFlag){
+		if(cMove->block & attack->blockMask){
 		/*Do blocking stuff. Specifically, we need to put the player in
 		block stun, a state in which they're frozen in the last block animation until blockstun ends.
 		During blockstun, generally the option available to everyone is to switch blocks, so as not
@@ -94,8 +100,8 @@ int character::takeHit(move * attack)
 		for what should be obvious reasons. In MOST games, characters remain throw-invuln for a few frames after
 		coming out of blockstun.
 		*/		
-	}
-	else{
+		}
+		else{
 		/*Do hitstun stuff. Specifically, the player needs to be put in a "hitstun" state for a number
 		of frames defined by the stun of the attacking move. Blockstun may be separate, or a function of the same
 		number. The hitstun state while standing generally has a "reeling" animation that can affect what hits them,
@@ -106,19 +112,25 @@ int character::takeHit(move * attack)
 		easily referred to as a "Tech." Therefore, while falling state persists until they hit the ground, there's an amount of
 		"untechable" time associated with any move that hits them. This is not functionally different from hitstun in any other way.
 		*/
-		if(cMove == reel) ct++;
-		reel->init(attack->stun);
-		cMove = reel;
-		health -= attack->damage;
-		if(!aerial && attack->launch) aerial = 1;
-		if(aerial) volitionY -= attack->lift;
-		if(health < 0){
-			health = 0; 	//Healthbar can't go below 0;
-			//Reckon other KO stuff;
+			if(cMove == reel || cMove == fall) ct++;
+			if(!aerial && attack->launch) aerial = 1;
+			if(aerial){
+				volitionY -= attack->lift;
+				fall->init(attack->stun);
+				cMove = fall;
+			} else {
+				reel->init(attack->stun);
+				cMove = reel;
+			}
+			health -= attack->damage;
+			if(health < 0){
+				health = 0; 	//Healthbar can't go below 0;
+				//Reckon other KO stuff;
+			}
 		}
+		volitionX -= attack->push;
+		attack->connect(); 	//Tell the attack it's connected.
 	}
-	volitionX -= attack->push;
-	attack->connect(); 	//Tell the attack it's connected.
  	return ct;
 	/*Eventually the plan is to have this return a combo count. This not only allows us to display a counter and do whatever scaling/combo 
 	mitigation we want to, but also allows us to do things like pushback ramping during blockstrings*/

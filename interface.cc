@@ -151,13 +151,17 @@ void interface::resolve()
 	if(p1->pick->cMove != p1->pick->reel) combo2 = 0;
 	if(p2->pick->cMove != p2->pick->reel) combo1 = 0;
 
-	if(checkCollision(hitbox1, hitreg2)) {
-		combo1 += p2->pick->takeHit(p1->pick->cMove);
-		if(combo1 > 0) printf("p1: %i-hit combo\n", combo1+1);
+	if(hitbox1.w > 0 && hitreg2.w > 0){
+		if(checkCollision(hitbox1, hitreg2)) {
+			combo1 += p2->pick->takeHit(p1->pick->cMove);
+			if(combo1 > 0) printf("p1: %i-hit combo\n", combo1+1);
+		}
 	}
-	if(checkCollision(hitbox2, hitreg1)) {
-		combo2 += p1->pick->takeHit(p2->pick->cMove);
-		if(combo2 > 0) printf("p2: %i-hit combo\n", combo2+1);
+	if(hitbox2.w > 0 && hitreg1.w > 0){
+		if(checkCollision(hitbox2, hitreg1)) {
+			combo2 += p1->pick->takeHit(p2->pick->cMove);
+			if(combo2 > 0) printf("p2: %i-hit combo\n", combo2+1);
+		}
 	}
 	/* Floor and Cieling */
 	if (p2->pos.y + deltaY2 <= 0)
