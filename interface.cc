@@ -130,6 +130,16 @@ void interface::resolve()
 	if(p2->pos.y + p2->pos.h < floor) p2->aerial = 1;
 	bool collision = 0;
 
+	deltaX1 += p1->pick->volitionX*p1->facing;
+	deltaY1 += p1->pick->volitionY;
+	deltaX2 += p2->pick->volitionX*p2->facing;
+	deltaY2 += p2->pick->volitionY;
+	p1->pick->volitionX = 0;
+	p1->pick->volitionY = 0;
+	p2->pick->volitionX = 0;
+	p2->pick->volitionY = 0;
+
+
 	SDL_Rect a = p1->pos, b = p2->pos;
 	a.x += deltaX1;
 	b.x += deltaX2;
