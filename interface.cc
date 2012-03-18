@@ -64,10 +64,10 @@ interface::interface()
 
 	combo1 = 0;
 	combo2 = 0;
-	deltaX1 = 0;
-	deltaY1 = 0;
-	deltaX2 = 0;
-	deltaY2 = 0;
+	p1->deltaX = 0;
+	p1->deltaY = 0;
+	p2->deltaX = 0;
+	p2->deltaY = 0;
 	grav = 3;
 	timer = 5824;
 	p1->facing = 1;
@@ -88,119 +88,84 @@ void interface::runTimer()
 
 void interface::resolve()
 {
-	SDL_Rect hitbox1, hitreg1, delta1, collision1;
-	SDL_Rect hitbox2, hitreg2, delta2, collision2;
-	frame * dummy;
-	if(p1->pick->cMove != NULL) {
-		p1->pick->cMove->pollRects(delta1, collision1, hitreg1, hitbox1);
-		if(p1->pick->cMove->xLock) deltaX1 = delta1.x*p1->facing; else deltaX1 += delta1.x*p1->facing;
-		if(!p1->pick->aerial){
-			if(p1->pick->cMove->yLock) deltaY1 = delta1.y; 	else deltaY1 += delta1.y;
-		}
-		if(p1->facing == -1) hitbox1.x = p1->pos.x + p1->pos.w - hitbox1.x - hitbox1.w;
-		else hitbox1.x += p1->pos.x;
-		hitbox1.y += p1->pos.y;
-		if(p1->facing == -1) hitreg1.x = p1->pos.x + p1->pos.w - hitreg1.x - hitreg1.w;
-		else hitreg1.x += p1->pos.x;
-		hitreg1.y += p1->pos.y;
-		if(p1->facing == -1) collision1.x = p1->pos.x + p1->pos.w - collision1.x - collision1.w;
-		else collision1.x += p1->pos.x;
-		collision1.y += p1->pos.y;
-	}
-	if(p2->pick->cMove != NULL) { 
-		p2->pick->cMove->pollRects(delta2, collision2, hitreg2, hitbox2); 
-		if(p2->pick->cMove->xLock) deltaX2 = delta2.x*p2->facing; else deltaX2 += delta2.x*p2->facing;
-		if(!p2->pick->aerial){
-			if(p2->pick->cMove->yLock) deltaY2 = delta2.y; else deltaY2 += delta2.y;
-		}
-		if(p2->facing == -1) hitbox2.x = p2->pos.x + p2->pos.w - hitbox2.x - hitbox2.w;
-		else hitbox2.x += p2->pos.x;
-		hitbox2.y += p2->pos.y;
-		if(p2->facing == -1) hitreg2.x = p2->pos.x + p2->pos.w - hitreg2.x - hitreg2.w;
-		else hitreg2.x += p2->pos.x;
-		hitreg2.y += p2->pos.y;
-		if(p2->facing == -1) collision2.x = p2->pos.x + p2->pos.w - collision2.x - collision2.w;
-		else collision2.x += p2->pos.x;
-		collision2.y += p2->pos.y;
-	}
-			
-
+	p1->updateRects();
+	p2->updateRects();
 	/* Movement currently determined by static deltas */
 	if(p1->pos.y + p1->pos.h < floor) p1->pick->aerial = 1; 
 	if(p2->pos.y + p2->pos.h < floor) p2->pick->aerial = 1;
 	bool collision = 0;
 
-	deltaX1 += p1->pick->volitionX*p1->facing;
-	deltaY1 += p1->pick->volitionY;
-	deltaX2 += p2->pick->volitionX*p2->facing;
-	deltaY2 += p2->pick->volitionY;
+	p1->deltaX += p1->pick->volitionX*p1->facing;
+	p1->deltaY += p1->pick->volitionY;
+	p2->deltaX += p2->pick->volitionX*p2->facing;
+	p2->deltaY += p2->pick->volitionY;
 	p1->pick->volitionX = 0;
 	p1->pick->volitionY = 0;
 	p2->pick->volitionX = 0;
 	p2->pick->volitionY = 0;
 
 
-	SDL_Rect a = collision1, b = collision2;
-	a.x += deltaX1;
-	b.x += deltaX2;
-	a.y += deltaY1;
-	b.y += deltaY2;
+	SDL_Rect a = p1->collision, b = p2->collision;
+	a.x += p1->deltaX;
+	b.x += p2->deltaX;
+	a.y += p1->deltaY;
+	b.y += p2->deltaY;
 	bool lock1, lock2 = 0;
 	collision = checkCollision(a, b);
 	/* Some collision */
 	if(p1->pick->cMove != p1->pick->reel) combo2 = 0;
 	if(p2->pick->cMove != p2->pick->reel) combo1 = 0;
 
-	if(hitbox1.w > 0 && hitreg2.w > 0){
-		if(checkCollision(hitbox1, hitreg2)) {
+	if(p1->hitbox.w > 0 && p2->hitreg.w > 0){
+		if(checkCollision(p1->hitbox, p2->hitreg)) {
 			combo1 += p2->pick->takeHit(p1->pick->cMove);
 			if(combo1 > 0) printf("p1: %i-hit combo\n", combo1+1);
 		}
 	}
-	if(hitbox2.w > 0 && hitreg1.w > 0){
-		if(checkCollision(hitbox2, hitreg1)) {
+	if(p2->hitbox.w > 0 && p1->hitreg.w > 0){
+		if(checkCollision(p2->hitbox, p1->hitreg)) {
 			combo2 += p1->pick->takeHit(p2->pick->cMove);
 			if(combo2 > 0) printf("p2: %i-hit combo\n", combo2+1);
 		}
 	}
 	/* Floor and Cieling */
-	if (p2->pos.y + deltaY2 + p2->pos.h >= floor){
+	if (p2->pos.y + p2->deltaY + p2->pos.h >= floor){
 		p2->pos.y = floor - p2->pos.h;
-		p2->pick->aerial = 0; deltaY2 = 0;
+		p2->pick->aerial = 0; p2->deltaY = 0;
 	}
-	else p2->pos.y += deltaY2;
+	else p2->pos.y += p2->deltaY;
 	
 	
 	
-	if (p1->pos.y + p1->pos.h + deltaY1 >= floor){
+	if (p1->pos.y + p1->pos.h + p1->deltaY >= floor){
 		p1->pos.y = floor - p1->pos.h;
-		p1->pick->aerial = 0; deltaY1 = 0;
+		p1->pick->aerial = 0; p1->deltaY = 0;
 	}
-	else p1->pos.y += deltaY1;
+	else p1->pos.y += p1->deltaY;
 
 	/* Walls */
 
-	if (p1->pos.x + deltaX1 <= wall){
+	if (p1->pos.x + p1->deltaX <= wall){
 		p1->pos.x = wall;
 		if(collision && p1->facing == 1) { p2->pos.x = p1->pos.x + p1->pos.w; lock2 = 1;}
-	} else if (p1->pos.x + deltaX1 + p1->pos.w >= screenWidth - wall){
+	} else if (p1->pos.x + p1->deltaX + p1->pos.w >= screenWidth - wall){
 		p1->pos.x = screenWidth - wall - p1->pos.w;
 		if(collision && p1->facing == -1) { p2->pos.x = p1->pos.x - p2->pos.w; lock2 = 1;}
 	} else {
-		if(collision) p1->pos.x += deltaX2;
-		p1->pos.x += deltaX1;
+		if(collision) p1->pos.x += p2->deltaX;
+		p1->pos.x += p1->deltaX;
 	}
 
-	if (p2->pos.x + deltaX2 <= wall){
+	if (p2->pos.x + p2->deltaX <= wall){
 		p2->pos.x = wall;
 		if(collision && p2->facing == 1) p1->pos.x = p2->pos.x + p2->pos.w;
-	} else if (p2->pos.x + deltaX2 + p2->pos.w >= screenWidth - wall){
+	} else if (p2->pos.x + p2->deltaX + p2->pos.w >= screenWidth - wall){
 		p2->pos.x = screenWidth - wall - p2->pos.w;
 		if(collision && p2->facing == -1) p1->pos.x = p2->pos.x - p1->pos.w;
 	} else { 
 		if(!lock2){
-			p2->pos.x += deltaX2;
-			if(collision) p2->pos.x += deltaX1;
+			p2->pos.x += p2->deltaX;
+			if(collision) p2->pos.x += p1->deltaX;
 		}
 	}
 
@@ -224,12 +189,12 @@ void interface::resolve()
 	}
 	if(!p1->pick->aerial){
 		if(p1->pick->cMove == p1->pick->neutral){
-			if((!sAxis1[2] && !sAxis1[3]) || sAxis1[1] == 1) deltaX1 = 0;
+			if((!sAxis1[2] && !sAxis1[3]) || sAxis1[1] == 1) p1->deltaX = 0;
 		}
 		if (p1->pos.x < p2->pos.x && p1->facing == -1) p1->facing = 1;
 		else if (p1->pos.x > p2->pos.x && p1->facing == 1) p1->facing = -1; 
 	}
-	if(p1->pick->aerial) deltaY1 += grav;
+	if(p1->pick->aerial) p1->deltaY += grav;
 
 			/*Player 2*/
 
@@ -241,12 +206,12 @@ void interface::resolve()
 	}
 	if(!p2->pick->aerial){
 		if(p2->pick->cMove == p2->pick->neutral){
-			if((!sAxis2[2] && !sAxis2[3]) || sAxis2[1] == 1) deltaX2 = 0;
+			if((!sAxis2[2] && !sAxis2[3]) || sAxis2[1] == 1) p2->deltaX = 0;
 		}
 		if (p2->pos.x < p1->pos.x && p2->facing == -1) p2->facing = 1; 
 		else if (p2->pos.x > p1->pos.x && p2->facing == 1) p2->facing = -1; 
 	}
-	if(p2->pick->aerial) deltaY2 += grav;
+	if(p2->pick->aerial) p2->deltaY += grav;
 
 	/*Reinitialize inputs*/
 	for(int i = 0; i < 5; i++){
@@ -278,7 +243,7 @@ void interface::readInput()
 {
 	/*Make our dummy event for polls*/
 	SDL_Event event;
-	for(int i = 0; i < 14; i++){
+	for(int i = 0; i < 20; i++){
 		if (SDL_PollEvent(&event)){
 			/*Do stuff with event*/
 			switch (event.type){
