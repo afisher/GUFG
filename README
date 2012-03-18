@@ -1,0 +1,5 @@
+Project: Ground Up Fighting Game
+
+A fighting game from scratch, built with SDL in C++.
+
+This repo should contain the complete game, including source code and dependencies.
