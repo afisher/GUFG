@@ -23,9 +23,14 @@ public:
 	int colorkey;
 	void draw();
 	void spriteInit();
-	void update();
+
 	SDL_Rect pos, hitbox, hitreg, collision, delta;
 	bool rCorner, lCorner;
+	
+	/*Helper functions for "resolve" tick*/
+	void updateRects();
+	int checkHit(player*);
+	void resolveCollision(player*);
 private:
 	int inputBuffer[29];
 };

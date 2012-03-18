@@ -81,10 +81,14 @@ void player::characterSelect(int i)
 	}
 }
 
-void player::update()
+void player::updateRects()
 {
 	if(pick->cMove != NULL) {
 		pick->cMove->pollRects(delta, collision, hitreg, hitbox);
+		if(pick->cMove->xLock) deltaX = delta.x*facing; else deltaX += delta.x*facing;
+		if(!pick->aerial){
+			if(pick->cMove->yLock) deltaY = delta.y; else deltaY += delta.y;
+		}
 		if(facing == -1) hitbox.x = pos.x + pos.w - hitbox.x - hitbox.w;
 		else hitbox.x += pos.x;
 		hitbox.y += pos.y;
@@ -95,5 +99,4 @@ void player::update()
 		else collision.x += pos.x;
 		collision.y += pos.y;
 	}
-	
 }
