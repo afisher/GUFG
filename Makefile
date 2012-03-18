@@ -24,7 +24,7 @@ keytest: $(OBJS)
 keytest.o: keytest.cc
 	g++ -c keytest.cc $(FLAGS)
 
-interface.o: interface.h interface.cc
+interface.o: interface.h interface.cc player.h player.cc
 	g++ -c interface.cc $(FLAGS)
 
 hooks.o: hooks.cc

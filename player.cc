@@ -81,3 +81,19 @@ void player::characterSelect(int i)
 	}
 }
 
+void player::update()
+{
+	if(pick->cMove != NULL) {
+		pick->cMove->pollRects(delta, collision, hitreg, hitbox);
+		if(facing == -1) hitbox.x = pos.x + pos.w - hitbox.x - hitbox.w;
+		else hitbox.x += pos.x;
+		hitbox.y += pos.y;
+		if(facing == -1) hitreg.x = pos.x + pos.w - hitreg.x - hitreg.w;
+		else hitreg.x += pos.x;
+		hitreg.y += pos.y;
+		if(facing == -1) collision.x = pos.x + pos.w - collision.x - collision.w;
+		else collision.x += pos.x;
+		collision.y += pos.y;
+	}
+	
+}
