@@ -1,7 +1,13 @@
-Project: Ground Up Fighting Game
+Project: Ground Up Fighting Game (Name Subject to change) is an open-source, gameplay-focused fighting game developed from the bottom up, one feature at a time. As such:
 
-A fighting game from scratch, built with SDL in C++.
+-The code may be edited by anyone, but there is an “official” version of the game.
+-No decision will compromise gameplay, fun factor, or balance for any form of aesthetics.
+-The game skeleton will be developed first.
+-Features will be added one at a time. Features include mechanics, characters, etc.
+-Characters will be designed from a gameplay perspective foremost, with aesthetics falling lower on the priority scale. As such, some characters may exist who do not have "real" sprites (Represented instead as colored dummies with sprites matching their hitboxes)
 
-This repo should contain the complete game, including source code and data files.
+The game is built with SDL in C++
 
-Currently the project is coordinated through a semi-private googledoc collection. If you're interested in helping, email eshink@gmail.com to be shared on the documents
+This repo will contain the complete game, including data files and source code.
+
+Currently the project is coordinated through a google docs collection. If you're interested in helping, email eshink@gmail.com for access
