@@ -140,7 +140,7 @@ void interface::resolve()
 	p2->pick->volitionY = 0;
 
 
-	SDL_Rect a = p1->pos, b = p2->pos;
+	SDL_Rect a = collision1, b = collision2;
 	a.x += deltaX1;
 	b.x += deltaX2;
 	a.y += deltaY1;
@@ -164,9 +164,7 @@ void interface::resolve()
 		}
 	}
 	/* Floor and Cieling */
-	if (p2->pos.y + deltaY2 <= 0)
-		p2->pos.y = 0;
-	else if (p2->pos.y + deltaY2 + p2->pos.h >= floor){
+	if (p2->pos.y + deltaY2 + p2->pos.h >= floor){
 		p2->pos.y = floor - p2->pos.h;
 		p2->pick->aerial = 0; deltaY2 = 0;
 	}
@@ -174,9 +172,7 @@ void interface::resolve()
 	
 	
 	
-	if (p1->pos.y + deltaY1 <= 0)
-		p1->pos.y = 0;
-	else if (p1->pos.y + p1->pos.h + deltaY1 >= floor){
+	if (p1->pos.y + p1->pos.h + deltaY1 >= floor){
 		p1->pos.y = floor - p1->pos.h;
 		p1->pick->aerial = 0; deltaY1 = 0;
 	}
@@ -222,6 +218,8 @@ void interface::resolve()
 
 	/*Enforcing gravity*/
 	if(p1->pos.y + p1->pos.h >= floor && p1->pick->aerial == 1){
+		p1->pick->cMove->init();
+		p1->pick->cMove = p1->pick->neutral;
 		p1->pick->aerial = 0;
 	}
 	if(!p1->pick->aerial){
@@ -236,8 +234,11 @@ void interface::resolve()
 			/*Player 2*/
 
 
-	if(p2->pos.y + p2->pos.h >= floor && p2->pick->aerial == 1)
+	if(p2->pos.y + p2->pos.h >= floor && p2->pick->aerial == 1){
+		p2->pick->cMove->init();
+		p2->pick->cMove = p2->pick->neutral;
 		p2->pick->aerial = 0;
+	}
 	if(!p2->pick->aerial){
 		if(p2->pick->cMove == p2->pick->neutral){
 			if((!sAxis2[2] && !sAxis2[3]) || sAxis2[1] == 1) deltaX2 = 0;
@@ -254,6 +255,9 @@ void interface::resolve()
 		negEdge1[i] = 0;
 		negEdge2[i] = 0;
 	}
+
+	/*One more collision case: Resolving jumping on people*/
+
 	if(!p1->pick->aerial && !p1->pick->cMove){
 		if(p1->facing == -1 && p1->pos.x < p2->pos.x) p1->facing = 1;
 		else if(p1->facing == 1 && p1->pos.x > p2->pos.x) p1->facing = -1;
@@ -262,6 +266,8 @@ void interface::resolve()
 		if(p2->facing == -1 && p2->pos.x < p1->pos.x) p2->facing = 1;
 		else if(p2->facing == 1 && p2->pos.x > p1->pos.x) p2->facing = -1;
 	}
+
+	/*Draw the sprites*/
 	p1->spriteInit();
 	p2->spriteInit();
 	runTimer();
