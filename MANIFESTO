@@ -1,9 +1,0 @@
-Project: Ground Up Fighting Game (Name Subject to change) is an open-source, gameplay-focused fighting game developed from the bottom up, one feature at a time. As such:
-
--The code may be edited by anyone, but there is an “official” version of the game.
--No decision will compromise gameplay, fun factor, or balance for any form of aesthetics.
--The game skeleton will be developed first.
--Features will be added one at a time. Features include mechanics, characters, etc.
--Characters will be designed from a gameplay perspective foremost, with aesthetics falling lower on the priority scale. As such, some characters may exist who do not have "real" sprites (Represented instead as colored dummies with sprites matching their hitboxes)
-
-
