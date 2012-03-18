@@ -2,6 +2,6 @@ Project: Ground Up Fighting Game
 
 A fighting game from scratch, built with SDL in C++.
 
-This repo should contain the complete game, including source code and dependencies.
+This repo should contain the complete game, including source code and data files.
 
 Currently the project is coordinated through a semi-private googledoc collection. If you're interested in helping, email eshink@gmail.com to be shared on the documents
