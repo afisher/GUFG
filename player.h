@@ -24,6 +24,7 @@ public:
 	void draw();
 	void spriteInit();
 	SDL_Rect pos;
+	bool rCorner, lCorner;
 private:
 	int inputBuffer[29];
 };
