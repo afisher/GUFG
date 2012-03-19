@@ -95,6 +95,7 @@ character::~character()
 int character::takeHit(move * attack)
 {
 	/*All the important logic like blocking and stuff will go here later.*/
+	cMove->init();
 	int ct = 0;
 	/*Damage scaling logic will factor into this later*/
 	if(!attack->cFlag){
