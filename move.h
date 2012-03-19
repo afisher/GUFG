@@ -37,7 +37,7 @@ public:
 
 	int damage;		//How much damage the move does
 	int stun;		//How much stun the move does
-	int blockMask;		//High, Low, Air Block. Basically a 3-digit binary number expressed as an integer from 0-7.
+	int blockMask;		//Low, High, Air Block. Basically a 3-digit binary number expressed as an integer from 0-7.
 				//Digits from right to left: Blockable low, Blockable high, Blockable in the air, 
 	int blockState;		//Partner to the blockmask. This variable is the move's actual "guard state." Usually it will only be one of the three.
 	bool cFlag;

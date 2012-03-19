@@ -9,7 +9,7 @@ void hitstun::step()
 	if(counter <= 0) currentFrame++;
 	else counter--;
 }
-
+	
 hitstun::hitstun(char * n, int l)
 {
 	name = n;
@@ -32,4 +32,8 @@ hitstun::hitstun(char * n, int l)
 	blockMask = 7;
 	blockState = 0;
 	debugStateInit(0, 0, 0);
+}
+
+void hitstun::blockSuccess(int st){
+	counter = st;
 }

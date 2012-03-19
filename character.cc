@@ -74,6 +74,21 @@ character::character()
 	fall->debugHittableInit(0, 0, 150, 65);
 	fall->debugCollisionInit(0, 5, 55, 55);
 
+	airBlock = new hitstun("White/BL", 1);
+	airBlock->blockState = 4;
+	airBlock->debugHittableInit(0, 0, 65, 150);
+	airBlock->debugCollisionInit(0, 5, 55, 150);
+	
+	standBlock = new hitstun("White/BL", 1);
+	standBlock->blockState = 2;
+	standBlock->debugHittableInit(0, 0, 65, 150);
+	standBlock->debugCollisionInit(0, 5, 55, 150);
+	
+	crouchBlock = new hitstun("White/BL", 1);
+	crouchBlock->blockState = 1;
+	crouchBlock->debugHittableInit(0, 0, 65, 150);
+	crouchBlock->debugCollisionInit(0, 5, 55, 150);
+
 	cMove = neutral;
 
 	health = 300;
