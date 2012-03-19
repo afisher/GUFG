@@ -98,7 +98,7 @@ int character::takeHit(move * attack)
 	int ct = 0;
 	/*Damage scaling logic will factor into this later*/
 	if(!attack->cFlag){
-		if(cMove->block & attack->blockMask){
+		if(cMove->blockState & attack->blockMask){
 		/*Do blocking stuff. Specifically, we need to put the player in
 		block stun, a state in which they're frozen in the last block animation until blockstun ends.
 		During blockstun, generally the option available to everyone is to switch blocks, so as not
@@ -107,7 +107,8 @@ int character::takeHit(move * attack)
 		be universal or character-specific. Notably, characters are throw-invulnerable during blockstun,
 		for what should be obvious reasons. In MOST games, characters remain throw-invuln for a few frames after
 		coming out of blockstun.
-		*/		
+		*/
+			cMove->blockSuccess(attack->stun);
 		}
 		else{
 		/*Do hitstun stuff. Specifically, the player needs to be put in a "hitstun" state for a number

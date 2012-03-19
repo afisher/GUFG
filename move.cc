@@ -41,7 +41,7 @@ move::move(char * n, int l)
 	launch = 0;
 	init();
 	blockMask = 7;
-	block = 0;
+	blockState = 0;
 }
 
 move::move(char* n, char *b, bool s, int l)
@@ -87,7 +87,7 @@ move::move(char* n, char *b, bool s, int l)
 	lift = 3;
 	launch = 0;
 	blockMask = 7;
-	block = 0;
+	blockState = 0;
 }
 
 void move::setTolerance(int t)
@@ -210,6 +210,11 @@ void move::init()
 void move::connect()
 {
 	cFlag = 1;
+}
+
+void move::blockSuccess(int st)
+{
+	return;
 }
 
 
