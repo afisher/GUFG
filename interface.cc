@@ -90,6 +90,8 @@ void interface::resolve()
 {
 	p1->updateRects();
 	p2->updateRects();
+	if(p2->hitbox.w > 0) p1->checkBlocking();
+	if(p1->hitbox.w > 0) p2->checkBlocking();
 	/* Movement currently determined by static deltas */
 	if(p1->pos.y + p1->pos.h < floor) p1->pick->aerial = 1; 
 	if(p2->pos.y + p2->pos.h < floor) p2->pick->aerial = 1;
@@ -189,8 +191,13 @@ void interface::resolve()
 
 	/*Enforcing gravity*/
 	if(p1->pos.y + p1->pos.h >= floor && p1->pick->aerial == 1){
-		p1->pick->cMove->init();
-		p1->pick->cMove = p1->pick->neutral;
+		if(p1->pick->cMove == p1->pick->airBlock){
+			p1->pick->standBlock->init(p1->pick->airBlock->counter);
+			p1->pick->cMove == p1->pick->standBlock;
+		} else { 
+			p1->pick->cMove->init();
+			p1->pick->cMove = p1->pick->neutral;
+		}
 		p1->pick->aerial = 0;
 	}
 	if(!p1->pick->aerial){
@@ -206,8 +213,13 @@ void interface::resolve()
 
 
 	if(p2->pos.y + p2->pos.h >= floor && p2->pick->aerial == 1){
-		p2->pick->cMove->init();
-		p2->pick->cMove = p2->pick->neutral;
+		if(p2->pick->cMove == p2->pick->airBlock){
+			p2->pick->standBlock->init(p2->pick->airBlock->counter);
+			p2->pick->cMove == p2->pick->standBlock;
+		} else { 
+			p2->pick->cMove->init();
+			p2->pick->cMove = p2->pick->neutral;
+		}
 		p2->pick->aerial = 0;
 	}
 	if(!p2->pick->aerial){

@@ -33,7 +33,7 @@ move::move(char * n, int l)
 	hitreg = new SDL_Rect[l];
 	delta = new SDL_Rect[l];
 	xLock = 0;
-	stun = 10;
+	stun = 11;
 	yLock = 0;
 	damage = 0;
 	push = 1;
@@ -77,7 +77,7 @@ move::move(char* n, char *b, bool s, int l)
 	init();
 	xLock = 0;
 	yLock = 0;
-	stun = 10;
+	stun = 11;
 	state = new unsigned int[l];
 	collision = new SDL_Rect[l];
 	hitbox = new SDL_Rect[l];
@@ -86,7 +86,7 @@ move::move(char* n, char *b, bool s, int l)
 	push = 1;
 	lift = 3;
 	launch = 0;
-	blockMask = 7;
+	blockMask = 3;
 	blockState = 0;
 }
 
@@ -165,12 +165,12 @@ void move::pollRects(SDL_Rect &d, SDL_Rect &c, SDL_Rect &r, SDL_Rect &b)
 		c.y = collision[currentFrame].y; c.h = collision[currentFrame].h;
 		r.x = hitreg[currentFrame].x; r.w = hitreg[currentFrame].w;
 		r.y = hitreg[currentFrame].y; r.h = hitreg[currentFrame].h;
-		if(!cFlag) { 
+		if(cFlag) {
+			b.x = 0; b.w = 0;
+			b.y = 0; b.h = 0;
+		} else {
 			b.x = hitbox[currentFrame].x; b.w = hitbox[currentFrame].w; 
 			b.y = hitbox[currentFrame].y; b.h = hitbox[currentFrame].h;
-		}
-		else {
-			b.x = 0; b.y = 0; b.w = 0; b.h = 0;
 		}
 	}
 }

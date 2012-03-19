@@ -35,5 +35,5 @@ hitstun::hitstun(char * n, int l)
 }
 
 void hitstun::blockSuccess(int st){
-	counter = st;
+	init(st);
 }
