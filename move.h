@@ -18,6 +18,7 @@ public:
 	void execute();				 
 	bool check(bool[], bool[], int);	//Check to see if the move is possible right now.
 	void setTolerance(int);
+	virtual void blockSuccess(int);
 	void execute(frame *&);			//Currently what we're using to send the first frame to the animation routines. This will likely change.
 	void pollRects(SDL_Rect&, SDL_Rect&, SDL_Rect&, SDL_Rect&); //Return the relevant information needed for interface::resolve(), then step to the next frame.
 	bool operator>(move*); //Cancel allowed check. Essentially: is move Lvalue allowed given the current state of move Rvalue?
@@ -38,7 +39,7 @@ public:
 	int stun;		//How much stun the move does
 	int blockMask;		//High, Low, Air Block. Basically a 3-digit binary number expressed as an integer from 0-7.
 				//Digits from right to left: Blockable low, Blockable high, Blockable in the air, 
-	int block;		//Partner to the blockmask. This variable is the move's actual "guard state." Usually it will only be one of the three.
+	int blockState;		//Partner to the blockmask. This variable is the move's actual "guard state." Usually it will only be one of the three.
 	bool cFlag;
 	int cState;
 	int currentFrame; 	//The frame that is currently running.

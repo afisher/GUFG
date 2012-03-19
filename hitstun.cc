@@ -30,6 +30,6 @@ hitstun::hitstun(char * n, int l)
 	currentFrame = 0;
 	damage = 0;
 	blockMask = 7;
-	block = 0;
+	blockState = 0;
 	debugStateInit(0, 0, 0);
 }
