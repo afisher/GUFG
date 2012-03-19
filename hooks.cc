@@ -26,10 +26,10 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 		if(!pick->aerial && axis[0]) 	pick->cMove = pick->jump;
 		else if(!pick->aerial && inputBuffer[0] == 4) pick->cMove = pick->walkBack;
 		else if(!pick->aerial && inputBuffer[0] == 6) {
-//			if(current == pick->dash->start) pick->cMove = pick->dash; else
+//			if(pick->cMove == pick->dash) pick->cMove = pick->dash; else
 			pick->cMove = pick->walk;
 		} else {
-//			if(current == pick->dash->start) pick->cMove = pick->brake; else
+//			if(pick->cMove == pick->dash) pick->cMove = pick->brake; else
 			pick->cMove = pick->neutral;
 		}
 	}

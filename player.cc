@@ -101,8 +101,26 @@ void player::updateRects()
 	}
 }
 
-void player::enforceGravity()
-{
+void player::enforceGravity(int grav, int floor)
+{	
+	if(pos.y + pos.h >= floor && pick->aerial == 1){
+		if(pick->cMove == pick->airBlock){
+			pick->standBlock->init(pick->airBlock->counter);
+			pick->cMove == pick->standBlock;
+		} else { 
+			pick->cMove->init();
+			pick->cMove = pick->neutral;
+		}
+		pick->aerial = 0;
+	}
+
+	if(pick->aerial) deltaY += grav;
+
+	if (pos.y + deltaY + pos.h >= floor){
+		pos.y = floor - pos.h;
+		pick->aerial = 0; deltaY = 0;
+	}
+	else pos.y += deltaY;
 }
 
 void player::checkBlocking()
