@@ -104,3 +104,34 @@ void player::updateRects()
 void player::enforceGravity()
 {
 }
+
+void player::checkBlocking()
+{
+	switch(inputBuffer[0]){
+	case 7:
+	case 4:
+		if(pick->aerial && (*pick->airBlock) > pick->cMove) {
+			pick->airBlock->init(0);
+			pick->cMove = pick->airBlock;
+		}
+		else if((*pick->standBlock) > pick->cMove) {
+			pick->standBlock->init(0);
+			pick->cMove = pick->standBlock;
+		}
+		updateRects();
+		break;
+	case 1:
+		if(pick->aerial && (*pick->airBlock) > pick->cMove) {
+			pick->airBlock->init(0);
+			pick->cMove = pick->airBlock;
+		}
+		else if((*pick->crouchBlock) > pick->cMove) {
+			pick->crouchBlock->init(0);
+			pick->cMove = pick->crouchBlock;
+		}
+		updateRects();
+		break;
+	default:
+		break;
+	}
+}

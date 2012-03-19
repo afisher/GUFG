@@ -76,18 +76,26 @@ character::character()
 
 	airBlock = new hitstun("White/BL", 1);
 	airBlock->blockState = 4;
+	airBlock->debugRectsInit();
 	airBlock->debugHittableInit(0, 0, 65, 150);
 	airBlock->debugCollisionInit(0, 5, 55, 150);
-	
+	airBlock->debugStateInit(33, 32, 32);
+
 	standBlock = new hitstun("White/BL", 1);
 	standBlock->blockState = 2;
+	standBlock->debugRectsInit();
 	standBlock->debugHittableInit(0, 0, 65, 150);
 	standBlock->debugCollisionInit(0, 5, 55, 150);
+	standBlock->debugStateInit(33, 32, 32);
+	standBlock->xLock = 1;
 	
 	crouchBlock = new hitstun("White/BL", 1);
 	crouchBlock->blockState = 1;
+	crouchBlock->debugRectsInit();
 	crouchBlock->debugHittableInit(0, 0, 65, 150);
 	crouchBlock->debugCollisionInit(0, 5, 55, 150);
+	crouchBlock->debugStateInit(33, 32, 32);
+	crouchBlock->xLock = 1;
 
 	cMove = neutral;
 
@@ -125,6 +133,8 @@ int character::takeHit(move * attack)
 		coming out of blockstun.
 		*/
 			cMove->blockSuccess(attack->stun);
+			printf("Block!\n");
+			attack->connect();
 		}
 		else{
 		/*Do hitstun stuff. Specifically, the player needs to be put in a "hitstun" state for a number
