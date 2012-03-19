@@ -28,7 +28,10 @@ public:
 	move * walkBack;
 	hitstun * reel;	
 	hitstun * fall;
-	
+	hitstun * crouchBlock;
+	hitstun * standBlock;
+	hitstun * airBlock;
+
 	move * cMove;
 
 	int health;

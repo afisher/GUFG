@@ -5,5 +5,7 @@ public:
 	void init(int);
 	int counter;
 	void step();
+	void blockSuccess(int);
+	hitstun();
 	hitstun(char *, int);
 };
