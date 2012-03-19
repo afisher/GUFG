@@ -100,3 +100,7 @@ void player::updateRects()
 		collision.y += pos.y;
 	}
 }
+
+void player::enforceGravity()
+{
+}

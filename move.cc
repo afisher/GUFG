@@ -184,7 +184,7 @@ SDL_Surface * move::draw(int facing)
 	return temp;
 }
 
-bool move::operator==(move * x)
+bool move::operator>(move * x)
 {
 	if(frames == 0 || x->frames == 0) return 0;
 	else{
