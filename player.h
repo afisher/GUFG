@@ -31,6 +31,9 @@ public:
 	void updateRects();
 	int checkHit(player*);
 	void resolveCollision(player*);
+	void conserveMomentum();
+	void enforceGravity();
+	void checkBlocking();
 private:
 	int inputBuffer[29];
 };

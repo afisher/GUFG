@@ -97,8 +97,10 @@ void interface::resolve()
 
 	p1->deltaX += p1->pick->volitionX*p1->facing;
 	p1->deltaY += p1->pick->volitionY;
+	if(p1->lCorner || p1->rCorner) p2->deltaX += p1->pick->volitionX*p2->facing;
 	p2->deltaX += p2->pick->volitionX*p2->facing;
 	p2->deltaY += p2->pick->volitionY;
+	if(p2->lCorner || p2->rCorner) p1->deltaX += p2->pick->volitionX*p1->facing;
 	p1->pick->volitionX = 0;
 	p1->pick->volitionY = 0;
 	p2->pick->volitionX = 0;
@@ -145,23 +147,27 @@ void interface::resolve()
 
 	/* Walls */
 
-	if (p1->pos.x + p1->deltaX <= wall){
-		p1->pos.x = wall;
-		if(collision && p1->facing == 1) { p2->pos.x = p1->pos.x + p1->pos.w; lock2 = 1;}
-	} else if (p1->pos.x + p1->deltaX + p1->pos.w >= screenWidth - wall){
+	if (p1->collision.x + p1->deltaX <= wall){
+		p1->lCorner = 1;
+		p1->pos.x = wall - (p1->pos.x - p1->collision.x);
+		if(collision && p1->facing == 1) { p2->pos.x = wall - (p1->pos.x - p1->collision.x) + (p2->pos.x - p2->collision.x) + p1->collision.w; lock2 = 1;}
+	} else if (p1->collision.x + p1->deltaX + p1->collision.w >= screenWidth - wall){
+		p1->rCorner = 1;
 		p1->pos.x = screenWidth - wall - p1->pos.w;
-		if(collision && p1->facing == -1) { p2->pos.x = p1->pos.x - p2->pos.w; lock2 = 1;}
+		if(collision && p1->facing == -1) { p2->pos.x = p1->collision.x - p2->collision.w; lock2 = 1;}
 	} else {
 		if(collision) p1->pos.x += p2->deltaX;
 		p1->pos.x += p1->deltaX;
 	}
 
-	if (p2->pos.x + p2->deltaX <= wall){
-		p2->pos.x = wall;
-		if(collision && p2->facing == 1) p1->pos.x = p2->pos.x + p2->pos.w;
-	} else if (p2->pos.x + p2->deltaX + p2->pos.w >= screenWidth - wall){
+	if (p2->collision.x + p2->deltaX <= wall){
+		p2->lCorner = 1;
+		p2->pos.x = wall - (p2->pos.x - p2->collision.w);
+		if(collision && p2->facing == 1) p1->pos.x = wall - (p2->pos.x - p2->collision.x) + (p1->pos.x - p1->collision.x) + p2->collision.w;
+	} else if (p2->collision.x + p2->deltaX + p2->collision.w >= screenWidth - wall){
+		p2->rCorner = 1;
 		p2->pos.x = screenWidth - wall - p2->pos.w;
-		if(collision && p2->facing == -1) p1->pos.x = p2->pos.x - p1->pos.w;
+		if(collision && p2->facing == -1) p1->pos.x = p2->collision.x - p1->collision.w;
 	} else { 
 		if(!lock2){
 			p2->pos.x += p2->deltaX;
