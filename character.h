@@ -36,6 +36,7 @@ public:
 
 	int health;
 	int meter;
+	int rounds;
 	int volitionX;
 	int volitionY;
 	bool aerial;	
