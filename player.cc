@@ -123,6 +123,12 @@ void player::enforceGravity(int grav, int floor)
 	else pos.y += deltaY;
 }
 
+void player::checkCorners(int left, int right)
+{
+	if(collision.x <= left) lCorner = 1; else lCorner = 0;
+	if(collision.x >= right) rCorner = 1; else rCorner = 0;
+}
+
 void player::checkBlocking()
 {
 	int st;

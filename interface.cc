@@ -84,11 +84,25 @@ void interface::runTimer()
 
 void interface::resolve()
 {
+
+	/*Current plan for this function: Once I've got everything reasonably functionally abstracted into player members,
+	the idea is to do the procedure as follows: 
+		1. Update to current rectangles. Since the actual step is part of the draw routine, this should happen first.
+		2. Figure out all deltas that should currently apply to sprite positions. Basically move the sprites to where 
+		   they'd be if there were no collision rules.
+		3. Check for things like hits and blocks. Enact all the effects of these, including stun, damage, etc.
+		4. Check for collision against the opponent or against boundaries such as the floor or the corners. 
+		   Haven't decided if there should be a cieling yet.
+		5. Apply any changes to deltas that need to be made before the next frame
+		6. Initialize sprites.
+	*/
+
 	p1->updateRects();
 	p2->updateRects();
+
 	if(p2->hitbox.w > 0) p1->checkBlocking();
 	if(p1->hitbox.w > 0) p2->checkBlocking();
-	/* Movement currently determined by static deltas */
+	
 	if(p1->pos.y + p1->pos.h < floor) p1->pick->aerial = 1; 
 	if(p2->pos.y + p2->pos.h < floor) p2->pick->aerial = 1;
 	bool collision = 0;
@@ -111,6 +125,9 @@ void interface::resolve()
 	p1->checkFacing(p2->pos.x);
 	p2->checkFacing(p1->pos.x);
 
+	p1->checkCorners(wall, screenWidth - wall);
+	p2->checkCorners(wall, screenWidth - wall);
+	
 	SDL_Rect a = p1->collision, b = p2->collision;
 	a.x += p1->deltaX;
 	b.x += p2->deltaX;
@@ -137,11 +154,9 @@ void interface::resolve()
 	/* Walls */
 
 	if (p1->collision.x + p1->deltaX <= wall){
-		p1->lCorner = 1;
 		p1->pos.x = wall - (p1->pos.x - p1->collision.x);
 		if(collision && p1->facing == 1) { p2->pos.x = wall - (p1->pos.x - p1->collision.x) + (p2->pos.x - p2->collision.x) + p1->collision.w; lock2 = 1;}
 	} else if (p1->collision.x + p1->deltaX + p1->collision.w >= screenWidth - wall) {
-		p1->rCorner = 1;
 		p1->pos.x = screenWidth - wall - p1->pos.w;
 		if(collision && p1->facing == -1) { p2->pos.x = p1->collision.x - p2->collision.w; lock2 = 1;}
 	} else {
@@ -150,11 +165,9 @@ void interface::resolve()
 	}
 
 	if (p2->collision.x + p2->deltaX <= wall){
-		p2->lCorner = 1;
 		p2->pos.x = wall - (p2->pos.x - p2->collision.w);
 		if(collision && p2->facing == 1) p1->pos.x = wall - (p2->pos.x - p2->collision.x) + (p1->pos.x - p1->collision.x) + p2->collision.w;
 	} else if (p2->collision.x + p2->deltaX + p2->collision.w >= screenWidth - wall){
-		p2->rCorner = 1;
 		p2->pos.x = screenWidth - wall - p2->pos.w;
 		if(collision && p2->facing == -1) p1->pos.x = p2->collision.x - p1->collision.w;
 	} else { 
