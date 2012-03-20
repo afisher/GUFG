@@ -34,6 +34,9 @@ interface::interface()
 	printf("Player 2:\n");
 	p2 = new player;
 
+	/*Flag to kill the game*/
+	gameover = 0;
+	
 	/*Temporarily, this is where we do character select. Obviously this will become a menu later*/
 	p1->characterSelect(1);
 	p2->characterSelect(0);
@@ -42,12 +45,15 @@ interface::interface()
 	p1->sprite = NULL;
 	p2->sprite = NULL;
 	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
+	roundInit();
+}
+
+void interface::roundInit()
+{
 
 	/*Background color, temporary until we have backgrounds*/
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
 
-	/*Flag to kill the game*/
-	gameover = 0;
 
 	/*Initialize input containers*/
 	for(int i = 0; i < 4; i++) 
@@ -75,6 +81,7 @@ interface::interface()
 	p1->pos.y = floor - p1->sprite->h;
 	p2->pos.y = floor - p2->sprite->h;
 	draw();
+
 }
 
 void interface::runTimer()

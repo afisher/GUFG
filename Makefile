@@ -27,7 +27,7 @@ keytest.o: keytest.cc
 interface.o: interface.h interface.cc player.h player.cc
 	g++ -c interface.cc $(FLAGS)
 
-hooks.o: hooks.cc
+hooks.o: hooks.cc player.h player.cc move.h move.cc 
 	g++ -c hooks.cc $(FLAGS)
 
 move.o: move.h move.cc
@@ -39,16 +39,16 @@ character.o: character.h character.cc move.h move.cc hitstun.h hitstun.cc
 frame.o: frame.h frame.cc
 	g++ -c frame.cc $(FLAGS)
 
-player.o: player.h player.cc
+player.o: player.h player.cc character.h character.cc
 	g++ -c player.cc $(FLAGS)
 
-draw.o: draw.cc
+draw.o: draw.cc player.h interface.h
 	g++ -c draw.cc $(FLAGS)
 
-red.o: red.h red.cc
+red.o: red.h red.cc character.h character.cc
 	g++ -c red.cc $(FLAGS)
 
-hitstun.o: hitstun.h hitstun.cc 
+hitstun.o: hitstun.h hitstun.cc move.h move.cc
 	g++ -c hitstun.cc $(FLAGS)
 
 # -f Is needed to avoid errors with missing files.
