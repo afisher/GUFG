@@ -1,5 +1,5 @@
-headers = interface.h move.h blck.h character.h player.h frame.h red.h hitstun.h
-source = keytest.cc blck.cc interface.cc hooks.cc move.cc character.cc frame.cc player.cc draw.cc red.cc hitstun.cc
+headers = interface.h move.h character.h player.h frame.h red.h hitstun.h
+source = keytest.cc interface.cc hooks.cc move.cc character.cc frame.cc player.cc draw.cc red.cc hitstun.cc
 flags = -g -O2 -Wno-write-strings `sdl-config --cflags`
 libs = `sdl-config --libs`
 OBJS = \
@@ -21,10 +21,10 @@ LIBS = `sdl-config --libs`
 keytest: $(OBJS)
 	g++ -o keytest $(OBJS) $(FLAGS) $(LIBS)
 
-keytest.o: keytest.cc
+keytest.o: $(source) $(headers)
 	g++ -c keytest.cc $(FLAGS)
 
-interface.o: interface.h interface.cc player.h player.cc
+interface.o: interface.h interface.cc player.h player.cc character.h character.cc
 	g++ -c interface.cc $(FLAGS)
 
 hooks.o: hooks.cc player.h player.cc move.h move.cc 

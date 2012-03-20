@@ -26,6 +26,7 @@ player::player()
 
 	/*Set up the sprite*/
 
+	rounds = 0;
 	deltaX = 0;
 	deltaY = 0;
 }

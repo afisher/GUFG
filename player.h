@@ -14,8 +14,9 @@ public:
 	character * pick;
 	int deltaX, deltaY;
 	char * inputName[10];	//Input names. This is really just for housekeeping.
-	int gameover;
+	int rounds;
 	int facing;
+		
 	void init();
 	void keyConfig(int);
 	void characterSelect(int);

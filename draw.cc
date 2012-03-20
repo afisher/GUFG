@@ -7,7 +7,6 @@
 #include "interface.h"
 void interface::draw()
 {
-	int numRounds = 2; //This will eventually be an interface variable.
 	SDL_Rect bar1, bar2, meter1, meter2, rounds1[numRounds], rounds2[numRounds];
 	
 	if(p1->pick->health >= 0) bar1.w = p1->pick->health; else bar1.w = 1; 
@@ -29,9 +28,9 @@ void interface::draw()
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
 	
 	for(int i = 0; i < numRounds; i++){
-		if(p1->pick->rounds > i) SDL_FillRect(screen, &rounds1[i], SDL_MapRGB(screen->format, 0, 255, 255));
+		if(p1->rounds > i) SDL_FillRect(screen, &rounds1[i], SDL_MapRGB(screen->format, 0, 255, 255));
 		else SDL_FillRect(screen, &rounds1[i], SDL_MapRGB(screen->format, 0, 0, 0));
-		if(p2->pick->rounds > i) SDL_FillRect(screen, &rounds2[i], SDL_MapRGB(screen->format, 0, 255, 255));
+		if(p2->rounds > i) SDL_FillRect(screen, &rounds2[i], SDL_MapRGB(screen->format, 0, 255, 255));
 		else SDL_FillRect(screen, &rounds2[i], SDL_MapRGB(screen->format, 0, 0, 0));
 	}
 
