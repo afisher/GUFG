@@ -24,6 +24,7 @@ public:
 	void spriteInit();
 	void flip();
 	void roundInit();
+	void checkWin();
 
 	player *p1, *p2;	
 	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
@@ -40,7 +41,8 @@ public:
 	void readKey(SDL_Event&);
 	int combo1;
 	int combo2;
-	
+	int numRounds;
+
 	bool gameover;
 	bool checkCollision(SDL_Rect, SDL_Rect);
 private:

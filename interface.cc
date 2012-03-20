@@ -36,7 +36,8 @@ interface::interface()
 
 	/*Flag to kill the game*/
 	gameover = 0;
-	
+	numRounds = 2;
+
 	/*Temporarily, this is where we do character select. Obviously this will become a menu later*/
 	p1->characterSelect(1);
 	p2->characterSelect(0);
@@ -48,6 +49,8 @@ interface::interface()
 
 void interface::roundInit()
 {
+	p1->pick->health = 300;
+	p2->pick->health = 300;
 	p1->sprite = NULL;
 	p2->sprite = NULL;
 	
@@ -214,9 +217,30 @@ void interface::resolve()
 	/*Draw the sprites*/
 	p1->spriteInit();
 	p2->spriteInit();
+	checkWin();
 	runTimer();
 }
 
+void interface::checkWin()
+{
+	if(p1->pick->health == 0 || p2->pick->health == 0 || timer == 0){
+		if(p1->pick->health > p2->pick->health) {
+			printf("Player 1 wins!\n");
+			p1->rounds++;
+		}
+		else if(p2->pick->health > p2->pick->health) {
+			printf("Player 2 wins!\n");
+			p2->rounds++;
+		}
+		else {
+			printf("Draw!\n");
+			if(p1->rounds < numRounds - 1) p1->rounds++;
+			if(p2->rounds < numRounds - 1) p2->rounds++;
+		}
+		if(p1->rounds == numRounds || p2->rounds == numRounds) gameover = 1;
+		else roundInit();
+	}
+}
 
 void interface::readInput()
 {
