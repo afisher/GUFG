@@ -101,6 +101,7 @@ character::character()
 
 	health = 300;
 	meter = 0;
+	rounds = 0;
 	volitionX = 0;
 	volitionY = 0;
 	aerial = 0;
