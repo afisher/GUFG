@@ -103,6 +103,8 @@ void player::updateRects()
 
 void player::enforceGravity(int grav, int floor)
 {	
+	if(pos.y + pos.h < floor) pick->aerial = 1; 
+	
 	if(pos.y + pos.h >= floor && pick->aerial == 1){
 		if(pick->cMove == pick->airBlock){
 			pick->standBlock->init(pick->airBlock->counter);
