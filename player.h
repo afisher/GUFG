@@ -34,6 +34,7 @@ public:
 	void conserveMomentum();
 	void enforceGravity(int, int);
 	void checkBlocking();
+	void checkFacing(int);
 private:
 	int inputBuffer[29];
 };

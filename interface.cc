@@ -64,10 +64,6 @@ interface::interface()
 
 	combo1 = 0;
 	combo2 = 0;
-	p1->deltaX = 0;
-	p1->deltaY = 0;
-	p2->deltaX = 0;
-	p2->deltaY = 0;
 	grav = 3;
 	timer = 5824;
 	p1->facing = 1;
@@ -103,13 +99,17 @@ void interface::resolve()
 	p2->deltaX += p2->pick->volitionX*p2->facing;
 	p2->deltaY += p2->pick->volitionY;
 	if(p2->lCorner || p2->rCorner) p1->deltaX += p2->pick->volitionX*p1->facing;
+
 	p1->pick->volitionX = 0;
-	p1->pick->volitionY = 0;
 	p2->pick->volitionX = 0;
+	p1->pick->volitionY = 0;
 	p2->pick->volitionY = 0;
 
 	p1->enforceGravity(grav, floor);
 	p2->enforceGravity(grav, floor);
+
+	p1->checkFacing(p2->pos.x);
+	p2->checkFacing(p1->pos.x);
 
 	SDL_Rect a = p1->collision, b = p2->collision;
 	a.x += p1->deltaX;
@@ -140,7 +140,7 @@ void interface::resolve()
 		p1->lCorner = 1;
 		p1->pos.x = wall - (p1->pos.x - p1->collision.x);
 		if(collision && p1->facing == 1) { p2->pos.x = wall - (p1->pos.x - p1->collision.x) + (p2->pos.x - p2->collision.x) + p1->collision.w; lock2 = 1;}
-	} else if (p1->collision.x + p1->deltaX + p1->collision.w >= screenWidth - wall){
+	} else if (p1->collision.x + p1->deltaX + p1->collision.w >= screenWidth - wall) {
 		p1->rCorner = 1;
 		p1->pos.x = screenWidth - wall - p1->pos.w;
 		if(collision && p1->facing == -1) { p2->pos.x = p1->collision.x - p2->collision.w; lock2 = 1;}
@@ -163,6 +163,8 @@ void interface::resolve()
 			if(collision) p2->pos.x += p1->deltaX;
 		}
 	}
+	
+	/*One more collision case: Resolving jumping on people*/
 
 	if(checkCollision(p1->pos, p2->pos)){
 		if(p1->pick->aerial && !(p2->pick->aerial)){
@@ -176,25 +178,13 @@ void interface::resolve()
 	}
 
 
-	/*Enforce facing*/
-	if(!p1->pick->aerial){
-		if(p1->pick->cMove == p1->pick->neutral){
-			if((!sAxis1[2] && !sAxis1[3]) || sAxis1[1] == 1) p1->deltaX = 0;
-		}
-		if (p1->pos.x < p2->pos.x && p1->facing == -1) p1->facing = 1;
-		else if (p1->pos.x > p2->pos.x && p1->facing == 1) p1->facing = -1; 
-	}
+	if(!p1->pick->aerial)
+		if(p1->pick->cMove == p1->pick->neutral)
+			p1->deltaX = 0;
 
-			/*Player 2*/
-
-
-	if(!p2->pick->aerial){
-		if(p2->pick->cMove == p2->pick->neutral){
-			if((!sAxis2[2] && !sAxis2[3]) || sAxis2[1] == 1) p2->deltaX = 0;
-		}
-		if (p2->pos.x < p1->pos.x && p2->facing == -1) p2->facing = 1; 
-		else if (p2->pos.x > p1->pos.x && p2->facing == 1) p2->facing = -1; 
-	}
+	if(!p2->pick->aerial)
+		if(p2->pick->cMove == p2->pick->neutral)
+			p2->deltaX = 0;
 
 	/*Reinitialize inputs*/
 	for(int i = 0; i < 5; i++){
@@ -204,8 +194,7 @@ void interface::resolve()
 		negEdge2[i] = 0;
 	}
 
-	/*One more collision case: Resolving jumping on people*/
-
+/*
 	if(!p1->pick->aerial && !p1->pick->cMove){
 		if(p1->facing == -1 && p1->pos.x < p2->pos.x) p1->facing = 1;
 		else if(p1->facing == 1 && p1->pos.x > p2->pos.x) p1->facing = -1;
@@ -214,7 +203,7 @@ void interface::resolve()
 		if(p2->facing == -1 && p2->pos.x < p1->pos.x) p2->facing = 1;
 		else if(p2->facing == 1 && p2->pos.x > p1->pos.x) p2->facing = -1;
 	}
-
+*/
 	/*Draw the sprites*/
 	p1->spriteInit();
 	p2->spriteInit();
