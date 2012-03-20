@@ -35,6 +35,7 @@ public:
 	void enforceGravity(int, int);
 	void checkBlocking();
 	void checkFacing(int);
+	void checkCorners(int, int);
 private:
 	int inputBuffer[29];
 };
