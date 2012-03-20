@@ -158,3 +158,10 @@ void player::checkBlocking()
 		break;
 	}
 }
+
+void player::checkFacing(int maypole){
+	if(!pick->aerial){
+		if (pos.x < maypole && facing == -1) facing = 1; 
+		else if (pos.x > maypole && facing == 1) facing = -1; 
+	}
+}
