@@ -194,16 +194,6 @@ void interface::resolve()
 		negEdge2[i] = 0;
 	}
 
-/*
-	if(!p1->pick->aerial && !p1->pick->cMove){
-		if(p1->facing == -1 && p1->pos.x < p2->pos.x) p1->facing = 1;
-		else if(p1->facing == 1 && p1->pos.x > p2->pos.x) p1->facing = -1;
-	}
-	if(!p2->pick->aerial && !p2->pick->cMove){
-		if(p2->facing == -1 && p2->pos.x < p1->pos.x) p2->facing = 1;
-		else if(p2->facing == 1 && p2->pos.x > p1->pos.x) p2->facing = -1;
-	}
-*/
 	/*Draw the sprites*/
 	p1->spriteInit();
 	p2->spriteInit();
