@@ -42,18 +42,17 @@ interface::interface()
 	p2->characterSelect(0);
 
 	/*Build the character. Eventually this will probably be a function.*/
-	p1->sprite = NULL;
-	p2->sprite = NULL;
 	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
 	roundInit();
 }
 
 void interface::roundInit()
 {
-
+	p1->sprite = NULL;
+	p2->sprite = NULL;
+	
 	/*Background color, temporary until we have backgrounds*/
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
-
 
 	/*Initialize input containers*/
 	for(int i = 0; i < 4; i++) 
@@ -81,7 +80,6 @@ void interface::roundInit()
 	p1->pos.y = floor - p1->sprite->h;
 	p2->pos.y = floor - p2->sprite->h;
 	draw();
-
 }
 
 void interface::runTimer()
@@ -106,12 +104,10 @@ void interface::resolve()
 
 	p1->updateRects();
 	p2->updateRects();
-
-	if(p2->hitbox.w > 0) p1->checkBlocking();
-	if(p1->hitbox.w > 0) p2->checkBlocking();
+		
+	p1->enforceGravity(grav, floor);
+	p2->enforceGravity(grav, floor);
 	
-	if(p1->pos.y + p1->pos.h < floor) p1->pick->aerial = 1; 
-	if(p2->pos.y + p2->pos.h < floor) p2->pick->aerial = 1;
 	bool collision = 0;
 	
 	p1->deltaX += p1->pick->volitionX*p1->facing;
@@ -126,8 +122,6 @@ void interface::resolve()
 	p1->pick->volitionY = 0;
 	p2->pick->volitionY = 0;
 
-	p1->enforceGravity(grav, floor);
-	p2->enforceGravity(grav, floor);
 
 	p1->checkFacing(p2->pos.x);
 	p2->checkFacing(p1->pos.x);
@@ -142,9 +136,12 @@ void interface::resolve()
 	b.y += p2->deltaY;
 	bool lock1, lock2 = 0;
 	collision = checkCollision(a, b);
-	/* Some collision */
-	if(p1->pick->cMove != p1->pick->reel) combo2 = 0;
-	if(p2->pick->cMove != p2->pick->reel) combo1 = 0;
+	
+	if(p1->pick->cMove != p1->pick->reel && p1->pick->cMove != p1->pick->fall) combo2 = 0;
+	if(p2->pick->cMove != p2->pick->reel && p2->pick->cMove != p2->pick->fall) combo1 = 0;
+
+	if(p2->hitbox.w > 0) p1->checkBlocking();
+	if(p1->hitbox.w > 0) p2->checkBlocking();
 
 	if(p1->hitbox.w > 0 && p2->hitreg.w > 0){
 		if(checkCollision(p1->hitbox, p2->hitreg)) {
