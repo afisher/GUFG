@@ -125,26 +125,31 @@ void player::enforceGravity(int grav, int floor)
 
 void player::checkBlocking()
 {
+	int st;
+	if(pick->cMove == pick->airBlock || pick->cMove == pick->standBlock || pick->cMove == pick->crouchBlock)
+		st = ((hitstun*)pick->cMove)->counter;
+	else st = 0;
+
 	switch(inputBuffer[0]){
 	case 7:
 	case 4:
 		if(pick->aerial && (*pick->airBlock) > pick->cMove) {
-			pick->airBlock->init(0);
+			pick->airBlock->init(st);
 			pick->cMove = pick->airBlock;
 		}
 		else if((*pick->standBlock) > pick->cMove) {
-			pick->standBlock->init(0);
+			pick->standBlock->init(st);
 			pick->cMove = pick->standBlock;
 		}
 		updateRects();
 		break;
 	case 1:
 		if(pick->aerial && (*pick->airBlock) > pick->cMove) {
-			pick->airBlock->init(0);
+			pick->airBlock->init(st);
 			pick->cMove = pick->airBlock;
 		}
 		else if((*pick->crouchBlock) > pick->cMove) {
-			pick->crouchBlock->init(0);
+			pick->crouchBlock->init(st);
 			pick->cMove = pick->crouchBlock;
 		}
 		updateRects();
