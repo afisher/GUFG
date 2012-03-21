@@ -19,28 +19,28 @@ character::character()
 	head->fish[0].debugDamageInit(10);
 	head->fish[0].debugHitboxInit(45, 45, 30, 30);
 	head->fish[0].debugHittableInit(0, 0, 80, 150);
-	head->fish[0].debugCollisionInit(0, 5, 55, 150);
+	head->fish[0].debugCollisionInit(5, 0, 55, 150);
 	head->fish[0].xLock = 1;
 
 	temp = new move("White/D", "D", 0, 1);
 	head->insert(temp);
 	head->fish[1].debugStateInit(3, 16, 30);
 	head->fish[1].debugRectsInit();
-	head->fish[1].debugCollisionInit(0, 5, 55, 150);
+	head->fish[1].debugCollisionInit(5, 0, 55, 150);
 	airHead = new moveTrie(temp);
 
 	neutral = new move("White/N", 1);
 	neutral->debugRectsInit();
 	neutral->debugStateInit(1, 31, 31);
 	neutral->debugHittableInit(0, 0, 65, 150);
-	neutral->debugCollisionInit(0, 5, 55, 150);
+	neutral->debugCollisionInit(5, 0, 55, 150);
 
 	walkBack = new move("White/WB", 1);
 	walkBack->debugRectsInit();
 	walkBack->debugStateInit(1, 31, 31);
 	walkBack->debugHittableInit(0, 0, 65, 150);
 	walkBack->debugDeltaInit(-5, 0, 0, 0);
-	walkBack->debugCollisionInit(0, 5, 55, 150);
+	walkBack->debugCollisionInit(5, 0, 55, 150);
 	walkBack->xLock = 1;
 
 	walk = new move("White/W", 1);
@@ -48,7 +48,7 @@ character::character()
 	walk->debugStateInit(1, 31, 31);
 	walk->debugHittableInit(0, 0, 65, 150);
 	walk->debugDeltaInit(5, 0, 0, 0);
-	walk->debugCollisionInit(0, 5, 55, 150);
+	walk->debugCollisionInit(5, 0, 55, 150);
 	walk->setTolerance(1);
 	walk->xLock = 1;
 
@@ -56,8 +56,8 @@ character::character()
 	jump->debugRectsInit();
 	jump->debugStateInit(5, 31, 31);
 	jump->debugHittableInit(0, 0, 65, 150);
-	jump->debugDeltaInit(0, -20, 0, 0);
-	jump->debugCollisionInit(0, 5, 55, 150);
+	jump->debugDeltaInit(0, -35, 0, 0);
+	jump->debugCollisionInit(5, 0, 55, 150);
 	jump->setTolerance(1);
 	
 	head->insert(9, jump);
@@ -67,18 +67,18 @@ character::character()
 	reel = new hitstun("White/H", 1);
 	reel->debugRectsInit();
 	reel->debugHittableInit(0, 0, 65, 150);
-	reel->debugCollisionInit(0, 5, 55, 150);
+	reel->debugCollisionInit(5, 0, 55, 150);
 
 	fall = new hitstun("White/UT", 1);
 	fall->debugRectsInit();
 	fall->debugHittableInit(0, 0, 150, 65);
-	fall->debugCollisionInit(0, 5, 55, 55);
+	fall->debugCollisionInit(5, 0, 55, 55);
 
 	airBlock = new hitstun("White/BL", 1);
 	airBlock->blockState = 4;
 	airBlock->debugRectsInit();
 	airBlock->debugHittableInit(0, 0, 65, 150);
-	airBlock->debugCollisionInit(0, 5, 55, 150);
+	airBlock->debugCollisionInit(5, 0, 55, 150);
 	airBlock->debugStateInit(33, 32, 32);
 
 	standBlock = new hitstun("White/BL", 1);
@@ -93,7 +93,7 @@ character::character()
 	crouchBlock->blockState = 1;
 	crouchBlock->debugRectsInit();
 	crouchBlock->debugHittableInit(0, 0, 65, 150);
-	crouchBlock->debugCollisionInit(0, 5, 55, 150);
+	crouchBlock->debugCollisionInit(5, 0, 55, 150);
 	crouchBlock->debugStateInit(33, 32, 32);
 	crouchBlock->xLock = 1;
 

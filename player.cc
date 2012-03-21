@@ -104,30 +104,32 @@ void player::updateRects()
 
 void player::enforceGravity(int grav, int floor)
 {	
-	if(pos.y + pos.h < floor) pick->aerial = 1; 
+	if(pos.y + pos.h < floor && pick->aerial == 0) pick->aerial = 1; 
 	
-	if(pos.y + pos.h >= floor && pick->aerial == 1){
-		if(pick->cMove == pick->airBlock){
-			pick->standBlock->init(pick->airBlock->counter);
-			pick->cMove == pick->standBlock;
-		} else { 
-			pick->cMove->init();
-			pick->cMove = pick->neutral;
-		}
-		pick->aerial = 0;
-	}
-
-	if(pick->aerial) deltaY += grav;
-
-	if (pos.y + deltaY + pos.h >= floor){
-		pos.y = floor - pos.h;
-		pick->aerial = 0; deltaY = 0;
-	}
-	else pos.y += deltaY;
+	else if(pick->aerial) deltaY += grav;
 }
 
-void player::checkCorners(int left, int right)
+void player::checkCorners(int floor, int left, int right)
 {
+	/*Floor, or "Bottom corner"*/
+
+	if (pos.y + pos.h > floor){
+		if(pick->aerial == 1){
+			if(pick->cMove == pick->airBlock){
+				pick->standBlock->init(pick->airBlock->counter);
+				pick->cMove == pick->standBlock;
+			} else { 
+				pick->cMove->init();
+				pick->cMove = pick->neutral;
+			}
+			pick->aerial = 0;
+			deltaY = 0;
+		}
+		pos.y = floor - pos.h;
+	}
+
+	/*Walls, or "Left and Right" corners*/
+
 	if(collision.x <= left) lCorner = 1; else lCorner = 0;
 	if(collision.x >= right) rCorner = 1; else rCorner = 0;
 }
