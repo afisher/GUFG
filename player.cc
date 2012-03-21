@@ -113,6 +113,12 @@ void player::checkCorners(int floor, int left, int right)
 {
 	/*Floor, or "Bottom corner"*/
 
+	/*Currently this is done just with pos, but it needs to use collision, since
+	pos is just the sprite, and our collision boxes won't always be a rectangle circumscribing
+	the sprite. But something's broken about collision rects at the moment that makes that not work.
+	Maybe check what's happening in updateRects() for that, or move::debugCollisionInit() is broken,
+	which is also a possibility (and one that may be better remedied by having a real move constructor).*/
+
 	if (pos.y + pos.h > floor){
 		if(pick->aerial == 1){
 			if(pick->cMove == pick->airBlock){
@@ -130,8 +136,15 @@ void player::checkCorners(int floor, int left, int right)
 
 	/*Walls, or "Left and Right" corners*/
 
+	/*Eventually this function should actually make sure sprites stay out of the walls. The corner flags
+	should probably stay though, as I'm sure they'll make resolving jumping into the corner easier. 
+	(Obviously the expected behavior is that you CAN'T jump into a corner someone is currently standing in
+	to the fullest extent they can, but if you can get "past" them, you can swap sides and be in the corner.
+	This is to prevent corner crossups in normal circumstances. We might tie this to "facing" instead though. Not sure
+	at this stage*/
+
 	if(collision.x <= left) lCorner = 1; else lCorner = 0;
-	if(collision.x >= right) rCorner = 1; else rCorner = 0;
+	if(collision.x + collision.w >= right) rCorner = 1; else rCorner = 0;
 }
 
 void player::checkBlocking()
