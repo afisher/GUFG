@@ -9,7 +9,7 @@ red::red()
 	head->fish[0].debugHitboxInit(45, 35, 30, 30);
 	head->fish[0].debugHittableInit(0, 0, 65, 150);
 	head->fish[0].debugDamageInit(9);
-	head->fish[0].debugCollisionInit(0, 5, 55, 150);
+	head->fish[0].debugCollisionInit(5, 0, 55, 150);
 	head->fish[0].xLock = 1;
 	head->fish[0].yLock = 1;
 
@@ -17,7 +17,7 @@ red::red()
 	neutral->debugRectsInit();
 	neutral->debugStateInit(1, 31, 31);
 	neutral->debugHittableInit(0, 0, 65, 150);
-	neutral->debugCollisionInit(0, 5, 55, 150);
+	neutral->debugCollisionInit(5, 0, 55, 150);
 	
 	cMove = neutral;
 }

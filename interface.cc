@@ -107,9 +107,6 @@ void interface::resolve()
 
 	p1->updateRects();
 	p2->updateRects();
-		
-	p1->enforceGravity(grav, floor);
-	p2->enforceGravity(grav, floor);
 	
 	bool collision = 0;
 	
@@ -120,17 +117,25 @@ void interface::resolve()
 	p2->deltaY += p2->pick->volitionY;
 	if(p2->lCorner || p2->rCorner) p1->deltaX += p2->pick->volitionX*p1->facing;
 
+	p1->pos.y += p1->deltaY;
+	p2->pos.y += p2->deltaY;
+
 	p1->pick->volitionX = 0;
 	p2->pick->volitionX = 0;
 	p1->pick->volitionY = 0;
 	p2->pick->volitionY = 0;
 
-
+	p1->pos.x += p1->deltaX;
+	p2->pos.x += p2->deltaX;
+	
+	p1->enforceGravity(grav, floor);
+	p2->enforceGravity(grav, floor);	
+	
 	p1->checkFacing(p2->pos.x);
 	p2->checkFacing(p1->pos.x);
 
-	p1->checkCorners(wall, screenWidth - wall);
-	p2->checkCorners(wall, screenWidth - wall);
+	p1->checkCorners(floor, wall, screenWidth - wall);
+	p2->checkCorners(floor, wall, screenWidth - wall);
 	
 	SDL_Rect a = p1->collision, b = p2->collision;
 	a.x += p1->deltaX;
@@ -168,7 +173,6 @@ void interface::resolve()
 		if(collision && p1->facing == -1) { p2->pos.x = p1->collision.x - p2->collision.w; lock2 = 1;}
 	} else {
 		if(collision) p1->pos.x += p2->deltaX;
-		p1->pos.x += p1->deltaX;
 	}
 
 	if (p2->collision.x + p2->deltaX <= wall){
@@ -179,7 +183,6 @@ void interface::resolve()
 		if(collision && p2->facing == -1) p1->pos.x = p2->collision.x - p1->collision.w;
 	} else { 
 		if(!lock2){
-			p2->pos.x += p2->deltaX;
 			if(collision) p2->pos.x += p1->deltaX;
 		}
 	}
@@ -228,7 +231,7 @@ void interface::checkWin()
 			printf("Player 1 wins!\n");
 			p1->rounds++;
 		}
-		else if(p2->pick->health > p2->pick->health) {
+		else if(p2->pick->health > p1->pick->health) {
 			printf("Player 2 wins!\n");
 			p2->rounds++;
 		}
