@@ -193,25 +193,27 @@ void player::checkBlocking()
 
 void player::resolveCollision(player * other)
 {
-	int totalDX;
-	if(deltaX > 0 && other->deltaX > 0){
-		if(pos.x > other->pos.x) totalDX = deltaX;
-		else totalDX = other->deltaX;
-	}
-	else if(deltaX < 0 && other->deltaX < 0){
-		if(pos.x < other->pos.x) totalDX = deltaX;
-		else totalDX = other->deltaX;
-	} else totalDX = deltaX + other->deltaX;
-
-
+	bool displace = 0;
+	bool oDisplace = 0;
+	int middle;
 	if(other->lCorner) pos.x = other->pos.x + other->pos.w;
 	else if(other->rCorner) pos.x = other->pos.x - pos.w;
 	else if(lCorner) other->pos.x = pos.x + pos.w;
 	else if(rCorner) other->pos.x = pos.x - other->pos.w;
 	else {
 		if((!pick->aerial && !other->pick->aerial) || (pick->aerial && other->pick->aerial)){
-			pos.x = pos.x + totalDX - deltaX;
-			other->pos.x = other->pos.x + totalDX - other->deltaX;
+			if((facing == 1 && deltaX > 0) || (facing == -1 && deltaX < 0)) oDisplace = 1;
+			if((other->facing == 1 && other->deltaX > 0) || (other->facing == -1 && other->deltaX < 0)) displace = 1;
+			if(displace && !oDisplace) {
+				if(facing == 1) pos.x = other->pos.x - pos.w;
+				else pos.x = other->pos.x + other->pos.w;
+			} else if (oDisplace && !displace) {
+				if(other->facing == 1) other->pos.x = pos.x - other->pos.w;
+				else other->pos.x = pos.x + pos.w;
+			} else if (oDisplace && displace) { 
+				pos.x += other->deltaX;
+				other->pos.x += deltaX;
+			}
 		} else if (pick->aerial && !other->pick->aerial) {
 			if(other->facing == 1) pos.x = other->pos.x + other->pos.w;
 			else pos.x = other->pos.x - pos.w;
