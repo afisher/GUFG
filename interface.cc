@@ -165,28 +165,6 @@ void interface::resolve()
 	}
 	/* Walls */
 
-	if (p1->collision.x + p1->deltaX <= wall){
-		p1->pos.x = wall - (p1->pos.x - p1->collision.x);
-		if(collision && p1->facing == 1) { p2->pos.x = wall - (p1->pos.x - p1->collision.x) + (p2->pos.x - p2->collision.x) + p1->collision.w; lock2 = 1;}
-	} else if (p1->collision.x + p1->deltaX + p1->collision.w >= screenWidth - wall) {
-		p1->pos.x = screenWidth - wall - p1->pos.w;
-		if(collision && p1->facing == -1) { p2->pos.x = p1->collision.x - p2->collision.w; lock2 = 1;}
-	} else {
-		if(collision) p1->pos.x += p2->deltaX;
-	}
-
-	if (p2->collision.x + p2->deltaX <= wall){
-		p2->pos.x = wall - (p2->pos.x - p2->collision.w);
-		if(collision && p2->facing == 1) p1->pos.x = wall - (p2->pos.x - p2->collision.x) + (p1->pos.x - p1->collision.x) + p2->collision.w;
-	} else if (p2->collision.x + p2->deltaX + p2->collision.w >= screenWidth - wall){
-		p2->pos.x = screenWidth - wall - p2->pos.w;
-		if(collision && p2->facing == -1) p1->pos.x = p2->collision.x - p1->collision.w;
-	} else { 
-		if(!lock2){
-			if(collision) p2->pos.x += p1->deltaX;
-		}
-	}
-	
 	/*One more collision case: Resolving jumping on people*/
 
 	if(checkCollision(p1->pos, p2->pos)){

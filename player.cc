@@ -143,8 +143,16 @@ void player::checkCorners(int floor, int left, int right)
 	This is to prevent corner crossups in normal circumstances. We might tie this to "facing" instead though. Not sure
 	at this stage*/
 
-	if(collision.x <= left) lCorner = 1; else lCorner = 0;
-	if(collision.x + collision.w >= right) rCorner = 1; else rCorner = 0;
+	if(pos.x <= left){
+		if(facing == 1) lCorner = 1;
+		if(pos.x < left) 
+			pos.x = left;
+	}
+	if(pos.x + pos.w >= right){
+		if(facing == -1) rCorner = 1;
+		if(pos.x + pos.w > right)
+			pos.x = right - pos.w;
+	}
 }
 
 void player::checkBlocking()
