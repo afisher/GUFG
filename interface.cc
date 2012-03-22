@@ -137,9 +137,10 @@ void interface::resolve()
 	p1->checkCorners(floor, wall, screenWidth - wall);
 	p2->checkCorners(floor, wall, screenWidth - wall);
 	
-	SDL_Rect a = p1->collision, b = p2->collision;
-	collision = checkCollision(a, b);
-	
+	if (checkCollision(p1->pos, p2->pos)){
+		p1->resolveCollision(p2);
+		p2->resolveCollision(p1);
+	}
 	if(p1->pick->cMove != p1->pick->reel && p1->pick->cMove != p1->pick->fall) combo2 = 0;
 	if(p2->pick->cMove != p2->pick->reel && p2->pick->cMove != p2->pick->fall) combo1 = 0;
 
@@ -160,18 +161,6 @@ void interface::resolve()
 	}
 
 	/*One more collision case: Resolving jumping on people*/
-
-	if(checkCollision(p1->pos, p2->pos)){
-		if(p1->pick->aerial && !(p2->pick->aerial)){
-			if(p2->facing == 1) p1->pos.x = p2->pos.x + p2->pos.w;
-			else p1->pos.x = p2->pos.x - p1->pos.w;
-		}
-		if(p2->pick->aerial && !(p1->pick->aerial)){
-			if(p1->facing == 1) p2->pos.x = p1->pos.x + p1->pos.w;
-			else p2->pos.x = p1->pos.x - p2->pos.w;
-		}
-	}
-
 
 	if(!p1->pick->aerial)
 		if(p1->pick->cMove == p1->pick->neutral)

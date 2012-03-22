@@ -191,9 +191,22 @@ void player::checkBlocking()
 	}
 }
 
+void player::resolveCollision(player * other)
+{
+	if(other->pos.x > pos.x){
+		if(!other->rCorner)
+			other->pos.x = pos.x + pos.w;
+	} else if(other->pos.x < pos.x) {
+		if(!other->lCorner)
+			other->pos.x = pos.x - other->pos.w;
+	}
+}
+
 void player::checkFacing(int maypole){
 	if(!pick->aerial){
-		if (pos.x < maypole && facing == -1) facing = 1; 
+		if (lCorner) facing = 1;
+		else if (rCorner) facing = -1;
+		else if (pos.x < maypole && facing == -1) facing = 1; 
 		else if (pos.x > maypole && facing == 1) facing = -1; 
 	}
 }
