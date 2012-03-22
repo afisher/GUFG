@@ -147,12 +147,12 @@ void player::checkCorners(int floor, int left, int right)
 		if(facing == 1) lCorner = 1;
 		if(pos.x < left) 
 			pos.x = left;
-	}
+	} else lCorner = 0;
 	if(pos.x + pos.w >= right){
 		if(facing == -1) rCorner = 1;
 		if(pos.x + pos.w > right)
 			pos.x = right - pos.w;
-	}
+	} else rCorner = 0;
 }
 
 void player::checkBlocking()
