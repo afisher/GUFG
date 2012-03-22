@@ -139,7 +139,6 @@ void interface::resolve()
 	
 	if (checkCollision(p1->pos, p2->pos)){
 		p1->resolveCollision(p2);
-		p2->resolveCollision(p1);
 	}
 	if(p1->pick->cMove != p1->pick->reel && p1->pick->cMove != p1->pick->fall) combo2 = 0;
 	if(p2->pick->cMove != p2->pick->reel && p2->pick->cMove != p2->pick->fall) combo1 = 0;
