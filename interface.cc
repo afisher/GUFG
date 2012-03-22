@@ -138,11 +138,6 @@ void interface::resolve()
 	p2->checkCorners(floor, wall, screenWidth - wall);
 	
 	SDL_Rect a = p1->collision, b = p2->collision;
-	a.x += p1->deltaX;
-	b.x += p2->deltaX;
-	a.y += p1->deltaY;
-	b.y += p2->deltaY;
-	bool lock1, lock2 = 0;
 	collision = checkCollision(a, b);
 	
 	if(p1->pick->cMove != p1->pick->reel && p1->pick->cMove != p1->pick->fall) combo2 = 0;
@@ -163,7 +158,6 @@ void interface::resolve()
 			if(combo2 > 0) printf("p2: %i-hit combo\n", combo2+1);
 		}
 	}
-	/* Walls */
 
 	/*One more collision case: Resolving jumping on people*/
 
