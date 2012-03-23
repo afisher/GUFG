@@ -24,16 +24,14 @@ public:
 	void spriteInit();
 	void flip();
 	void roundInit();
+	void matchInit();
+	void cSelectMenu();
 	void checkWin();
 
 	player *p1, *p2;	
-	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
-	SDL_Surface *p1sprite, *p2sprite, *bg, *screen;
-	character * pick;
+	SDL_Surface *bg, *screen;
 	int grav;
-	char * inputName[10];	//Input names. This is really just for housekeeping.
 	int colorKey;
-	int deltaX1, deltaX2, deltaY1, deltaY2;
 	bool sAxis1[4], sAxis2[4]; 
 	bool posEdge1[5], posEdge2[5];
 	bool negEdge1[5], negEdge2[5];

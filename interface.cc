@@ -38,9 +38,9 @@ interface::interface()
 	gameover = 0;
 	numRounds = 2;
 
-	/*Temporarily, this is where we do character select. Obviously this will become a menu later*/
-	p1->characterSelect(1);
-	p2->characterSelect(0);
+	/*Select characters. Currently done automatically, to change later*/
+
+	cSelectMenu();
 
 	/*Build the character. Eventually this will probably be a function.*/
 	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
@@ -51,6 +51,25 @@ void interface::roundInit()
 {
 	p1->pick->health = 300;
 	p2->pick->health = 300;
+	p1->pick->meter = 0;
+	p2->pick->meter = 0;
+	p1->deltaX = 0;
+	p2->deltaX = 0;
+	p1->deltaY = 0;
+	p2->deltaY = 0;
+	p1->pick->volitionX = 0;
+	p2->pick->volitionX = 0;
+	p1->pick->volitionY = 0;
+	p2->pick->volitionY = 0;
+	if(p1->pick->cMove != p1->pick->neutral){
+		p1->pick->cMove->init();
+		p1->pick->cMove = p1->pick->neutral;
+	}
+	if(p2->pick->cMove != p2->pick->neutral){
+		p2->pick->cMove->init();
+		p2->pick->cMove = p2->pick->neutral;
+	}
+
 	p1->sprite = NULL;
 	p2->sprite = NULL;
 	
@@ -108,8 +127,6 @@ void interface::resolve()
 	p1->updateRects();
 	p2->updateRects();
 	
-	bool collision = 0;
-	
 	p1->deltaX += p1->pick->volitionX*p1->facing;
 	p1->deltaY += p1->pick->volitionY;
 	if(p1->lCorner || p1->rCorner) p2->deltaX += p1->pick->volitionX*p2->facing;
@@ -128,6 +145,9 @@ void interface::resolve()
 	p1->pos.x += p1->deltaX;
 	p2->pos.x += p2->deltaX;
 	
+	p1->updateRects();
+	p2->updateRects();
+	
 	p1->enforceGravity(grav, floor);
 	p2->enforceGravity(grav, floor);	
 	
@@ -137,7 +157,7 @@ void interface::resolve()
 	p1->checkCorners(floor, wall, screenWidth - wall);
 	p2->checkCorners(floor, wall, screenWidth - wall);
 	
-	if (checkCollision(p1->pos, p2->pos)){
+	if (checkCollision(p1->collision, p2->collision)){
 		p1->resolveCollision(p2);
 	}
 	if(p1->pick->cMove != p1->pick->reel && p1->pick->cMove != p1->pick->fall) combo2 = 0;
@@ -293,4 +313,15 @@ bool interface::checkCollision(SDL_Rect a, SDL_Rect b)
 	if(a.y + a.h - b.y <= 0 || b.y + b.h - a.y <= 0) return 0;
 	if(a.x + a.w - b.x < 0 || b.x + b.w - a.x < 0) return 0;
 	return 1;
+}
+
+void interface::cSelectMenu()
+{
+	/*The plan is that this is eventually a menu, preferably pretty visual, in which players can select characters.*/
+	int select1, select2;
+	select1 = 1;
+	select2 = 0;
+
+	p1->characterSelect(select1);
+	p2->characterSelect(select2);
 }
