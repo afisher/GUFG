@@ -56,7 +56,7 @@ character::character()
 	jump->debugRectsInit();
 	jump->debugStateInit(5, 31, 31);
 	jump->debugHittableInit(0, 0, 65, 150);
-	jump->debugDeltaInit(0, -35, 0, 0);
+	jump->debugDeltaInit(0, -20, 0, 0);
 	jump->debugCollisionInit(5, 0, 55, 150);
 	jump->setTolerance(1);
 	
@@ -85,7 +85,7 @@ character::character()
 	standBlock->blockState = 2;
 	standBlock->debugRectsInit();
 	standBlock->debugHittableInit(0, 0, 65, 150);
-	standBlock->debugCollisionInit(0, 5, 55, 150);
+	standBlock->debugCollisionInit(5, 0, 55, 150);
 	standBlock->debugStateInit(33, 32, 32);
 	standBlock->xLock = 1;
 	

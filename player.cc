@@ -109,52 +109,6 @@ void player::enforceGravity(int grav, int floor)
 	else if(pick->aerial) deltaY += grav;
 }
 
-void player::checkCorners(int floor, int left, int right)
-{
-	/*Floor, or "Bottom corner"*/
-
-	/*Currently this is done just with pos, but it needs to use collision, since
-	pos is just the sprite, and our collision boxes won't always be a rectangle circumscribing
-	the sprite. But something's broken about collision rects at the moment that makes that not work.
-	Maybe check what's happening in updateRects() for that, or move::debugCollisionInit() is broken,
-	which is also a possibility (and one that may be better remedied by having a real move constructor).*/
-
-	if (pos.y + pos.h > floor){
-		if(pick->aerial == 1){
-			if(pick->cMove == pick->airBlock){
-				pick->standBlock->init(pick->airBlock->counter);
-				pick->cMove == pick->standBlock;
-			} else { 
-				pick->cMove->init();
-				pick->cMove = pick->neutral;
-			}
-			pick->aerial = 0;
-			deltaY = 0;
-		}
-		pos.y = floor - pos.h;
-	}
-
-	/*Walls, or "Left and Right" corners*/
-
-	/*Eventually this function should actually make sure sprites stay out of the walls. The corner flags
-	should probably stay though, as I'm sure they'll make resolving jumping into the corner easier. 
-	(Obviously the expected behavior is that you CAN'T jump into a corner someone is currently standing in
-	to the fullest extent they can, but if you can get "past" them, you can swap sides and be in the corner.
-	This is to prevent corner crossups in normal circumstances. We might tie this to "facing" instead though. Not sure
-	at this stage*/
-
-	if(pos.x <= left){
-		if(facing == 1) lCorner = 1;
-		if(pos.x < left) 
-			pos.x = left;
-	} else lCorner = 0;
-	if(pos.x + pos.w >= right){
-		if(facing == -1) rCorner = 1;
-		if(pos.x + pos.w > right)
-			pos.x = right - pos.w;
-	} else rCorner = 0;
-}
-
 void player::checkBlocking()
 {
 	int st;
@@ -191,37 +145,97 @@ void player::checkBlocking()
 	}
 }
 
+void player::checkCorners(int floor, int left, int right)
+{
+	/*Offset variables. I could do these calculations on the fly, but it's easier this way.
+	Essentially, this represents the offset between the sprite and the collision box, since
+	even though we're *checking* collision, we're still *moving* pos*/
+	int lOffset = pos.x - collision.x;
+	int rOffset = pos.x + pos.w - (collision.x + collision.w);
+	int bOffset = pos.y + pos.h - (collision.y + collision.h);	
+
+	/*Floor, or "Bottom corner"*/
+
+	/*Currently this is done just with pos, but it needs to use collision, since
+	pos is just the sprite, and our collision boxes won't always be a rectangle circumscribing
+	the sprite. But something's broken about collision rects at the moment that makes that not work.
+	Maybe check what's happening in updateRects() for that, or move::debugCollisionInit() is broken,
+	which is also a possibility (and one that may be better remedied by having a real move constructor).*/
+
+	if (collision.y + collision.h > floor){
+		if(pick->aerial == 1){
+			if(pick->cMove == pick->airBlock){
+				pick->standBlock->init(pick->airBlock->counter);
+				pick->cMove == pick->standBlock;
+			} else { 
+				pick->cMove->init();
+				pick->cMove = pick->neutral;
+			}
+			pick->aerial = 0;
+			deltaY = 0;
+		}
+		pos.y = floor - collision.h - bOffset;
+	}
+
+	/*Walls, or "Left and Right" corners
+
+	This not only keeps the characters within the stage boundaries, but flags them as "in the corner"
+	so we can specialcase collision checks for when one player is in the corner.*/
+
+	if(collision.x <= left){
+		if(facing == 1) lCorner = 1;
+		if(collision.x < left) 
+			pos.x = left + lOffset;
+	} else lCorner = 0;
+	if(collision.x + collision.w >= right){
+		if(facing == -1) rCorner = 1;
+		if(collision.x + collision.w > right)
+			pos.x = right - collision.w - rOffset;
+	} else rCorner = 0;
+	updateRects(); //Update rectangles or the next collision check will be wrong.
+}
+
 void player::resolveCollision(player * other)
 {
+	/*Collision between players. Unfortunately a lot of specialcasing necessary here.*/
 	bool displace = 0;
 	bool oDisplace = 0;
-	int middle;
-	if(other->lCorner) pos.x = other->pos.x + other->pos.w;
-	else if(other->rCorner) pos.x = other->pos.x - pos.w;
-	else if(lCorner) other->pos.x = pos.x + pos.w;
-	else if(rCorner) other->pos.x = pos.x - other->pos.w;
+	int lOffset = pos.x - collision.x;
+	int rOffset = pos.x + pos.w - (collision.x + collision.w);
+	int oLOffset = other->pos.x - other->collision.x;
+	int oROffset = other->pos.x + other->pos.w - (other->collision.x + other->collision.w);
+
+
+	if(other->lCorner) pos.x = other->collision.x + other->collision.w + lOffset;
+	else if(other->rCorner) pos.x = other->collision.x - collision.w - rOffset;
+	else if(lCorner) other->pos.x = collision.x + collision.w + oLOffset;
+	else if(rCorner) other->pos.x = collision.x - other->collision.w - oROffset;
 	else {
 		if((!pick->aerial && !other->pick->aerial) || (pick->aerial && other->pick->aerial)){
 			if((facing == 1 && deltaX > 0) || (facing == -1 && deltaX < 0)) oDisplace = 1;
 			if((other->facing == 1 && other->deltaX > 0) || (other->facing == -1 && other->deltaX < 0)) displace = 1;
 			if(displace && !oDisplace) {
-				if(facing == 1) pos.x = other->pos.x - pos.w;
-				else pos.x = other->pos.x + other->pos.w;
+				if(facing == 1) pos.x = other->collision.x - collision.w - rOffset;
+				else pos.x = other->collision.x + other->collision.w + lOffset;
 			} else if (oDisplace && !displace) {
-				if(other->facing == 1) other->pos.x = pos.x - other->pos.w;
-				else other->pos.x = pos.x + pos.w;
+				if(other->facing == 1) other->pos.x = collision.x - other->collision.w - oROffset;
+				else other->pos.x = collision.x + collision.w + oLOffset;
 			} else if (oDisplace && displace) { 
+			/*This is a kludge! The expected behavior is for no one to be able to *inside* another player,
+			but for the deltas to basically combine, meaning that if one player is moving towards the other
+			player faster, they will "push" them.*/
 				pos.x += other->deltaX;
 				other->pos.x += deltaX;
 			}
 		} else if (pick->aerial && !other->pick->aerial) {
-			if(other->facing == 1) pos.x = other->pos.x + other->pos.w;
-			else pos.x = other->pos.x - pos.w;
+			if(other->facing == 1) pos.x = other->collision.x + other->collision.w + lOffset;
+			else pos.x = other->collision.x - collision.w - rOffset;
 		} else {
-			if(facing == 1) other->pos.x = pos.x + pos.w;
-			else other->pos.x = pos.x - other->pos.w;
+			if(facing == 1) other->pos.x = collision.x + collision.w + oLOffset;
+			else other->pos.x = collision.x - other->collision.w - oROffset;
 		}	
 	}
+	updateRects(); 
 }
 
 void player::checkFacing(int maypole){
