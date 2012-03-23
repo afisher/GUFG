@@ -9,11 +9,14 @@
 
 #include "interface.h"
 #include <unistd.h>
+#include <stdlib.h>
 
 int main(int argc, char* argv[])
 {
 	/*Spawn the interface*/
 	interface game;
+	int rounds = atoi(argv[1]);
+	if(rounds > 0 || rounds < 10) game.numRounds = rounds;
 
 	/*Loop of everything*/
 	while (!game.gameover){
