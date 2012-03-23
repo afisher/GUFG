@@ -235,7 +235,8 @@ void player::resolveCollision(player * other)
 			else other->pos.x = collision.x - other->collision.w - oROffset;
 		}	
 	}
-	updateRects(); 
+	updateRects();
+	other->updateRects();
 }
 
 void player::checkFacing(int maypole){
