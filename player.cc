@@ -221,11 +221,17 @@ void player::resolveCollision(player * other)
 				if(other->facing == 1) other->pos.x = collision.x - other->collision.w - oROffset;
 				else other->pos.x = collision.x + collision.w + oLOffset;
 			} else if (oDisplace && displace) { 
-			/*This is a kludge! The expected behavior is for no one to be able to *inside* another player,
-			but for the deltas to basically combine, meaning that if one player is moving towards the other
-			player faster, they will "push" them.*/
-				pos.x += other->deltaX;
-				other->pos.x += deltaX;
+				if(abs(deltaX) > abs(other->deltaX)){
+					pos.x += other->deltaX; 
+					updateRects();
+					if(other->facing == 1) other->pos.x = collision.x - other->collision.w - oROffset;
+					else other->pos.x = collision.x + collision.w + oLOffset;
+				} else {
+					other->pos.x += deltaX; 
+					other->updateRects();
+					if(facing == 1) pos.x = other->collision.x - collision.w - rOffset;
+					else pos.x = other->collision.x + other->collision.w + lOffset;
+				}
 			}
 		} else if (pick->aerial && !other->pick->aerial) {
 			if(other->facing == 1) pos.x = other->collision.x + other->collision.w + lOffset;
