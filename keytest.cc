@@ -15,7 +15,8 @@ int main(int argc, char* argv[])
 {
 	/*Spawn the interface*/
 	interface game;
-	int rounds = atoi(argv[1]);
+	int rounds = 2;
+	if(argc > 1) rounds = atoi(argv[1]);
 	if(rounds > 0 || rounds < 10) game.numRounds = rounds;
 
 	/*Loop of everything*/
