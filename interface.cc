@@ -40,10 +40,10 @@ interface::interface()
 
 	/*Select characters. Currently done automatically, to change later*/
 
+	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
 	cSelectMenu();
 
 	/*Build the character. Eventually this will probably be a function.*/
-	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
 	roundInit();
 }
 
@@ -318,9 +318,79 @@ bool interface::checkCollision(SDL_Rect a, SDL_Rect b)
 void interface::cSelectMenu()
 {
 	/*The plan is that this is eventually a menu, preferably pretty visual, in which players can select characters.*/
+	int numChars = 2;
+	SDL_Event event;
+	SDL_Surface *temp = SDL_LoadBMP("Misc/Select.bmp");
+	SDL_Surface *cursor1, *cursor2, *ct1, *ct2, *selectScreen;
 	int select1, select2;
 	select1 = 1;
-	select2 = 0;
+	select2 = 2;
+	SDL_Rect c1, c2, wheel;
+	c1.x = 100; c1.y = 0;
+	c2.x = 100; c2.y = 0;
+	wheel.x = 100; wheel.y = 0;
+	char base1[17];
+	char base2[17];
+	bool selectFlag1 = 0;
+	bool selectFlag2 = 0;
+
+	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 100, 100, 100));
+	selectScreen = SDL_DisplayFormat(temp);
+	SDL_FreeSurface(temp);
+	SDL_SetColorKey(selectScreen, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
+	SDL_BlitSurface(selectScreen, NULL, screen, &wheel);
+	SDL_UpdateRect(screen, 0, 0, 0, 0);
+	
+	while(!selectFlag1 || !selectFlag2){
+		if (SDL_PollEvent(&event)){
+			switch(event.type){
+			case SDL_KEYDOWN:
+				if(event.key.keysym.sym == p1->input[2].key.keysym.sym && !selectFlag1) select1--;
+				if(event.key.keysym.sym == p1->input[3].key.keysym.sym && !selectFlag1)	select1++;
+				if(event.key.keysym.sym == p2->input[2].key.keysym.sym && !selectFlag2) select2--;
+				if(event.key.keysym.sym == p2->input[3].key.keysym.sym && !selectFlag2)	select2++;
+						
+				for(int i = 4; i < 9; i++){
+					if(event.key.keysym.sym == p1->input[i].key.keysym.sym) selectFlag1 = 1;
+					if(event.key.keysym.sym == p2->input[i].key.keysym.sym) selectFlag2 = 1;
+				}
+				break;
+			case SDL_JOYBUTTONDOWN:
+				for(int i = 4; i < 9; i++){
+					if(event.jbutton.which == p1->input[i].jbutton.which && event.jbutton.button == p1->input[i].jbutton.button) selectFlag1 = 1;
+					if(event.jbutton.which == p2->input[i].jbutton.which && event.jbutton.button == p2->input[i].jbutton.button) selectFlag2 = 1;
+				}
+				break;
+			case SDL_JOYAXISMOTION:
+				if(event.jaxis.which == p1->input[2].jaxis.which && event.jaxis.axis == p1->input[2].jaxis.axis && event.jaxis.value == p1->input[2].jaxis.value && !selectFlag1) select1--;
+				if(event.jaxis.which == p1->input[3].jaxis.which && event.jaxis.axis == p1->input[3].jaxis.axis && event.jaxis.value == p1->input[3].jaxis.value && !selectFlag1) select1++;
+				if(event.jaxis.which == p2->input[2].jaxis.which && event.jaxis.axis == p2->input[2].jaxis.axis && event.jaxis.value == p2->input[2].jaxis.value && !selectFlag2) select2--;
+				if(event.jaxis.which == p2->input[3].jaxis.which && event.jaxis.axis == p2->input[3].jaxis.axis && event.jaxis.value == p2->input[3].jaxis.value && !selectFlag2) select2++;
+				break;
+			}
+			if(select2 > numChars) select2 = 1;
+			if(select1 > numChars) select1 = 1;
+			if(select1 < 1) select1 = numChars;
+			if(select2 < 1) select2 = numChars;
+			sprintf(base1, "Misc/P1Select%i.bmp", select1);
+			sprintf(base2, "Misc/P2Select%i.bmp", select2);
+			ct1 = SDL_LoadBMP(base1);
+			ct2 = SDL_LoadBMP(base2);
+			cursor1 = SDL_DisplayFormat(ct1);
+			cursor2 = SDL_DisplayFormat(ct2);
+			SDL_FreeSurface(ct1);
+			SDL_FreeSurface(ct2);
+			SDL_SetColorKey(cursor1, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
+			SDL_SetColorKey(cursor2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
+			SDL_BlitSurface(selectScreen, NULL, screen, &wheel);
+			SDL_BlitSurface(cursor1, NULL, screen, &c1);
+			SDL_BlitSurface(cursor2, NULL, screen, &c2);
+			SDL_UpdateRect(screen, 0, 0, 0, 0);
+		}
+	}
+	SDL_FreeSurface(cursor1);
+	SDL_FreeSurface(cursor2);
+	SDL_FreeSurface(selectScreen);
 
 	p1->characterSelect(select1);
 	p2->characterSelect(select2);
