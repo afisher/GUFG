@@ -220,7 +220,12 @@ void interface::checkWin()
 			if(p1->rounds < numRounds - 1) p1->rounds++;
 			if(p2->rounds < numRounds - 1) p2->rounds++;
 		}
-		if(p1->rounds == numRounds || p2->rounds == numRounds) gameover = 1;
+		if(p1->rounds == numRounds || p2->rounds == numRounds){
+			p1->rounds = 0;
+			p2->rounds = 0;
+			cSelectMenu();
+			roundInit();
+		}
 		else roundInit();
 	}
 }
@@ -318,6 +323,7 @@ bool interface::checkCollision(SDL_Rect a, SDL_Rect b)
 void interface::cSelectMenu()
 {
 	/*The plan is that this is eventually a menu, preferably pretty visual, in which players can select characters.*/
+	printf("Please select a character:\n");
 	int numChars = 2;
 	SDL_Event event;
 	SDL_Surface *temp = SDL_LoadBMP("Misc/Select.bmp");
@@ -353,6 +359,11 @@ void interface::cSelectMenu()
 				for(int i = 4; i < 9; i++){
 					if(event.key.keysym.sym == p1->input[i].key.keysym.sym) selectFlag1 = 1;
 					if(event.key.keysym.sym == p2->input[i].key.keysym.sym) selectFlag2 = 1;
+				}
+				if(event.key.keysym.sym == SDLK_q){
+					gameover = 1;
+					selectFlag1 = 1;
+					selectFlag2 = 1;
 				}
 				break;
 			case SDL_JOYBUTTONDOWN:
