@@ -162,19 +162,19 @@ void player::checkCorners(int floor, int left, int right)
 	Maybe check what's happening in updateRects() for that, or move::debugCollisionInit() is broken,
 	which is also a possibility (and one that may be better remedied by having a real move constructor).*/
 
-	if (collision.y + collision.h > floor){
+	if (pos.y + pos.h > floor){
 		if(pick->aerial == 1){
 			if(pick->cMove == pick->airBlock){
 				pick->standBlock->init(pick->airBlock->counter);
 				pick->cMove == pick->standBlock;
 			} else { 
-				pick->cMove->init();
+				if(pick->cMove) pick->cMove->init();
 				pick->cMove = pick->neutral;
 			}
 			pick->aerial = 0;
 			deltaY = 0;
 		}
-		pos.y = floor - collision.h - bOffset;
+		pos.y = floor - pos.h;
 	}
 
 	/*Walls, or "Left and Right" corners
