@@ -1,5 +1,9 @@
 #include "move.h"
 #include <cstring>
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
+
 move::move()
 {
 	name = NULL;
@@ -8,6 +12,11 @@ move::move()
 
 move::move(char * n)
 {
+	ifstream read;
+	char fname[strlen(n)+4];
+	strcpy(fname, n);
+	strcat(fname, ".mv");
+	read.open(fname);
 	name = n;
 	for(int i = 0; i < 5; i++)
 		button[i] = 0;
