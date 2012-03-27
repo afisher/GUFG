@@ -38,11 +38,11 @@ public:
 
 	int damage;		//How much damage the move does
 	int stun;		//How much stun the move does
-	int blockMask;		//Low, High, Air Block. Basically a 3-digit binary number expressed as an integer from 0-7.
+	unsigned int blockMask;	//Low, High, Air Block. Basically a 3-digit binary number expressed as an integer from 0-7.
 				//Digits from right to left: Blockable low, Blockable high, Blockable in the air, 
-	int blockState;		//Partner to the blockmask. This variable is the move's actual "guard state." Usually it will only be one of the three.
+	unsigned int blockState;//Partner to the blockmask. This variable is the move's actual "guard state." Usually it will only be one of the three.
 	bool cFlag;
-	unsigned int state;		//An array of states. If the states are single integers, the array is the same size as the number of frames.
+	unsigned int state;	
 	unsigned int cState;
 	int currentFrame; 	//The frame that is currently running.
 	int frames;	//Number of frames.

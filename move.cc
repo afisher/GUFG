@@ -29,13 +29,14 @@ move::move(char * n)
 	read >> active;
 	while(read.get() != ':'); read.ignore();
 	read >> recovery;
-	printf("%i:%i:%i:%i\n", frames, startup, active, recovery);
 	while(read.get() != ':'); read.ignore();
 	read >> allowed;
 	while(read.get() != ':'); read.ignore();
 	read >> state;
 	while(read.get() != ':'); read.ignore();
 	read >> cState;
+	while(read.get() != ':'); read.ignore();
+	read >> damage;
 	while(read.get() != ':'); read.ignore();
 	read >> stun;
 	while(read.get() != ':'); read.ignore();
@@ -56,21 +57,16 @@ move::move(char * n)
 	{
 		while(read.get() != '$'); read.ignore(2);
 		read >> collision[i].x >> collision[i].y >> collision[i].w >> collision[i].h;
-		printf("Collision: X:%i Y:%i W:%i H:%i\n", collision[i].x, collision[i].y, collision[i].w, collision[i].h);
 		while(read.get() != '$'); read.ignore(2);
 		read >> hitreg[i].x >> hitreg[i].y >> hitreg[i].w >> hitreg[i].h;
-		printf("Hitreg: X:%i Y:%i W:%i H:%i\n", hitreg[i].x, hitreg[i].y, hitreg[i].w, hitreg[i].h);
 		while(read.get() != '$'); read.ignore(2);
 		read >> delta[i].x >> delta[i].y >> delta[i].w >> delta[i].h;
-		printf("Delta: X:%i Y:%i W:%i H:%i\n", delta[i].x, delta[i].y, delta[i].w, delta[i].h);
 		if(i >= startup && i < startup+active){
 			while(read.get() != '$'); read.ignore(2);
 			read >> hitbox[i].x >> hitbox[i].y >> hitbox[i].w >> hitbox[i].h;
 		} else {
 			hitbox[i].x = 0; hitbox[i].y = 0; hitbox[i].w = 0; hitbox[i].h = 0;
-		}
-		printf("Hitbox: X:%i Y:%i W:%i H:%i\n", hitbox[i].x, hitbox[i].y, hitbox[i].w, hitbox[i].h);
-			
+		}	
 	}
 
 	launch = 0;
@@ -184,38 +180,6 @@ void move::setTolerance(int t)
 	tolerance = t;
 }
 
-move::move(char* n, char * b, bool s)
-{
-	int r = strlen(b);
-	for(int i = 0; i < 5; i++)
-		button[i] = 0;
-	name = n;
-	for(int i = 0; i < r; i++){
-		switch(b[i]){
-		case 'A':
-			button[0] = 1;
-			break;
-		case 'B':
-			button[1] = 1;
-			break;
-		case 'C':
-			button[2] = 1;
-			break;
-		case 'D':
-			button[3] = 1;
-			break;
-		case 'E':
-			button[4] = 1;
-			break;
-		}
-
-	}
-	special = s;
-	start = NULL;
-	tolerance = 30;
-	frames = 0;
-	init();
-}
 
 move::~move()
 {
