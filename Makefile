@@ -1,5 +1,5 @@
-headers = interface.h move.h character.h player.h frame.h red.h hitstun.h
-source = keytest.cc interface.cc hooks.cc move.cc character.cc frame.cc player.cc draw.cc red.cc hitstun.cc
+headers = interface.h move.h character.h player.h frame.h red.h hitstun.h special.h
+source = keytest.cc interface.cc hooks.cc move.cc special.cc character.cc frame.cc player.cc draw.cc red.cc hitstun.cc
 flags = -g -O2 -Wno-write-strings `sdl-config --cflags`
 libs = `sdl-config --libs`
 OBJS = \
@@ -48,8 +48,8 @@ draw.o: draw.cc player.h interface.h
 red.o: red.h red.cc character.h character.cc
 	g++ -c red.cc $(FLAGS)
 
-hitstun.o: hitstun.h hitstun.cc move.h move.cc
-	g++ -c hitstun.cc $(FLAGS)
+hitstun.o: hitstun.h hitstun.cc move.h move.cc special.h special.cc
+	g++ -c hitstun.cc special.cc $(FLAGS)
 
 # -f Is needed to avoid errors with missing files.
 clean:

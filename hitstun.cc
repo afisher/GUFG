@@ -15,7 +15,6 @@ hitstun::hitstun(char * n, int l)
 	name = n;
 	for(int i = 0; i < 5; i++)
 		button[i] = 0;
-	special = 0;
 	start = new frame(n, l);
 	tolerance = 30;
 	frames = l;

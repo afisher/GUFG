@@ -5,7 +5,7 @@
  */
 
 #include "SDL.h"
-#include "hitstun.h"
+#include "special.h"
 #include <stdio.h>
 
 class character{

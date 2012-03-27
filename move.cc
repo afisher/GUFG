@@ -95,7 +95,6 @@ move::move(char * n)
 		}
 
 	}
-	special = 0;
 	start = new frame(name, frames);
 	tolerance = 30;
 	init();
@@ -108,7 +107,6 @@ move::move(char * n, int l)
 	name = n;
 	for(int i = 0; i < 5; i++)
 		button[i] = 0;
-	special = 0;
 	start = new frame(n, l);
 	tolerance = 30;
 	frames = l;
@@ -154,7 +152,6 @@ move::move(char* n, char *b, bool s, int l)
 		}
 
 	}
-	special = s;
 	start = new frame(n, l);
 	tolerance = 30;
 	frames = l;
@@ -197,10 +194,7 @@ bool move::check(bool pos[5], bool neg[5], int t)
 //	if(state != allowedState) return 0;
 	for(int i = 0; i < 5; i++){
 		if(button[i] == 1){
-			if(special){
-				if(pos[i] == 0 && neg[i] == 0) return 0;
-			}
-			else if(pos[i] == 0) return 0;
+			if(pos[i] == 0) return 0;
 		}
 				
 	}
