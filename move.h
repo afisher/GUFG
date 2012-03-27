@@ -16,13 +16,12 @@ public:
 	move(char*, char*, bool);
 	~move();
 	void execute();
-	virtual void execute(move *);		/*Okay so, hopefully the idea here is that we can init() 
+	void execute(move *);		/*Okay so, hopefully the idea here is that we can init() 
 						the move we're cancelling out of in the usual case, and, well
 						Do other stuff sometimes.*/
 	bool check(bool[], bool[], int);	//Check to see if the move is possible right now.
 	void setTolerance(int);
 	virtual void blockSuccess(int);
-	void execute(frame *&);			//Currently what we're using to send the first frame to the animation routines. This will likely change.
 	void pollRects(SDL_Rect&, SDL_Rect&, SDL_Rect&, SDL_Rect&); //Return the relevant information needed for interface::resolve(), then step to the next frame.
 	bool operator>(move*); //Cancel allowed check. Essentially: is move Lvalue allowed given the current state of move Rvalue?
 	void init();		//Really just sets current frame to 0. I wanted current frame to be private for now, so I don't break anything.
@@ -31,7 +30,6 @@ public:
 	SDL_Surface * draw(int);
 
 	frame * start;		//The first frame of the move's sprite.
-	unsigned int * state;		//An array of states. If the states are single integers, the array is the same size as the number of frames.
 	unsigned int allowed;		//The state in which the move is allowed. Depending on how we handle states, this may need to be an array of states or something.
 	bool xLock, yLock;
 	int push;		//How much pushback the move does
@@ -44,7 +42,8 @@ public:
 				//Digits from right to left: Blockable low, Blockable high, Blockable in the air, 
 	int blockState;		//Partner to the blockmask. This variable is the move's actual "guard state." Usually it will only be one of the three.
 	bool cFlag;
-	int cState;
+	unsigned int state;		//An array of states. If the states are single integers, the array is the same size as the number of frames.
+	unsigned int cState;
 	int currentFrame; 	//The frame that is currently running.
 	int frames;	//Number of frames.
 	

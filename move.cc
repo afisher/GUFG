@@ -2,30 +2,110 @@
 #include <cstring>
 #include <stdio.h>
 #include <iostream>
+using namespace std;
 #include <fstream>
 
 move::move()
 {
 	name = NULL;
-	state = NULL;
+	state = 0;
 }
 
 move::move(char * n)
 {
 	ifstream read;
+	int startup, active, recovery;
 	char fname[strlen(n)+4];
 	strcpy(fname, n);
 	strcat(fname, ".mv");
 	read.open(fname);
-	name = n;
+	while(read.get() != ':'); read.ignore();
+	name = n; //I'll fix this later.
+	while(read.get() != ':'); read.ignore();
+	read >> frames;
+	while(read.get() != ':'); read.ignore();
+	read >> startup;
+	while(read.get() != ':'); read.ignore();
+	read >> active;
+	while(read.get() != ':'); read.ignore();
+	read >> recovery;
+	printf("%i:%i:%i:%i\n", frames, startup, active, recovery);
+	while(read.get() != ':'); read.ignore();
+	read >> allowed;
+	while(read.get() != ':'); read.ignore();
+	read >> state;
+	while(read.get() != ':'); read.ignore();
+	read >> cState;
+	while(read.get() != ':'); read.ignore();
+	read >> stun;
+	while(read.get() != ':'); read.ignore();
+	read >> push;
+	while(read.get() != ':'); read.ignore();
+	read >> blockMask;
+	while(read.get() != ':'); read.ignore();
+	read >> blockState;
+
+	while(read.get() != ':'); read.ignore();
+	//Properties will be a bit more complicated, I'll add this later.
+	collision = new SDL_Rect[frames];
+	hitbox = new SDL_Rect[frames];
+	hitreg = new SDL_Rect[frames];
+	delta = new SDL_Rect[frames];
+
+	for(int i = 0; i < frames; i++)
+	{
+		while(read.get() != '$'); read.ignore(2);
+		read >> collision[i].x >> collision[i].y >> collision[i].w >> collision[i].h;
+		printf("Collision: X:%i Y:%i W:%i H:%i\n", collision[i].x, collision[i].y, collision[i].w, collision[i].h);
+		while(read.get() != '$'); read.ignore(2);
+		read >> hitreg[i].x >> hitreg[i].y >> hitreg[i].w >> hitreg[i].h;
+		printf("Hitreg: X:%i Y:%i W:%i H:%i\n", hitreg[i].x, hitreg[i].y, hitreg[i].w, hitreg[i].h);
+		while(read.get() != '$'); read.ignore(2);
+		read >> delta[i].x >> delta[i].y >> delta[i].w >> delta[i].h;
+		printf("Delta: X:%i Y:%i W:%i H:%i\n", delta[i].x, delta[i].y, delta[i].w, delta[i].h);
+		if(i >= startup && i < startup+active){
+			while(read.get() != '$'); read.ignore(2);
+			read >> hitbox[i].x >> hitbox[i].y >> hitbox[i].w >> hitbox[i].h;
+		} else {
+			hitbox[i].x = 0; hitbox[i].y = 0; hitbox[i].w = 0; hitbox[i].h = 0;
+		}
+		printf("Hitbox: X:%i Y:%i W:%i H:%i\n", hitbox[i].x, hitbox[i].y, hitbox[i].w, hitbox[i].h);
+			
+	}
+
+	launch = 0;
 	for(int i = 0; i < 5; i++)
 		button[i] = 0;
+	int r = strlen(name);
+	for(int i = 0; i < r; i++){
+		switch(name[i]){
+		case 'A':
+			button[0] = 1;
+			break;
+		case 'B':
+			button[1] = 1;
+			break;
+		case 'C':
+			button[2] = 1;
+			break;
+		case 'D':
+			button[3] = 1;
+			break;
+		case 'E':
+			button[4] = 1;
+			break;
+		default:
+			break;
+		}
+
+	}
 	special = 0;
-	start = NULL;
+	start = new frame(name, frames);
 	tolerance = 30;
-	state = NULL;
 	init();
+	read.close();
 }
+
 
 move::move(char * n, int l)
 {
@@ -36,7 +116,7 @@ move::move(char * n, int l)
 	start = new frame(n, l);
 	tolerance = 30;
 	frames = l;
-	state = new unsigned int[l];
+	state = 0;
 	collision = new SDL_Rect[l];
 	hitbox = new SDL_Rect[l];
 	hitreg = new SDL_Rect[l];
@@ -87,7 +167,7 @@ move::move(char* n, char *b, bool s, int l)
 	xLock = 0;
 	yLock = 0;
 	stun = 11;
-	state = new unsigned int[l];
+	state = 0;
 	collision = new SDL_Rect[l];
 	hitbox = new SDL_Rect[l];
 	hitreg = new SDL_Rect[l];
@@ -141,7 +221,6 @@ move::~move()
 {
 	if(name) delete [] name;
 	if(start) delete start;
-	if(state) delete [] state;
 	if(collision) delete [] collision;
 	if(hitbox) delete [] hitbox;
 	if(hitreg) delete [] hitreg;
@@ -200,7 +279,7 @@ bool move::operator>(move * x)
 		if(x->cFlag == 1){
 			if(allowed & cState) return 1;
 		}
-		else if(allowed & x->state[currentFrame]) return 1;
+		else if(allowed & x->state) return 1;
 	}
 	return 0;
 }
@@ -226,14 +305,18 @@ void move::blockSuccess(int st)
 	return;
 }
 
+void execute(move * last)
+{
+	last->init();
+}
+
 
 
 /*Testing stuff for now, thus it becomes necessary to set all states to stuff*/
 void move::debugStateInit(int q, int r, int s)
 {
 	allowed = q;
-	for(int i = 0; i < frames; i++)
-		state[i] = r;
+	state = r;
 	cState = s;
 }
 
