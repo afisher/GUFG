@@ -19,7 +19,7 @@ hitstun::hitstun(char * n, int l)
 	start = new frame(n, l);
 	tolerance = 30;
 	frames = l;
-	state = new unsigned int[l];
+	state = 0;
 	collision = new SDL_Rect[l];
 	hitbox = new SDL_Rect[l];
 	hitreg = new SDL_Rect[l];
