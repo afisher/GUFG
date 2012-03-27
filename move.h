@@ -15,7 +15,10 @@ public:
 	move(char*, char*, bool, int);
 	move(char*, char*, bool);
 	~move();
-	void execute();				 
+	void execute();
+	virtual void execute(move *);		/*Okay so, hopefully the idea here is that we can init() 
+						the move we're cancelling out of in the usual case, and, well
+						Do other stuff sometimes.*/
 	bool check(bool[], bool[], int);	//Check to see if the move is possible right now.
 	void setTolerance(int);
 	virtual void blockSuccess(int);
