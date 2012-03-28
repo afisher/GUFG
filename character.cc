@@ -181,8 +181,11 @@ SDL_Surface * character::draw(int facing){
 	return temp;
 }
 
-void character::initMoves(char * fname)
+void character::initMoves()
 {
+	char fname[strlen(name)+4];
+	sprintf(fname, "%s.ch", name);
+	printf("%s\n", fname);
 	ifstream read;
 	char buffer[30];
 	read.open(fname);

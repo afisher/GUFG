@@ -95,11 +95,11 @@ move::move(char * n)
 		}
 
 	}
+	read.close();
 	start = new frame(name, frames);
 	tolerance = 30;
 	activation = 30;
 	init();
-	read.close();
 }
 
 
