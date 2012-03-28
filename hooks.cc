@@ -16,7 +16,7 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 		inputBuffer[i] = inputBuffer[i-1];
 	}
 	
-	if(pick->aerial) t = pick->airHead->moveHook(inputBuffer, 0, 0, down, up, pick->cMove);
+	if(pick->aerial) t = pick->airHead->moveHook(inputBuffer, 0, -1, down, up, pick->cMove);
 	else t = pick->head->moveHook(inputBuffer, 0, 0, down, up, pick->cMove);
 
 	if(t != NULL){ 
@@ -39,7 +39,7 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 	
 }
 
-move * moveTrie::moveHook(int inputBuffer[30], int i, int delta, bool pos[5], bool neg[5], move * c)
+move * moveTrie::moveHook(int inputBuffer[30], int i, int f, bool pos[5], bool neg[5], move * c)
 {
 	moveTrie * test = NULL;
 	move * result = NULL;
@@ -47,15 +47,14 @@ move * moveTrie::moveHook(int inputBuffer[30], int i, int delta, bool pos[5], bo
 	for(j = i; j < 30; j++){
 		test = child[inputBuffer[j]];
 		if(test != NULL){
-			result = test->moveHook(inputBuffer, j, j-i, pos, neg, c);
-			if(result != NULL) {
-				return result;
-			}
+			if (f < 0) result = test->moveHook(inputBuffer, j, j, pos, neg, c);
+			else result = test->moveHook(inputBuffer, j, f, pos, neg, c);
+			if(result != NULL) return result;
 		}
 	}
-	if(occupants != 0) 
+	if(occupants != 0){ 
 		for(int i = 0; i < occupants; i++){
-			if(fish[i].check(pos, neg, delta) == 1){
+			if(fish[i].check(pos, neg, i, f) == 1){
 			//Testing!
 				if(c == NULL)
 					return &fish[i];
@@ -65,5 +64,6 @@ move * moveTrie::moveHook(int inputBuffer[30], int i, int delta, bool pos[5], bo
 				}
 			}
 		}
+	}
 	return NULL;
 }

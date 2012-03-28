@@ -13,6 +13,7 @@ public:
 	character(); 	//Load the entire character into memory
 	~character();	//Free stuff
 
+	void initMoves(char*);
 	moveTrie * head;
 	moveTrie * airHead;
 
