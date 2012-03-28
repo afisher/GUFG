@@ -19,7 +19,7 @@ public:
 	void execute(move *);		/*Okay so, hopefully the idea here is that we can init() 
 						the move we're cancelling out of in the usual case, and, well
 						Do other stuff sometimes.*/
-	virtual bool check(bool[], bool[], int);	//Check to see if the move is possible right now.
+	virtual bool check(bool[], bool[], int, int);	//Check to see if the move is possible right now.
 	void setTolerance(int);
 	virtual void blockSuccess(int);
 	void pollRects(SDL_Rect&, SDL_Rect&, SDL_Rect&, SDL_Rect&); //Return the relevant information needed for interface::resolve(), then step to the next frame.
@@ -59,8 +59,12 @@ public:
 //	SDL_Surface *sprite, *hit, *hitreg, *collision;
 	int button[5];
 	char * name;
-	int cost;
-	int tolerance;
+	int cost;		
+	int tolerance;		/*Tolerance refers to the individual size of the input buffer allowed for this move.
+				Default is 30 (The entire input buffer)*/
+	int activation;		/*Activation refers to the most recent accepted last command. So an activation of 0
+				Implies that the most recent input has to have been *this frame* for the move to be
+				Accepted. Default is 30 (the entire input buffer)*/
 	SDL_Rect * collision;	//This will be an array of rects that are the collision boxes for the move per frame
 	SDL_Rect * hitbox;	//Same but for hitboxes
 	SDL_Rect * hitreg;	//Same but for hitreg boxes

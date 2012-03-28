@@ -180,3 +180,21 @@ SDL_Surface * character::draw(int facing){
 	}
 	return temp;
 }
+
+void character::initMoves(char * fname)
+{
+	ifstream read;
+	char buffer[30];
+	read.open(fname);
+	while(read.get() != ':');
+	while(read.get() != ':');
+	read >> buffer;
+	printf("%s\n", buffer);
+	new move(buffer, 1);/*
+	while(read.peek() != '\n'){
+		switch (read.get()){
+		case ':':
+			break;
+		}
+	}*/
+}

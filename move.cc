@@ -97,6 +97,7 @@ move::move(char * n)
 	}
 	start = new frame(name, frames);
 	tolerance = 30;
+	activation = 30;
 	init();
 	read.close();
 }
@@ -109,6 +110,7 @@ move::move(char * n, int l)
 		button[i] = 0;
 	start = new frame(n, l);
 	tolerance = 30;
+	activation = 30;
 	frames = l;
 	state = 0;
 	collision = new SDL_Rect[l];
@@ -154,6 +156,7 @@ move::move(char* n, char *b, bool s, int l)
 	}
 	start = new frame(n, l);
 	tolerance = 30;
+	activation = 30;
 	frames = l;
 	damage = 0;
 	init();
@@ -188,17 +191,17 @@ move::~move()
 	if(delta) delete [] delta;
 }
 
-bool move::check(bool pos[5], bool neg[5], int t)
+bool move::check(bool pos[5], bool neg[5], int t, int f)
 {
 	//if(meter < cost) return 0;
 //	if(state != allowedState) return 0;
 	for(int i = 0; i < 5; i++){
 		if(button[i] == 1){
-			if(pos[i] == 0) return 0;
+			if(!pos[i]) return 0;
 		}
 				
 	}
-	if(t > tolerance) return 0;
+	if(t > tolerance || f > activation) return 0;
 	return 1;
 }
 
@@ -236,8 +239,12 @@ bool move::operator>(move * x)
 	else{
 		if(x->cFlag == 1){
 			if(allowed & cState) return 1;
+		} else if(this != x) { /*Moves can't cancel into themselves without connecting. 
+					I put this in place mainly to allow neutral states to
+					loop without re-triggering. Perhaps there's a better way.
+					If this causes problems, we'll revisit it*/
+			if(allowed & x->state) return 1;
 		}
-		else if(allowed & x->state) return 1;
 	}
 	return 0;
 }
