@@ -13,5 +13,5 @@ red::red()
 	neutral->debugCollisionInit(5, 0, 55, 150);
 	
 	cMove = neutral;
-	initMoves("red.ch");
+	initMoves();
 }
