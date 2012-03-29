@@ -61,11 +61,11 @@ void interface::roundInit()
 	p2->pick->volitionX = 0;
 	p1->pick->volitionY = 0;
 	p2->pick->volitionY = 0;
-	if(p1->pick->cMove != p1->pick->neutral){
+	if(p1->pick->cMove != p1->pick->neutral && p1->pick->cMove){
 		p1->pick->cMove->init();
 		p1->pick->cMove = p1->pick->neutral;
 	}
-	if(p2->pick->cMove != p2->pick->neutral){
+	if(p2->pick->cMove != p2->pick->neutral && p2->pick->cMove){
 		p2->pick->cMove->init();
 		p2->pick->cMove = p2->pick->neutral;
 	}
@@ -383,14 +383,8 @@ void interface::cSelectMenu()
 			if(select1 > numChars) select1 = 1;
 			if(select1 < 1) select1 = numChars;
 			if(select2 < 1) select2 = numChars;
-//			base1 = "Misc/P1Select";
-//			strcat(base1, itoa(select1));
-//			strcat(base1, ".bmp");
-//			base2 = "Misc/P1Select";
-//			strcat(base2, itoa(select1));
-//			strcat(base2, ".bmp");
-			sprintf(base1, "Misc/P1Select%i.bmp\0", select1);
-			sprintf(base2, "Misc/P2Select%i.bmp\0", select2);
+			sprintf(base1, "Misc/P1Select%i.bmp", select1);
+			sprintf(base2, "Misc/P2Select%i.bmp", select2);
 			ct1 = SDL_LoadBMP(base1);
 			ct2 = SDL_LoadBMP(base2);
 			cursor1 = SDL_DisplayFormat(ct1);

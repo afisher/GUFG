@@ -15,9 +15,8 @@ move::move(char * n)
 {
 	ifstream read;
 	int startup, active, recovery;
-	char fname[strlen(n)+4];
-	strcpy(fname, n);
-	strcat(fname, ".mv");
+	char fname[40];
+	sprintf(fname, "%s.mv", n);
 	read.open(fname);
 	while(read.get() != ':'); read.ignore();
 	name = n; //I'll fix this later.
