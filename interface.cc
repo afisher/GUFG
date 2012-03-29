@@ -335,8 +335,8 @@ void interface::cSelectMenu()
 	c1.x = 100; c1.y = 0;
 	c2.x = 100; c2.y = 0;
 	wheel.x = 100; wheel.y = 0;
-	char base1[17];
-	char base2[17];
+	char base1[40];
+	char base2[40];
 	bool selectFlag1 = 0;
 	bool selectFlag2 = 0;
 
@@ -383,8 +383,14 @@ void interface::cSelectMenu()
 			if(select1 > numChars) select1 = 1;
 			if(select1 < 1) select1 = numChars;
 			if(select2 < 1) select2 = numChars;
-			sprintf(base1, "Misc/P1Select%i.bmp", select1);
-			sprintf(base2, "Misc/P2Select%i.bmp", select2);
+//			base1 = "Misc/P1Select";
+//			strcat(base1, itoa(select1));
+//			strcat(base1, ".bmp");
+//			base2 = "Misc/P1Select";
+//			strcat(base2, itoa(select1));
+//			strcat(base2, ".bmp");
+			sprintf(base1, "Misc/P1Select%i.bmp\0", select1);
+			sprintf(base2, "Misc/P2Select%i.bmp\0", select2);
 			ct1 = SDL_LoadBMP(base1);
 			ct2 = SDL_LoadBMP(base2);
 			cursor1 = SDL_DisplayFormat(ct1);
