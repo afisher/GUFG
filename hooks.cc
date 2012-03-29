@@ -28,8 +28,7 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 			if(axis[0]) pick->cMove = pick->jump;
 
 			else if(inputBuffer[0] == 4) pick->cMove = pick->walkBack;
-			else if(inputBuffer[0] == 6) {
-				pick->cMove = pick->walk;
+			else if(inputBuffer[0] == 6) pick->cMove = pick->walk;
 			} else {
 				pick->cMove = pick->neutral;
 			}
