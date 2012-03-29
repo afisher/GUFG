@@ -18,8 +18,8 @@ FLAGS = -g -O2 -Wno-write-strings `sdl-config --cflags`
 
 LIBS = `sdl-config --libs`
 
-keytest: $(OBJS)
-	g++ -o keytest $(OBJS) $(FLAGS) $(LIBS)
+keytest: $(headers) $(source)
+	g++ -o keytest $(source) $(FLAGS) $(LIBS)
 
 keytest.o: $(source) $(headers)
 	g++ -c keytest.cc $(FLAGS)
