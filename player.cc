@@ -233,7 +233,7 @@ void player::resolveCollision(player * other)
 					else pos.x = other->collision.x + other->collision.w + lOffset;
 				}
 			}
-/*
+//*
 		} else if (pick->aerial && !other->pick->aerial) {
 			if(other->facing == 1) pos.x = other->collision.x + other->collision.w + lOffset;
 			else pos.x = other->collision.x - collision.w - rOffset;

@@ -34,6 +34,8 @@ character::character()
 	neutral->debugStateInit(1, 31, 31);
 	neutral->debugHittableInit(0, 0, 65, 150);
 	neutral->debugCollisionInit(5, 0, 55, 150);
+	neutral->tolerance = 0; neutral->activation = 0;
+	head->insert(neutral);
 
 	walkBack = new move("White/WB", 1);
 	walkBack->debugRectsInit();
@@ -41,6 +43,7 @@ character::character()
 	walkBack->debugHittableInit(0, 0, 65, 150);
 	walkBack->debugDeltaInit(-5, 0, 0, 0);
 	walkBack->debugCollisionInit(5, 0, 55, 150);
+	walkBack->tolerance = 0; walkBack->activation = 0; 
 	walkBack->xLock = 1;
 
 	walk = new move("White/W", 1);
@@ -50,6 +53,7 @@ character::character()
 	walk->debugDeltaInit(5, 0, 0, 0);
 	walk->debugCollisionInit(5, 0, 55, 150);
 	walk->setTolerance(1);
+	walk->tolerance = 0; walk->activation = 0; 
 	walk->xLock = 1;
 
 	jump = new move("White/J", 1);
@@ -58,7 +62,7 @@ character::character()
 	jump->debugHittableInit(0, 0, 65, 150);
 	jump->debugDeltaInit(0, -20, 0, 0);
 	jump->debugCollisionInit(5, 0, 55, 150);
-	jump->tolerance = 10; jump->activation = 0;
+	jump->tolerance = 0; jump->activation = 0;
 	
 	head->insert(9, jump);
 	head->insert(8, jump);

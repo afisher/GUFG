@@ -22,21 +22,20 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 	if(t != NULL){ 
 		pick->cMove = t;
 	}
+//*	
 	else if (pick->cMove == NULL) {
 		if(!pick->aerial){
 			if(axis[0]) pick->cMove = pick->jump;
 
 			else if(inputBuffer[0] == 4) pick->cMove = pick->walkBack;
 			else if(inputBuffer[0] == 6) {
-//				if(pick->cMove == pick->dash) pick->cMove = pick->dash; else
 				pick->cMove = pick->walk;
 			} else {
-//				if(pick->cMove == pick->dash) pick->cMove = pick->brake; else
 				pick->cMove = pick->neutral;
 			}
 		}
 	}
-	
+//*/	
 }
 
 move * moveTrie::moveHook(int inputBuffer[30], int i, int f, bool pos[5], bool neg[5], move * c)
