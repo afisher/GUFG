@@ -58,7 +58,7 @@ character::character()
 	jump->debugHittableInit(0, 0, 65, 150);
 	jump->debugDeltaInit(0, -20, 0, 0);
 	jump->debugCollisionInit(5, 0, 55, 150);
-	jump->setTolerance(1);
+	jump->tolerance = 10; jump->activation = 0;
 	
 	head->insert(9, jump);
 	head->insert(8, jump);
