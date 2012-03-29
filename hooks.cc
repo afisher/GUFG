@@ -17,7 +17,7 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 	}
 	
 	if(pick->aerial) t = pick->airHead->moveHook(inputBuffer, 0, -1, down, up, pick->cMove);
-	else t = pick->head->moveHook(inputBuffer, 0, 0, down, up, pick->cMove);
+	else t = pick->head->moveHook(inputBuffer, 0, -1, down, up, pick->cMove);
 
 	if(t != NULL){ 
 		pick->cMove = t;
@@ -55,7 +55,6 @@ move * moveTrie::moveHook(int inputBuffer[30], int i, int f, bool pos[5], bool n
 	if(occupants != 0){ 
 		for(int i = 0; i < occupants; i++){
 			if(fish[i].check(pos, neg, i, f) == 1){
-			//Testing!
 				if(c == NULL)
 					return &fish[i];
 				else if(fish[i] > c){

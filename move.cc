@@ -201,7 +201,8 @@ bool move::check(bool pos[5], bool neg[5], int t, int f)
 		}
 				
 	}
-	if(t > tolerance || f > activation) return 0;
+	if(t > tolerance) return 0;
+	if(f > activation) return 0;
 	return 1;
 }
 
