@@ -187,17 +187,17 @@ SDL_Surface * character::draw(int facing){
 
 void character::initMoves()
 {
-	char fname[strlen(name)+4];
-	sprintf(fname, "%s.ch", name);
-	printf("%s\n", fname);
-	ifstream read;
+	char fname[30];
 	char buffer[30];
+	char mvName[30];
+	ifstream read;
+	
+	sprintf(fname, "%s/%s.ch", name, name);
 	read.open(fname);
-	while(read.get() != ':');
-	while(read.get() != ':');
+	while(read.get() != ':'); read.ignore();
 	read >> buffer;
-	printf("%s\n", buffer);
-	new move(buffer, 1);/*
+	sprintf(mvName, "%s/%s", name, buffer);
+	neutral = new move(mvName, 1);/*
 	while(read.peek() != '\n'){
 		switch (read.get()){
 		case ':':

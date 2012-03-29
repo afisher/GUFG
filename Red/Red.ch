@@ -1,5 +1,4 @@
 Red
-
 Basic States
 Neutral: NS
 Crouch: NC
