@@ -197,7 +197,7 @@ void character::initMoves()
 	while(read.get() != ':'); read.ignore();
 	read >> buffer;
 	sprintf(mvName, "%s/%s", name, buffer);
-	neutral = new move(mvName, 1);/*
+	neutral = new move(mvName);/*
 	while(read.peek() != '\n'){
 		switch (read.get()){
 		case ':':

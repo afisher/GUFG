@@ -104,7 +104,7 @@ void player::updateRects()
 
 void player::enforceGravity(int grav, int floor)
 {	
-	if(pos.y + pos.h < floor && pick->aerial == 0) pick->aerial = 1; 
+	if(collision.y + collision.h < floor && pick->aerial == 0) pick->aerial = 1; 
 	
 	else if(pick->aerial) deltaY += grav;
 }
