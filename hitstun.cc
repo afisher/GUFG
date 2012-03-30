@@ -10,29 +10,6 @@ void hitstun::step()
 	else counter--;
 }
 	
-hitstun::hitstun(char * n, int l)
-{
-	name = n;
-	for(int i = 0; i < 5; i++)
-		button[i] = 0;
-	start = new frame(n, l);
-	tolerance = 30;
-	frames = l;
-	state = 0;
-	collision = new SDL_Rect[l];
-	hitbox = new SDL_Rect[l];
-	hitreg = new SDL_Rect[l];
-	delta = new SDL_Rect[l];
-	xLock = 0;
-	stun = 10;
-	yLock = 0;
-	currentFrame = 0;
-	damage = 0;
-	blockMask = 7;
-	blockState = 0;
-	debugStateInit(0, 0, 0);
-}
-
 void hitstun::blockSuccess(int st){
 	init(st);
 }
@@ -68,8 +45,10 @@ hitstun::hitstun(char * n)
 	while(read.get() != ':'); read.ignore();
 	read >> push;
 	while(read.get() != ':'); read.ignore();
-	read >> blockMask;
+	read >> lift;
 	while(read.get() != ':'); read.ignore();
+	read >> blockMask;
+	while(read.get() != ':'); read.ignore(); 
 	read >> blockState;
 
 	while(read.get() != ':'); read.ignore();
@@ -122,7 +101,6 @@ hitstun::hitstun(char * n)
 
 	}
 	read.close();
-	start = new frame(name, frames);
 	sprite = new SDL_Surface*[frames];
 	fSprite = new SDL_Surface*[frames];
 	for(int i = 0; i < frames; i++){
@@ -135,6 +113,7 @@ hitstun::hitstun(char * n)
 		fSprite[i] = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
 	}
-	tolerance = 30;
-	activation = 30;
+	tolerance = 0;
+	activation = 0;
+	currentFrame = 0;
 }
