@@ -14,7 +14,7 @@ class interface
 {
 public:
 	interface(); 		//Constructor!
-	
+	~interface();
 	/*Important interface functions that will remain interface functions*/
 	
 	void readInput();	//Reads input from players. 

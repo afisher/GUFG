@@ -223,6 +223,8 @@ void interface::checkWin()
 		if(p1->rounds == numRounds || p2->rounds == numRounds){
 			p1->rounds = 0;
 			p2->rounds = 0;
+			delete p1->pick;
+			delete p2->pick;
 			cSelectMenu();
 			roundInit();
 		}
@@ -405,4 +407,11 @@ void interface::cSelectMenu()
 
 	p1->characterSelect(select1);
 	p2->characterSelect(select2);
+}
+
+interface::~interface()
+{
+	SDL_FreeSurface(screen);
+	delete p1;
+	delete p2;
 }

@@ -8,4 +8,5 @@ public:
 	void blockSuccess(int);
 	hitstun();
 	hitstun(char *, int);
+	hitstun(char *);
 };

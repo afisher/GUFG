@@ -1,9 +1,4 @@
 #include "move.h"
-#include <cstring>
-#include <stdio.h>
-#include <iostream>
-using namespace std;
-#include <fstream>
 
 move::move()
 {
@@ -14,12 +9,13 @@ move::move()
 move::move(char * n)
 {
 	ifstream read;
+	SDL_Surface * temp;
 	int startup, active, recovery;
 	char fname[40];
 	sprintf(fname, "%s.mv", n);
+	name = n; 
 	read.open(fname);
 	while(read.get() != ':'); read.ignore();
-	name = n; //I'll fix this later.
 	while(read.get() != ':'); read.ignore();
 	read >> frames;
 	while(read.get() != ':'); read.ignore();
@@ -96,6 +92,18 @@ move::move(char * n)
 	}
 	read.close();
 	start = new frame(name, frames);
+	sprite = new SDL_Surface*[frames];
+	fSprite = new SDL_Surface*[frames];
+	for(int i = 0; i < frames; i++){
+		sprintf(fname, "%s#%i", n, i);
+		temp = SDL_LoadBMP(fname);
+		sprite[i] = SDL_DisplayFormat(temp);
+		SDL_FreeSurface(temp);
+		sprintf(fname, "%s#%iF", n, i);
+		temp = SDL_LoadBMP(fname);
+		fSprite[i] = SDL_DisplayFormat(temp);
+		SDL_FreeSurface(temp);
+	}
 	tolerance = 30;
 	activation = 30;
 	init();
@@ -182,8 +190,7 @@ void move::setTolerance(int t)
 
 move::~move()
 {
-	if(name) delete [] name;
-	if(start) delete start;
+	delete start;
 	if(collision) delete [] collision;
 	if(hitbox) delete [] hitbox;
 	if(hitreg) delete [] hitreg;
@@ -421,8 +428,7 @@ moveTrie::~moveTrie()
 			child[i] = NULL;
 		}
 	}
-	delete tolerance;
-	delete fish;
+	if(fish != NULL) delete [] fish;
 	fish = NULL;
 }
 

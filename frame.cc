@@ -52,23 +52,14 @@ frame::frame(char * name, int n)
 			i = n;
 		}
 		delete [] fName;
+		z.close();
 	}
 }
 
 frame::~frame()
 {
-        if(next) {
-                delete next;
-                next = NULL;
-	}
-        if(sprite)
-		SDL_FreeSurface(sprite);
-}
-
-frame * frame::play(SDL_Surface *& gameSprite)
-{
-	gameSprite = sprite;
-	return next;
+	if(next) next->~frame();
+        if(sprite) SDL_FreeSurface(sprite);
 }
 
 frame * frame::operator[](const int &x)

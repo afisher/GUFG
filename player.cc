@@ -154,6 +154,8 @@ void player::checkCorners(int floor, int left, int right)
 	int rOffset = pos.x + pos.w - (collision.x + collision.w);
 	int bOffset = pos.y + pos.h - (collision.y + collision.h);	
 
+	if(collision.w == 0) printf("W problem\n");
+	if(collision.h == 0) printf("H problem\n");
 	/*Floor, or "Bottom corner"*/
 
 	/*Currently this is done just with pos, but it needs to use collision, since
@@ -254,4 +256,9 @@ void player::checkFacing(int maypole){
 		else if (pos.x < maypole && facing == -1) facing = 1; 
 		else if (pos.x > maypole && facing == 1) facing = -1; 
 	}
+}
+
+player::~player(){
+	SDL_FreeSurface(sprite);
+	delete pick;
 }

@@ -13,55 +13,26 @@ character::character()
 
 	/*Currently I'm using this as a test case for my move hooks*/
 
-	head = new moveTrie(new move("White/A", "A", 0, 11));
-	head->fish[0].debugStateInit(3, 16, 30);
-	head->fish[0].debugRectsInit();
-	head->fish[0].debugDamageInit(10);
-	head->fish[0].debugHitboxInit(45, 45, 30, 30);
-	head->fish[0].debugHittableInit(0, 0, 80, 150);
-	head->fish[0].debugCollisionInit(5, 0, 55, 150);
+	head = new moveTrie(new move("White/A"));
 	head->fish[0].xLock = 1;
 
-	temp = new move("White/D", "D", 0, 1);
+	temp = new move("White/D");
 	head->insert(temp);
-	head->fish[1].debugStateInit(3, 16, 30);
-	head->fish[1].debugRectsInit();
-	head->fish[1].debugCollisionInit(5, 0, 55, 150);
 	airHead = new moveTrie(temp);
 
-	neutral = new move("White/N", 1);
-	neutral->debugRectsInit();
-	neutral->debugStateInit(1, 31, 31);
-	neutral->debugHittableInit(0, 0, 65, 150);
-	neutral->debugCollisionInit(5, 0, 55, 150);
+	neutral = new move("White/N");
 	neutral->tolerance = 0; neutral->activation = 0;
 	head->insert(neutral);
 
-	walkBack = new move("White/WB", 1);
-	walkBack->debugRectsInit();
-	walkBack->debugStateInit(1, 31, 31);
-	walkBack->debugHittableInit(0, 0, 65, 150);
-	walkBack->debugDeltaInit(-5, 0, 0, 0);
-	walkBack->debugCollisionInit(5, 0, 55, 150);
+	walkBack = new move("White/WB");
 	walkBack->tolerance = 0; walkBack->activation = 0; 
 	walkBack->xLock = 1;
 
-	walk = new move("White/W", 1);
-	walk->debugRectsInit();
-	walk->debugStateInit(1, 31, 31);
-	walk->debugHittableInit(0, 0, 65, 150);
-	walk->debugDeltaInit(5, 0, 0, 0);
-	walk->debugCollisionInit(5, 0, 55, 150);
-	walk->setTolerance(1);
+	walk = new move("White/W");
 	walk->tolerance = 0; walk->activation = 0; 
 	walk->xLock = 1;
 
-	jump = new move("White/J", 1);
-	jump->debugRectsInit();
-	jump->debugStateInit(5, 31, 31);
-	jump->debugHittableInit(0, 0, 65, 150);
-	jump->debugDeltaInit(0, -20, 0, 0);
-	jump->debugCollisionInit(5, 0, 55, 150);
+	jump = new move("White/J");
 	jump->tolerance = 0; jump->activation = 0;
 	
 	head->insert(9, jump);
