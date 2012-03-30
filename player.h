@@ -8,12 +8,13 @@
 class player{
 public:
 	player();
+	~player();
 
+	char * inputName[10];	//Input names. This is really just for housekeeping.
 	SDL_Event input[10];	//Inputs. These are the SDL_Events tied to the 10 buttons in the actual game
 	SDL_Surface * sprite;
 	character * pick;
 	int deltaX, deltaY;
-	char * inputName[10];	//Input names. This is really just for housekeeping.
 	int rounds;
 	int facing;
 		
@@ -26,7 +27,6 @@ public:
 	void spriteInit();
 
 	SDL_Rect pos, hitbox, hitreg, collision, delta, lock;
-	SDL_Rect carry[3];
 	bool rCorner, lCorner;
 	
 	/*Helper functions for "resolve" tick*/

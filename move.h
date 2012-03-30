@@ -6,6 +6,11 @@
 
 #include "SDL.h"
 #include "frame.h"
+#include <cstring>
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+#include <fstream>
 
 class move{
 public:
@@ -69,6 +74,7 @@ public:
 	SDL_Rect * hitbox;	//Same but for hitboxes
 	SDL_Rect * hitreg;	//Same but for hitreg boxes
 	SDL_Rect * delta;	//Same but for position on the screen.
+	SDL_Surface **sprite, **fSprite;
 };
 
 /*Move trie class. Essentially a recursive trie-search algorithm that looks for input hooks*/

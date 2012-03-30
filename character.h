@@ -24,8 +24,8 @@ public:
 	move * neutral;
 	move * walk;
 	move * jump;
-	move * dash;
-	move * brake;
+//	move * dash;
+//	move * brake;
 	move * walkBack;
 	hitstun * reel;	
 	hitstun * fall;
