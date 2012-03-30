@@ -25,7 +25,8 @@ public:
 	void draw();
 	void spriteInit();
 
-	SDL_Rect pos, hitbox, hitreg, collision, delta;
+	SDL_Rect pos, hitbox, hitreg, collision, delta, lock;
+	SDL_Rect carry[3];
 	bool rCorner, lCorner;
 	
 	/*Helper functions for "resolve" tick*/
