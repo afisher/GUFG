@@ -39,37 +39,17 @@ character::character()
 	head->insert(8, jump);
 	head->insert(7, jump);
 
-	reel = new hitstun("White/H", 1);
-	reel->debugRectsInit();
-	reel->debugHittableInit(0, 0, 65, 150);
-	reel->debugCollisionInit(5, 0, 55, 150);
+	reel = new hitstun("White/H");
+	reel->xLock = 1; reel->yLock = 1;
 
-	fall = new hitstun("White/UT", 1);
-	fall->debugRectsInit();
-	fall->debugHittableInit(0, 0, 150, 65);
-	fall->debugCollisionInit(5, 0, 55, 55);
+	fall = new hitstun("White/UT");
 
-	airBlock = new hitstun("White/BL", 1);
-	airBlock->blockState = 4;
-	airBlock->debugRectsInit();
-	airBlock->debugHittableInit(0, 0, 65, 150);
-	airBlock->debugCollisionInit(5, 0, 55, 150);
-	airBlock->debugStateInit(33, 32, 32);
+	airBlock = new hitstun("White/BA");
 
-	standBlock = new hitstun("White/BL", 1);
-	standBlock->blockState = 2;
-	standBlock->debugRectsInit();
-	standBlock->debugHittableInit(0, 0, 65, 150);
-	standBlock->debugCollisionInit(5, 0, 55, 150);
-	standBlock->debugStateInit(33, 32, 32);
+	standBlock = new hitstun("White/BH");
 	standBlock->xLock = 1;
 	
-	crouchBlock = new hitstun("White/BL", 1);
-	crouchBlock->blockState = 1;
-	crouchBlock->debugRectsInit();
-	crouchBlock->debugHittableInit(0, 0, 65, 150);
-	crouchBlock->debugCollisionInit(5, 0, 55, 150);
-	crouchBlock->debugStateInit(33, 32, 32);
+	crouchBlock = new hitstun("White/BL");
 	crouchBlock->xLock = 1;
 
 	cMove = neutral;

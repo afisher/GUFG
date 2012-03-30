@@ -37,11 +37,12 @@ move::move(char * n)
 	while(read.get() != ':'); read.ignore();
 	read >> push;
 	while(read.get() != ':'); read.ignore();
-	read >> blockMask;
+	read >> lift;
 	while(read.get() != ':'); read.ignore();
+	read >> blockMask;
+	while(read.get() != ':'); read.ignore(); 
 	read >> blockState;
 
-	while(read.get() != ':'); read.ignore();
 	//Properties will be a bit more complicated, I'll add this later.
 	collision = new SDL_Rect[frames];
 	hitbox = new SDL_Rect[frames];
@@ -91,7 +92,6 @@ move::move(char * n)
 
 	}
 	read.close();
-	start = new frame(name, frames);
 	sprite = new SDL_Surface*[frames];
 	fSprite = new SDL_Surface*[frames];
 	for(int i = 0; i < frames; i++){
@@ -109,79 +109,6 @@ move::move(char * n)
 	init();
 }
 
-
-move::move(char * n, int l)
-{
-	name = n;
-	for(int i = 0; i < 5; i++)
-		button[i] = 0;
-	start = new frame(n, l);
-	tolerance = 30;
-	activation = 30;
-	frames = l;
-	state = 0;
-	collision = new SDL_Rect[l];
-	hitbox = new SDL_Rect[l];
-	hitreg = new SDL_Rect[l];
-	delta = new SDL_Rect[l];
-	xLock = 0;
-	stun = 11;
-	yLock = 0;
-	damage = 0;
-	push = 1;
-	lift = 3;
-	launch = 0;
-	init();
-	blockMask = 7;
-	blockState = 0;
-}
-
-move::move(char* n, char *b, bool s, int l)
-{
-	int r = strlen(b);
-	for(int i = 0; i < 5; i++)
-		button[i] = 0;
-	for(int i = 0; i < r; i++){
-		switch(b[i]){
-		case 'A':
-			button[0] = 1;
-			break;
-		case 'B':
-			button[1] = 1;
-			break;
-		case 'C':
-			button[2] = 1;
-			break;
-		case 'D':
-			button[3] = 1;
-			break;
-		case 'E':
-			button[4] = 1;
-			break;
-		}
-
-	}
-	start = new frame(n, l);
-	tolerance = 30;
-	activation = 30;
-	frames = l;
-	damage = 0;
-	init();
-	xLock = 0;
-	yLock = 0;
-	stun = 11;
-	state = 0;
-	collision = new SDL_Rect[l];
-	hitbox = new SDL_Rect[l];
-	hitreg = new SDL_Rect[l];
-	delta = new SDL_Rect[l];
-	push = 1;
-	lift = 3;
-	launch = 0;
-	blockMask = 3;
-	blockState = 0;
-}
-
 void move::setTolerance(int t)
 {
 	tolerance = t;
@@ -190,7 +117,12 @@ void move::setTolerance(int t)
 
 move::~move()
 {
-	delete start;
+	for(int i = 0; i < frames; i++){
+		if(sprite[i]) SDL_FreeSurface(sprite[i]);
+		if(fSprite[i]) SDL_FreeSurface(fSprite[i]);
+	}
+	if(sprite) delete [] sprite;
+	if(fSprite) delete [] fSprite;
 	if(collision) delete [] collision;
 	if(hitbox) delete [] hitbox;
 	if(hitreg) delete [] hitreg;
@@ -215,27 +147,25 @@ bool move::check(bool pos[5], bool neg[5], int t, int f)
 void move::pollRects(SDL_Rect &d, SDL_Rect &c, SDL_Rect &r, SDL_Rect &b)
 {
 
-	if(start){
-		d.x = delta[currentFrame].x; d.y = delta[currentFrame].y;
-		c.x = collision[currentFrame].x; c.w = collision[currentFrame].w;
-		c.y = collision[currentFrame].y; c.h = collision[currentFrame].h;
-		r.x = hitreg[currentFrame].x; r.w = hitreg[currentFrame].w;
-		r.y = hitreg[currentFrame].y; r.h = hitreg[currentFrame].h;
-		if(cFlag) {
-			b.x = 0; b.w = 0;
-			b.y = 0; b.h = 0;
-		} else {
-			b.x = hitbox[currentFrame].x; b.w = hitbox[currentFrame].w; 
-			b.y = hitbox[currentFrame].y; b.h = hitbox[currentFrame].h;
-		}
+	d.x = delta[currentFrame].x; d.y = delta[currentFrame].y;
+	c.x = collision[currentFrame].x; c.w = collision[currentFrame].w;
+	c.y = collision[currentFrame].y; c.h = collision[currentFrame].h;
+	r.x = hitreg[currentFrame].x; r.w = hitreg[currentFrame].w;
+	r.y = hitreg[currentFrame].y; r.h = hitreg[currentFrame].h;
+	if(cFlag) {
+		b.x = 0; b.w = 0;
+		b.y = 0; b.h = 0;
+	} else {
+		b.x = hitbox[currentFrame].x; b.w = hitbox[currentFrame].w; 
+		b.y = hitbox[currentFrame].y; b.h = hitbox[currentFrame].h;
 	}
 }
 
 SDL_Surface * move::draw(int facing)
 {
 	SDL_Surface * temp;
-	if(facing == -1) temp = (*start)[currentFrame]->fSprite;
-	else temp = (*start)[currentFrame]->sprite;
+	if(facing == -1) temp = fSprite[currentFrame];
+	else temp = sprite[currentFrame];
 	step();
 	return temp;
 }

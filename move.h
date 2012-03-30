@@ -16,9 +16,6 @@ class move{
 public:
 	move();
 	move(char*);
-	move(char*, int);
-	move(char*, char*, bool, int);
-	move(char*, char*, bool);
 	~move();
 	void execute();
 	void execute(move *);		/*Okay so, hopefully the idea here is that we can init() 
@@ -34,7 +31,6 @@ public:
 	void connect();
 	SDL_Surface * draw(int);
 
-	frame * start;		//The first frame of the move's sprite.
 	unsigned int allowed;		//The state in which the move is allowed. Depending on how we handle states, this may need to be an array of states or something.
 	bool xLock, yLock;
 	int push;		//How much pushback the move does
@@ -45,12 +41,13 @@ public:
 	int stun;		//How much stun the move does
 	unsigned int blockMask;	//Low, High, Air Block. Basically a 3-digit binary number expressed as an integer from 0-7.
 				//Digits from right to left: Blockable low, Blockable high, Blockable in the air, 
-	unsigned int blockState;//Partner to the blockmask. This variable is the move's actual "guard state." Usually it will only be one of the three.
 	bool cFlag;
 	unsigned int state;	
 	unsigned int cState;
 	int currentFrame; 	//The frame that is currently running.
 	int frames;	//Number of frames.
+	
+	unsigned int blockState;//Partner to the blockmask. This variable is the move's actual "guard state." Usually it will only be one of the three.
 	
 	//Some initialization functions for testing purposes. Once we work out the finalized constructor this will be obviated.
 	void debugStateInit(int, int, int); 	
