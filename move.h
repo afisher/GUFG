@@ -5,7 +5,6 @@
  */
 
 #include "SDL.h"
-#include "frame.h"
 #include <cstring>
 #include <stdio.h>
 #include <iostream>
