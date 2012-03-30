@@ -235,6 +235,7 @@ SDL_Surface * move::draw(int facing)
 
 bool move::operator>(move * x)
 {
+	if(x == NULL) return 1;
 	if(frames == 0 || x->frames == 0) return 0;
 	else{
 		if(x->cFlag == 1){
