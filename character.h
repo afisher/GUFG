@@ -35,6 +35,7 @@ public:
 
 	move * cMove;
 
+	int freeze;
 	int health;
 	int meter;
 	int rounds;

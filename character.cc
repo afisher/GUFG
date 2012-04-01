@@ -56,6 +56,7 @@ character::character()
 	volitionX = 0;
 	volitionY = 0;
 	aerial = 0;
+	freeze = 0;
 }
 
 character::~character()
@@ -124,7 +125,12 @@ int character::takeHit(move * attack)
 }
 
 SDL_Surface * character::draw(int facing){
-	SDL_Surface * temp = cMove->draw(facing);
+	SDL_Surface * temp;
+	if(freeze > 0) {
+		freeze--; 
+		temp = NULL;
+	}
+	else temp = cMove->draw(facing);
 	if(cMove->currentFrame == cMove->frames){
 		cMove->init();
 		cMove = NULL;

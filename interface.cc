@@ -126,25 +126,29 @@ void interface::resolve()
 
 	p1->updateRects();
 	p2->updateRects();
-	
-	p1->deltaX += p1->pick->volitionX*p1->facing;
-	p1->deltaY += p1->pick->volitionY;
-	if(p1->lCorner || p1->rCorner) p2->deltaX += p1->pick->volitionX*p2->facing;
-	p2->deltaX += p2->pick->volitionX*p2->facing;
-	p2->deltaY += p2->pick->volitionY;
-	if(p2->lCorner || p2->rCorner) p1->deltaX += p2->pick->volitionX*p1->facing;
 
-	p1->pos.y += p1->deltaY;
-	p2->pos.y += p2->deltaY;
+	if(!p1->pick->freeze){
+		p1->pos.x += p1->deltaX;
+		p1->pos.y += p1->deltaY;
+		p1->deltaX += p1->pick->volitionX*p1->facing;
+		p1->deltaY += p1->pick->volitionY;
+		if(p1->lCorner || p1->rCorner) p2->deltaX += p1->pick->volitionX*p2->facing;
+	}
+	if(!p2->pick->freeze){
+		p2->pos.y += p2->deltaY;
+		p2->pos.x += p2->deltaX;
+		p2->deltaX += p2->pick->volitionX*p2->facing;
+		p2->deltaY += p2->pick->volitionY;
+		if(p2->lCorner || p2->rCorner) p1->deltaX += p2->pick->volitionX*p1->facing;
+		p2->pick->volitionX = 0;
+		p2->pick->volitionY = 0;
+	}
 
-	p1->pick->volitionX = 0;
-	p2->pick->volitionX = 0;
-	p1->pick->volitionY = 0;
-	p2->pick->volitionY = 0;
+	if(!p1->pick->freeze){
+		p1->pick->volitionX = 0;
+		p1->pick->volitionY = 0;
+	}	
 
-	p1->pos.x += p1->deltaX;
-	p2->pos.x += p2->deltaX;
-	
 	p1->updateRects();
 	p2->updateRects();
 	
