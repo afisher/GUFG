@@ -35,10 +35,6 @@ character::character()
 	jump = new move("White/J");
 	jump->tolerance = 0; jump->activation = 0;
 	
-	head->insert(9, jump);
-	head->insert(8, jump);
-	head->insert(7, jump);
-
 	reel = new hitstun("White/H");
 	reel->xLock = 1; reel->yLock = 1;
 

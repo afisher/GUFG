@@ -117,6 +117,7 @@ void move::setTolerance(int t)
 
 move::~move()
 {
+	if(!this) return;
 	for(int i = 0; i < frames; i++){
 		if(sprite[i]) SDL_FreeSurface(sprite[i]);
 		if(fSprite[i]) SDL_FreeSurface(fSprite[i]);
