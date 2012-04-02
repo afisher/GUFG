@@ -28,7 +28,7 @@ public:
 	void init();		//Really just sets current frame to 0. I wanted current frame to be private for now, so I don't break anything.
 	virtual void step();
 	void connect();
-	SDL_Surface * draw(int);
+	SDL_Surface * draw(int, bool);
 
 	unsigned int allowed;		//The state in which the move is allowed. Depending on how we handle states, this may need to be an array of states or something.
 	bool xLock, yLock;
