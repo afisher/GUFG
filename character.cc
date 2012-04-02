@@ -119,6 +119,7 @@ int character::takeHit(move * attack)
 		volitionX -= attack->push;
 		attack->connect(); 	//Tell the attack it's connected.
 	}
+	freeze = attack->stun - 10; //For now this is the simple formula for freeze. Eventually it might be changed, or made a separate parameter
  	return ct;
 	/*Eventually the plan is to have this return a combo count. This not only allows us to display a counter and do whatever scaling/combo 
 	mitigation we want to, but also allows us to do things like pushback ramping during blockstrings*/
@@ -126,11 +127,8 @@ int character::takeHit(move * attack)
 
 SDL_Surface * character::draw(int facing){
 	SDL_Surface * temp;
-	if(freeze > 0) {
-		freeze--; 
-		temp = NULL;
-	}
-	else temp = cMove->draw(facing);
+	temp = cMove->draw(facing, freeze);
+	if(freeze > 0) freeze--; 
 	if(cMove->currentFrame == cMove->frames){
 		cMove->init();
 		cMove = NULL;

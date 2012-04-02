@@ -51,8 +51,8 @@ void player::spriteInit()
 
 	/*Doing moves*/
 	if(pick->cMove == NULL) pick->cMove = pick->neutral;
-	sTemp = SDL_DisplayFormat(pick->draw(facing));
-	if(sTemp != NULL) sprite = sTemp;
+	sTemp = pick->draw(facing);
+	if(sTemp != NULL) sprite = SDL_DisplayFormat(sTemp);
 	if(facing == -1) pos.x += (displacement - sprite->w);
 	
 }

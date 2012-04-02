@@ -174,12 +174,14 @@ void interface::resolve()
 		if(checkCollision(p1->hitbox, p2->hitreg)) {
 			combo1 += p2->pick->takeHit(p1->pick->cMove);
 			if(combo1 > 0) printf("p1: %i-hit combo\n", combo1+1);
+			p1->pick->freeze = p1->pick->cMove->stun - 10;
 		}
 	}
 	if(p2->hitbox.w > 0 && p1->hitreg.w > 0){
 		if(checkCollision(p2->hitbox, p1->hitreg)) {
 			combo2 += p1->pick->takeHit(p2->pick->cMove);
 			if(combo2 > 0) printf("p2: %i-hit combo\n", combo2+1);
+			p2->pick->freeze = p2->pick->cMove->stun - 10;
 		}
 	}
 

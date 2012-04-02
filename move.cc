@@ -162,12 +162,12 @@ void move::pollRects(SDL_Rect &d, SDL_Rect &c, SDL_Rect &r, SDL_Rect &b)
 	}
 }
 
-SDL_Surface * move::draw(int facing)
+SDL_Surface * move::draw(int facing, bool freeze)
 {
 	SDL_Surface * temp;
 	if(facing == -1) temp = fSprite[currentFrame];
 	else temp = sprite[currentFrame];
-	step();
+	if(!freeze) step();
 	return temp;
 }
 
