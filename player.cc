@@ -264,3 +264,33 @@ player::~player(){
 	SDL_FreeSurface(sprite);
 	delete pick;
 }
+
+void player::pushInput(bool axis[4], bool down[5], bool up[5])
+{
+	int temp = 5 + axis[0]*3 - axis[1]*3 - axis[2]*facing + axis[3]*facing;
+	move * t = NULL;
+//	if(temp != 5){	
+	inputBuffer[0] = temp;
+
+	for(int i = 30; i > 0; i--){
+		inputBuffer[i] = inputBuffer[i-1];
+	}
+	
+	if (pick->cMove == NULL) {
+		if(!pick->aerial){
+			if(inputBuffer[0] == 4) pick->cMove = pick->walkBack;
+			else if(inputBuffer[0] == 6) pick->cMove = pick->walk;
+			else pick->cMove = pick->neutral;
+		} else pick->cMove = pick->neutral;
+	}
+	
+	if(pick->aerial) t = pick->airHead->moveHook(inputBuffer, 0, -1, down, up, pick->cMove);
+	else t = pick->head->moveHook(inputBuffer, 0, -1, down, up, pick->cMove);
+
+	if(t != NULL){ 
+		pick->cMove = t;
+	}
+//*	
+//*/	
+}
+
