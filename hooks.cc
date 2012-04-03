@@ -28,7 +28,7 @@ void player::pushInput(bool axis[4], bool down[5], bool up[5])
 			if(inputBuffer[0] == 4) pick->cMove = pick->walkBack;
 			else if(inputBuffer[0] == 6) pick->cMove = pick->walk;
 			else pick->cMove = pick->neutral;
-		}
+		} else pick->cMove = pick->neutral;
 	}
 //*/	
 }
@@ -48,12 +48,12 @@ move * moveTrie::moveHook(int inputBuffer[30], int i, int f, bool pos[5], bool n
 	}
 	if(occupants != 0){ 
 		for(int i = 0; i < occupants; i++){
-			if(fish[i].check(pos, neg, i, f) == 1){
+			if(fish[i]->check(pos, neg, i, f) == 1){
 				if(c == NULL)
-					return &fish[i];
-				else if(fish[i] > c){
+					return fish[i];
+				else if((*fish[i]) > c){
 					c->init();
-					return &fish[i];
+					return fish[i];
 				}
 			}
 		}

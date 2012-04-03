@@ -14,7 +14,7 @@ character::character()
 	/*Currently I'm using this as a test case for my move hooks*/
 
 	head = new moveTrie(new move("White/A"));
-	head->fish[0].xLock = 1;
+	head->fish[0]->xLock = 1;
 
 	temp = new move("White/D");
 	head->insert(temp);

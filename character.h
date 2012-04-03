@@ -24,6 +24,8 @@ public:
 	move * neutral;
 	move * walk;
 	move * jump;
+	move * fJump;
+	move * bJump;
 //	move * dash;
 //	move * brake;
 	move * walkBack;
