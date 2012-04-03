@@ -48,15 +48,6 @@ public:
 	
 	unsigned int blockState;//Partner to the blockmask. This variable is the move's actual "guard state." Usually it will only be one of the three.
 	
-	//Some initialization functions for testing purposes. Once we work out the finalized constructor this will be obviated.
-	void debugStateInit(int, int, int); 	
-	void debugRectsInit();
-	void debugDamageInit(int);
-	void debugHittableInit(int, int, int, int);
-	void debugHitboxInit(int, int, int, int);
-	void debugDeltaInit(int, int, int, int);
-	void debugCollisionInit(int, int, int, int);
-
 //	SDL_Surface *sprite, *hit, *hitreg, *collision;
 	int button[5];
 	char * name;
@@ -84,7 +75,6 @@ public:
 	move * moveHook(int[40], int, int, bool[5], bool[5], move *);
 	moveTrie * child[10];
 	move * fish; 		//Because it's what a hook catches! Okay, this name probably needs to change.
-	int * tolerance;
 	moveTrie * insert(int);
 	moveTrie * insert(int, move*);
 	void insert(move *);

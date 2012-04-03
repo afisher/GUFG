@@ -214,85 +214,6 @@ void execute(move * last)
 	last->init();
 }
 
-
-
-/*Testing stuff for now, thus it becomes necessary to set all states to stuff*/
-void move::debugStateInit(int q, int r, int s)
-{
-	allowed = q;
-	state = r;
-	cState = s;
-}
-
-void move::debugRectsInit()
-{
-	for(int i = 0; i < frames; i++){
-		hitbox[i].y = 0;
-		hitbox[i].x = 0;
-		hitbox[i].w = 0;
-		hitbox[i].h = 0;
-		delta[i].y = 0;
-		delta[i].x = 0;
-		delta[i].w = 1;
-		delta[i].h = 1;
-		collision[i].y = 0;
-		collision[i].x = 0;
-		collision[i].w = 1;
-		collision[i].h = 1;
-		hitreg[i].y = 0;
-		hitreg[i].x = 0;
-		hitreg[i].w = 0;
-		hitreg[i].h = 0;
-	}
-}
-
-void move::debugHitboxInit(int x, int y, int w, int h)
-{
-	for(int i = 0; i < frames; i++){
-		hitbox[i].x = x;
-		hitbox[i].y = y;
-		hitbox[i].w = w;
-		hitbox[i].h = h;
-	}
-}
-
-void move::debugHittableInit(int x, int y, int w, int h)
-{
-	for(int i = 0; i < frames; i++){
-		hitreg[i].y = y;
-		hitreg[i].x = x;
-		hitreg[i].w = w;
-		hitreg[i].h = h;
-	}
-}
-void move::debugCollisionInit(int x, int y, int w, int h)
-{	
-	for(int i = 0; i < frames; i++){
-		collision[i].y = y;
-		collision[i].x = x;
-		collision[i].w = w;
-		collision[i].h = h;
-	}
-}
-void move::debugDeltaInit(int x, int y, int w, int h) 
-{
-	for(int i = 0; i < frames; i++){
-		delta[i].y = y;
-		delta[i].x = x;
-		delta[i].w = w;
-		delta[i].h = h;
-	}
-}
-void move::debugDamageInit(int d) { damage = d; }
-
-
-
-
-
-
-
-
-
 moveTrie::moveTrie()
 {
 	for(int i = 0; i < 10; i++)
@@ -308,8 +229,6 @@ moveTrie::moveTrie(move * a)
 		child[i] = NULL;
 	fish = a;
 	occupants = 1;
-	tolerance = new int;
-	tolerance[0] = 30;
 }
 
 void moveTrie::insert(move * b)
@@ -322,13 +241,10 @@ void moveTrie::insert(move * b)
 	t = new int[occupants];
 	for(i = 0; i < occupants-1; i++){
 		temp[i] = fish[i];
-		t[i] = tolerance[i];
 	}
 	t[i] = 30;
 	temp[i] = *b;
 	fish = temp;
-	tolerance = t;
-
 }
 
 moveTrie * moveTrie::insert(int a, move * b)
