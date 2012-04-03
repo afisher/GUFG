@@ -9,6 +9,7 @@ red::red()
 	head->fish[0]->xLock = 1; 
 	
 	initMoves();
-	
+
+
 	cMove = neutral;	
 }
