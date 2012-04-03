@@ -170,20 +170,30 @@ void interface::resolve()
 	if(p2->hitbox.w > 0) p1->checkBlocking();
 	if(p1->hitbox.w > 0) p2->checkBlocking();
 
+	move * temp1 = p1->pick->cMove;
+	move * temp2 = p2->pick->cMove;
+	bool hit1 = 0;
+	bool hit2 = 0;
+
 	if(p1->hitbox.w > 0 && p2->hitreg.w > 0){
 		if(checkCollision(p1->hitbox, p2->hitreg)) {
-			combo1 += p2->pick->takeHit(p1->pick->cMove);
+			combo1 += p2->pick->takeHit(temp1);
 			if(combo1 > 0) printf("p1: %i-hit combo\n", combo1+1);
 			p1->pick->freeze = p1->pick->cMove->stun - 10;
+			hit2 = 1;
 		}
 	}
 	if(p2->hitbox.w > 0 && p1->hitreg.w > 0){
 		if(checkCollision(p2->hitbox, p1->hitreg)) {
-			combo2 += p1->pick->takeHit(p2->pick->cMove);
+			combo2 += p1->pick->takeHit(temp2);
 			if(combo2 > 0) printf("p2: %i-hit combo\n", combo2+1);
 			p2->pick->freeze = p2->pick->cMove->stun - 10;
+			hit1 = 1;
 		}
 	}
+	if(hit2) temp2->init();
+	if(hit1) temp1->init();
+
 
 	/*One more collision case: Resolving jumping on people*/
 
