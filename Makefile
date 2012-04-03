@@ -1,5 +1,5 @@
-headers = interface.h move.h character.h player.h red.h hitstun.h special.h
-source = keytest.cc interface.cc hooks.cc move.cc special.cc character.cc player.cc draw.cc red.cc hitstun.cc
+headers = interface.h move.h character.h player.h red.h hitstun.h special.h moveTrie.h
+source = keytest.cc interface.cc hooks.cc move.cc special.cc character.cc player.cc draw.cc red.cc hitstun.cc moveTrie.cc
 flags = -g -O2 -Wno-write-strings `sdl-config --cflags`
 libs = `sdl-config --libs`
 OBJS = \
@@ -7,6 +7,7 @@ OBJS = \
   interface.o \
   hooks.o \
   move.o \
+  moveTrie.o \
   hitstun.o \
   character.o \
   player.o \
@@ -29,8 +30,8 @@ interface.o: interface.h interface.cc player.h player.cc character.h character.c
 hooks.o: hooks.cc player.h player.cc move.h move.cc 
 	g++ -c hooks.cc $(FLAGS)
 
-move.o: move.h move.cc
-	g++ -c move.cc $(FLAGS)
+move.o: move.h move.cc moveTrie.h moveTrie.cc
+	g++ -c move.cc moveTrie.cc $(FLAGS)
 
 character.o: character.h character.cc move.h move.cc hitstun.h hitstun.cc 
 	g++ -c character.cc $(FLAGS)
