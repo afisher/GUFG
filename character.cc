@@ -127,8 +127,9 @@ int character::takeHit(move * attack)
 
 SDL_Surface * character::draw(int facing){
 	SDL_Surface * temp;
+	if(freeze < 0) freeze = 0;
 	temp = cMove->draw(facing, freeze);
-	if(freeze > 0) freeze--; 
+	if(freeze > 0) freeze--;
 	if(cMove->currentFrame == cMove->frames){
 		cMove->init();
 		cMove = NULL;
