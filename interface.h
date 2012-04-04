@@ -28,7 +28,7 @@ public:
 	void cSelectMenu();
 	void checkWin();
 
-	player *p1, *p2;	
+	player * p[2];	
 	SDL_Surface *bg, *screen;
 	int grav;
 	int colorKey;
