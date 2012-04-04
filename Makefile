@@ -1,5 +1,5 @@
-headers = interface.h move.h character.h player.h red.h hitstun.h special.h trie.h
-source = keytest.cc interface.cc move.cc special.cc character.cc player.cc draw.cc red.cc hitstun.cc trie.cc
+headers = interface.h move.h character.h player.h red.h hitstun.h special.h moveTrie.h
+source = keytest.cc interface.cc move.cc special.cc character.cc player.cc draw.cc red.cc hitstun.cc moveTrie.cc
 flags = -g -O2 -Wno-write-strings `sdl-config --cflags`
 libs = `sdl-config --libs`
 OBJS = \
