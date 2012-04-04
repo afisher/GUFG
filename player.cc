@@ -72,6 +72,7 @@ void player::keyConfig(int curr)
 void player::characterSelect(int i)
 {
 	pick = NULL;
+	printf("Character select happened\n");
 	switch(i){
 	case 1:
 		pick = new red;
