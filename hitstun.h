@@ -1,4 +1,4 @@
-#include "moveTrie.h"
+#include "trie.h"
 
 class hitstun : public move {
 public:
