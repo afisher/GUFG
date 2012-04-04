@@ -9,8 +9,8 @@ void interface::draw()
 {
 	SDL_Rect bar1, bar2, meter1, meter2, rounds1[numRounds], rounds2[numRounds];
 	
-	if(p1->pick->health >= 0) bar1.w = p1->pick->health; else bar1.w = 1; 
-	if(p1->pick->health >= 0) bar2.w = p2->pick->health; else bar1.w = 1;
+	if(p[0]->pick->health >= 0) bar1.w = p[0]->pick->health; else bar1.w = 1; 
+	if(p[0]->pick->health >= 0) bar2.w = p[1]->pick->health; else bar1.w = 1;
 	
 	bar1.x = 50 + (300 - bar1.w); bar2.x = 450;
 	bar1.h = 5; bar2.h = 5;
@@ -22,23 +22,23 @@ void interface::draw()
 		rounds1[i].x = 340 - 12 * i; rounds2[i].x = 450 + 12 * i;
 	}
 
-	SDL_SetColorKey(p1->sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
-	SDL_SetColorKey(p2->sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
+	SDL_SetColorKey(p[0]->sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
+	SDL_SetColorKey(p[1]->sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 	
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
 	
 	for(int i = 0; i < numRounds; i++){
-		if(p1->rounds > i) SDL_FillRect(screen, &rounds1[i], SDL_MapRGB(screen->format, 0, 255, 255));
+		if(p[0]->rounds > i) SDL_FillRect(screen, &rounds1[i], SDL_MapRGB(screen->format, 0, 255, 255));
 		else SDL_FillRect(screen, &rounds1[i], SDL_MapRGB(screen->format, 0, 0, 0));
-		if(p2->rounds > i) SDL_FillRect(screen, &rounds2[i], SDL_MapRGB(screen->format, 0, 255, 255));
+		if(p[1]->rounds > i) SDL_FillRect(screen, &rounds2[i], SDL_MapRGB(screen->format, 0, 255, 255));
 		else SDL_FillRect(screen, &rounds2[i], SDL_MapRGB(screen->format, 0, 0, 0));
 	}
 
 	SDL_FillRect(screen, &bar1, SDL_MapRGB(screen->format, 255, 0, 0));
 	SDL_FillRect(screen, &bar2, SDL_MapRGB(screen->format, 255, 0, 0));
 	
-	SDL_BlitSurface(p1->sprite, NULL, screen, &p1->pos);
-	SDL_BlitSurface(p2->sprite, NULL, screen, &p2->pos);
+	SDL_BlitSurface(p[0]->sprite, NULL, screen, &p[0]->pos);
+	SDL_BlitSurface(p[1]->sprite, NULL, screen, &p[1]->pos);
 	
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
 }

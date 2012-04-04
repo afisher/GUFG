@@ -29,10 +29,10 @@ interface::interface()
 		SDL_JoystickOpen(i);
 
 	printf("Player 1:\n");
-	p1 = new player;
+	p[0] = new player;
 
 	printf("Player 2:\n");
-	p2 = new player;
+	p[1] = new player;
 
 	/*Flag to kill the game*/
 	gameover = 0;
@@ -49,29 +49,29 @@ interface::interface()
 
 void interface::roundInit()
 {
-	p1->pick->health = 300;
-	p2->pick->health = 300;
-	p1->pick->meter = 0;
-	p2->pick->meter = 0;
-	p1->deltaX = 0;
-	p2->deltaX = 0;
-	p1->deltaY = 0;
-	p2->deltaY = 0;
-	p1->pick->volitionX = 0;
-	p2->pick->volitionX = 0;
-	p1->pick->volitionY = 0;
-	p2->pick->volitionY = 0;
-	if(p1->pick->cMove != p1->pick->neutral && p1->pick->cMove){
-		p1->pick->cMove->init();
-		p1->pick->cMove = p1->pick->neutral;
+	p[0]->pick->health = 300;
+	p[1]->pick->health = 300;
+	p[0]->pick->meter = 0;
+	p[1]->pick->meter = 0;
+	p[0]->deltaX = 0;
+	p[1]->deltaX = 0;
+	p[0]->deltaY = 0;
+	p[1]->deltaY = 0;
+	p[0]->pick->volitionX = 0;
+	p[1]->pick->volitionX = 0;
+	p[0]->pick->volitionY = 0;
+	p[1]->pick->volitionY = 0;
+	if(p[0]->pick->cMove != p[0]->pick->neutral && p[0]->pick->cMove){
+		p[0]->pick->cMove->init();
+		p[0]->pick->cMove = p[0]->pick->neutral;
 	}
-	if(p2->pick->cMove != p2->pick->neutral && p2->pick->cMove){
-		p2->pick->cMove->init();
-		p2->pick->cMove = p2->pick->neutral;
+	if(p[1]->pick->cMove != p[1]->pick->neutral && p[1]->pick->cMove){
+		p[1]->pick->cMove->init();
+		p[1]->pick->cMove = p[1]->pick->neutral;
 	}
 
-	p1->sprite = NULL;
-	p2->sprite = NULL;
+	p[0]->sprite = NULL;
+	p[1]->sprite = NULL;
 	
 	/*Background color, temporary until we have backgrounds*/
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
@@ -93,14 +93,14 @@ void interface::roundInit()
 	combo2 = 0;
 	grav = 3;
 	timer = 5824;
-	p1->facing = 1;
-	p2->facing = -1;
-	p1->spriteInit();
-	p2->spriteInit();
-	p1->pos.x = wall*4;
-	p2->pos.x = screenWidth - wall*4 - p2->sprite->w;
-	p1->pos.y = floor - p1->sprite->h;
-	p2->pos.y = floor - p2->sprite->h;
+	p[0]->facing = 1;
+	p[1]->facing = -1;
+	p[0]->spriteInit();
+	p[1]->spriteInit();
+	p[0]->pos.x = wall*4;
+	p[1]->pos.x = screenWidth - wall*4 - p[1]->sprite->w;
+	p[0]->pos.y = floor - p[0]->sprite->h;
+	p[1]->pos.y = floor - p[1]->sprite->h;
 	draw();
 }
 
@@ -124,70 +124,70 @@ void interface::resolve()
 		6. Initialize sprites.
 	*/
 
-	p1->updateRects();
-	p2->updateRects();
+	p[0]->updateRects();
+	p[1]->updateRects();
 
-	if(!p1->pick->freeze){
-		p1->pos.x += p1->deltaX;
-		p1->pos.y += p1->deltaY;
-		p1->deltaX += p1->pick->volitionX*p1->facing;
-		p1->deltaY += p1->pick->volitionY;
-		if(p1->lCorner || p1->rCorner) p2->deltaX += p1->pick->volitionX*p2->facing;
+	if(!p[0]->pick->freeze){
+		p[0]->pos.x += p[0]->deltaX;
+		p[0]->pos.y += p[0]->deltaY;
+		p[0]->deltaX += p[0]->pick->volitionX*p[0]->facing;
+		p[0]->deltaY += p[0]->pick->volitionY;
+		if(p[0]->lCorner || p[0]->rCorner) p[1]->deltaX += p[0]->pick->volitionX*p[1]->facing;
 	}
-	if(!p2->pick->freeze){
-		p2->pos.y += p2->deltaY;
-		p2->pos.x += p2->deltaX;
-		p2->deltaX += p2->pick->volitionX*p2->facing;
-		p2->deltaY += p2->pick->volitionY;
-		if(p2->lCorner || p2->rCorner) p1->deltaX += p2->pick->volitionX*p1->facing;
-		p2->pick->volitionX = 0;
-		p2->pick->volitionY = 0;
+	if(!p[1]->pick->freeze){
+		p[1]->pos.y += p[1]->deltaY;
+		p[1]->pos.x += p[1]->deltaX;
+		p[1]->deltaX += p[1]->pick->volitionX*p[1]->facing;
+		p[1]->deltaY += p[1]->pick->volitionY;
+		if(p[1]->lCorner || p[1]->rCorner) p[0]->deltaX += p[1]->pick->volitionX*p[0]->facing;
+		p[1]->pick->volitionX = 0;
+		p[1]->pick->volitionY = 0;
 	}
 
-	if(!p1->pick->freeze){
-		p1->pick->volitionX = 0;
-		p1->pick->volitionY = 0;
+	if(!p[0]->pick->freeze){
+		p[0]->pick->volitionX = 0;
+		p[0]->pick->volitionY = 0;
 	}	
 
-	p1->updateRects();
-	p2->updateRects();
+	p[0]->updateRects();
+	p[1]->updateRects();
 	
-	p1->enforceGravity(grav, floor);
-	p2->enforceGravity(grav, floor);	
+	p[0]->enforceGravity(grav, floor);
+	p[1]->enforceGravity(grav, floor);	
 	
-	p1->checkFacing(p2->pos.x);
-	p2->checkFacing(p1->pos.x);
+	p[0]->checkFacing(p[1]->pos.x);
+	p[1]->checkFacing(p[0]->pos.x);
 
-	p1->checkCorners(floor, wall, screenWidth - wall);
-	p2->checkCorners(floor, wall, screenWidth - wall);
+	p[0]->checkCorners(floor, wall, screenWidth - wall);
+	p[1]->checkCorners(floor, wall, screenWidth - wall);
 	
-	if (checkCollision(p1->collision, p2->collision)){
-		p1->resolveCollision(p2);
+	if (checkCollision(p[0]->collision, p[1]->collision)){
+		p[0]->resolveCollision(p[1]);
 	}
-	if(p1->pick->cMove != p1->pick->reel && p1->pick->cMove != p1->pick->fall) combo2 = 0;
-	if(p2->pick->cMove != p2->pick->reel && p2->pick->cMove != p2->pick->fall) combo1 = 0;
+	if(p[0]->pick->cMove != p[0]->pick->reel && p[0]->pick->cMove != p[0]->pick->fall) combo2 = 0;
+	if(p[1]->pick->cMove != p[1]->pick->reel && p[1]->pick->cMove != p[1]->pick->fall) combo1 = 0;
 
-	if(p2->hitbox.w > 0) p1->checkBlocking();
-	if(p1->hitbox.w > 0) p2->checkBlocking();
+	if(p[1]->hitbox.w > 0) p[0]->checkBlocking();
+	if(p[0]->hitbox.w > 0) p[1]->checkBlocking();
 
-	move * temp1 = p1->pick->cMove;
-	move * temp2 = p2->pick->cMove;
+	move * temp1 = p[0]->pick->cMove;
+	move * temp2 = p[1]->pick->cMove;
 	bool hit1 = 0;
 	bool hit2 = 0;
 
-	if(p1->hitbox.w > 0 && p2->hitreg.w > 0){
-		if(checkCollision(p1->hitbox, p2->hitreg)) {
-			combo1 += p2->pick->takeHit(temp1);
-			if(combo1 > 0) printf("p1: %i-hit combo\n", combo1+1);
-			p1->pick->freeze = p1->pick->cMove->stun - 10;
+	if(p[0]->hitbox.w > 0 && p[1]->hitreg.w > 0){
+		if(checkCollision(p[0]->hitbox, p[1]->hitreg)) {
+			combo1 += p[1]->pick->takeHit(temp1);
+			if(combo1 > 0) printf("p[0]: %i-hit combo\n", combo1+1);
+			p[0]->pick->freeze = p[0]->pick->cMove->stun - 10;
 			hit2 = 1;
 		}
 	}
-	if(p2->hitbox.w > 0 && p1->hitreg.w > 0){
-		if(checkCollision(p2->hitbox, p1->hitreg)) {
-			combo2 += p1->pick->takeHit(temp2);
-			if(combo2 > 0) printf("p2: %i-hit combo\n", combo2+1);
-			p2->pick->freeze = p2->pick->cMove->stun - 10;
+	if(p[1]->hitbox.w > 0 && p[0]->hitreg.w > 0){
+		if(checkCollision(p[1]->hitbox, p[0]->hitreg)) {
+			combo2 += p[0]->pick->takeHit(temp2);
+			if(combo2 > 0) printf("p[1]: %i-hit combo\n", combo2+1);
+			p[1]->pick->freeze = p[1]->pick->cMove->stun - 10;
 			hit1 = 1;
 		}
 	}
@@ -197,13 +197,13 @@ void interface::resolve()
 
 	/*One more collision case: Resolving jumping on people*/
 
-	if(!p1->pick->aerial){
-		if(p1->pick->cMove == p1->pick->neutral)
-			p1->deltaX = 0;
+	if(!p[0]->pick->aerial){
+		if(p[0]->pick->cMove == p[0]->pick->neutral)
+			p[0]->deltaX = 0;
 	}
-	if(!p2->pick->aerial){
-		if(p2->pick->cMove == p2->pick->neutral)
-			p2->deltaX = 0;
+	if(!p[1]->pick->aerial){
+		if(p[1]->pick->cMove == p[1]->pick->neutral)
+			p[1]->deltaX = 0;
 	}
 	/*Reinitialize inputs*/
 	for(int i = 0; i < 5; i++){
@@ -214,33 +214,33 @@ void interface::resolve()
 	}
 
 	/*Draw the sprites*/
-	p1->spriteInit();
-	p2->spriteInit();
+	p[0]->spriteInit();
+	p[1]->spriteInit();
 	checkWin();
 	runTimer();
 }
 
 void interface::checkWin()
 {
-	if(p1->pick->health == 0 || p2->pick->health == 0 || timer == 0){
-		if(p1->pick->health > p2->pick->health) {
+	if(p[0]->pick->health == 0 || p[1]->pick->health == 0 || timer == 0){
+		if(p[0]->pick->health > p[1]->pick->health) {
 			printf("Player 1 wins!\n");
-			p1->rounds++;
+			p[0]->rounds++;
 		}
-		else if(p2->pick->health > p1->pick->health) {
+		else if(p[1]->pick->health > p[0]->pick->health) {
 			printf("Player 2 wins!\n");
-			p2->rounds++;
+			p[1]->rounds++;
 		}
 		else {
 			printf("Draw!\n");
-			if(p1->rounds < numRounds - 1) p1->rounds++;
-			if(p2->rounds < numRounds - 1) p2->rounds++;
+			if(p[0]->rounds < numRounds - 1) p[0]->rounds++;
+			if(p[1]->rounds < numRounds - 1) p[1]->rounds++;
 		}
-		if(p1->rounds == numRounds || p2->rounds == numRounds){
-			p1->rounds = 0;
-			p2->rounds = 0;
-			delete p1->pick;
-			delete p2->pick;
+		if(p[0]->rounds == numRounds || p[1]->rounds == numRounds){
+			p[0]->rounds = 0;
+			p[1]->rounds = 0;
+			delete p[0]->pick;
+			delete p[1]->pick;
 			cSelectMenu();
 			roundInit();
 		}
@@ -263,43 +263,43 @@ void interface::readInput()
 				/*Keyboard handler. Maybe I'll optimize such that the knows if it even needs to check this (EG if sticks are used)*/
 			case SDL_JOYAXISMOTION:
 				for(int i = 0; i < 4; i++){
-					if(event.jaxis.which == p1->input[i].jaxis.which && event.jaxis.axis == p1->input[i].jaxis.axis && event.jaxis.value == p1->input[i].jaxis.value)
+					if(event.jaxis.which == p[0]->input[i].jaxis.which && event.jaxis.axis == p[0]->input[i].jaxis.axis && event.jaxis.value == p[0]->input[i].jaxis.value)
 						sAxis1[i] = 1;
-					if(event.jaxis.which == p2->input[i].jaxis.which && event.jaxis.axis == p2->input[i].jaxis.axis && event.jaxis.value == p2->input[i].jaxis.value)
+					if(event.jaxis.which == p[1]->input[i].jaxis.which && event.jaxis.axis == p[1]->input[i].jaxis.axis && event.jaxis.value == p[1]->input[i].jaxis.value)
 						sAxis2[i] = 1;
-					if(event.jaxis.which == p1->input[i].jaxis.which && event.jaxis.axis == p1->input[i].jaxis.axis && event.jaxis.value == 0)
+					if(event.jaxis.which == p[0]->input[i].jaxis.which && event.jaxis.axis == p[0]->input[i].jaxis.axis && event.jaxis.value == 0)
 						sAxis1[i] = 0;
-					if(event.jaxis.which == p2->input[i].jaxis.which && event.jaxis.axis == p2->input[i].jaxis.axis && event.jaxis.value == 0)
+					if(event.jaxis.which == p[1]->input[i].jaxis.which && event.jaxis.axis == p[1]->input[i].jaxis.axis && event.jaxis.value == 0)
 						sAxis2[i] = 0;
 				}
 				break;
 			case SDL_JOYBUTTONDOWN:
 				for(int i = 4; i < 9; i++){
-					if(event.jbutton.which == p1->input[i].jbutton.which && event.jbutton.button == p1->input[i].jbutton.button)
+					if(event.jbutton.which == p[0]->input[i].jbutton.which && event.jbutton.button == p[0]->input[i].jbutton.button)
 						posEdge1[i-4] = 1;
-					if(event.jbutton.which == p2->input[i].jbutton.which && event.jbutton.button == p2->input[i].jbutton.button)
+					if(event.jbutton.which == p[1]->input[i].jbutton.which && event.jbutton.button == p[1]->input[i].jbutton.button)
 						posEdge2[i-4] = 1;
 				}
 				break;
 			case SDL_JOYBUTTONUP:
 				for(int i = 4; i < 9; i++){
-					if(event.jbutton.which == p1->input[i].jbutton.which && event.jbutton.button == p1->input[i].jbutton.button)
+					if(event.jbutton.which == p[0]->input[i].jbutton.which && event.jbutton.button == p[0]->input[i].jbutton.button)
 						negEdge1[i-4] = 1;
-					if(event.jbutton.which == p2->input[i].jbutton.which && event.jbutton.button == p2->input[i].jbutton.button)
+					if(event.jbutton.which == p[1]->input[i].jbutton.which && event.jbutton.button == p[1]->input[i].jbutton.button)
 						negEdge2[i-4] = 1;
 				}
 				break;
 			case SDL_KEYDOWN:
 				for(int i = 0; i < 4; i++) {
-					if(event.key.keysym.sym == p1->input[i].key.keysym.sym) 
+					if(event.key.keysym.sym == p[0]->input[i].key.keysym.sym) 
 						sAxis1[i] = 1;
-					if(event.key.keysym.sym == p2->input[i].key.keysym.sym) 
+					if(event.key.keysym.sym == p[1]->input[i].key.keysym.sym) 
 						sAxis2[i] = 1;
 				}
 				for(int i = 4; i < 9; i++) {
-					if(event.key.keysym.sym == p1->input[i].key.keysym.sym)
+					if(event.key.keysym.sym == p[0]->input[i].key.keysym.sym)
 						posEdge1[i-4] = 1;
-					if(event.key.keysym.sym == p2->input[i].key.keysym.sym)
+					if(event.key.keysym.sym == p[1]->input[i].key.keysym.sym)
 						posEdge2[i-4] = 1;
 				}
 				switch (event.key.keysym.sym) {
@@ -313,15 +313,15 @@ void interface::readInput()
 				break;
 			case SDL_KEYUP:
 				for(int i = 0; i < 4; i++){
-					if(event.key.keysym.sym == p1->input[i].key.keysym.sym)
+					if(event.key.keysym.sym == p[0]->input[i].key.keysym.sym)
 						sAxis1[i] = 0;
-					if(event.key.keysym.sym == p2->input[i].key.keysym.sym)
+					if(event.key.keysym.sym == p[1]->input[i].key.keysym.sym)
 						sAxis2[i] = 0;
 				}
 				for(int i = 4; i < 9; i++){
-					if(event.key.keysym.sym == p1->input[i].key.keysym.sym)
+					if(event.key.keysym.sym == p[0]->input[i].key.keysym.sym)
 						negEdge1[i-4] = 1;
-					if(event.key.keysym.sym == p2->input[i].key.keysym.sym)
+					if(event.key.keysym.sym == p[1]->input[i].key.keysym.sym)
 						negEdge2[i-4] = 1;
 				}
 				break;
@@ -369,14 +369,14 @@ void interface::cSelectMenu()
 		if (SDL_PollEvent(&event)){
 			switch(event.type){
 			case SDL_KEYDOWN:
-				if(event.key.keysym.sym == p1->input[2].key.keysym.sym && !selectFlag1) select1--;
-				if(event.key.keysym.sym == p1->input[3].key.keysym.sym && !selectFlag1)	select1++;
-				if(event.key.keysym.sym == p2->input[2].key.keysym.sym && !selectFlag2) select2--;
-				if(event.key.keysym.sym == p2->input[3].key.keysym.sym && !selectFlag2)	select2++;
+				if(event.key.keysym.sym == p[0]->input[2].key.keysym.sym && !selectFlag1) select1--;
+				if(event.key.keysym.sym == p[0]->input[3].key.keysym.sym && !selectFlag1)	select1++;
+				if(event.key.keysym.sym == p[1]->input[2].key.keysym.sym && !selectFlag2) select2--;
+				if(event.key.keysym.sym == p[1]->input[3].key.keysym.sym && !selectFlag2)	select2++;
 						
 				for(int i = 4; i < 9; i++){
-					if(event.key.keysym.sym == p1->input[i].key.keysym.sym) selectFlag1 = 1;
-					if(event.key.keysym.sym == p2->input[i].key.keysym.sym) selectFlag2 = 1;
+					if(event.key.keysym.sym == p[0]->input[i].key.keysym.sym) selectFlag1 = 1;
+					if(event.key.keysym.sym == p[1]->input[i].key.keysym.sym) selectFlag2 = 1;
 				}
 				if(event.key.keysym.sym == SDLK_q){
 					gameover = 1;
@@ -386,15 +386,15 @@ void interface::cSelectMenu()
 				break;
 			case SDL_JOYBUTTONDOWN:
 				for(int i = 4; i < 9; i++){
-					if(event.jbutton.which == p1->input[i].jbutton.which && event.jbutton.button == p1->input[i].jbutton.button) selectFlag1 = 1;
-					if(event.jbutton.which == p2->input[i].jbutton.which && event.jbutton.button == p2->input[i].jbutton.button) selectFlag2 = 1;
+					if(event.jbutton.which == p[0]->input[i].jbutton.which && event.jbutton.button == p[0]->input[i].jbutton.button) selectFlag1 = 1;
+					if(event.jbutton.which == p[1]->input[i].jbutton.which && event.jbutton.button == p[1]->input[i].jbutton.button) selectFlag2 = 1;
 				}
 				break;
 			case SDL_JOYAXISMOTION:
-				if(event.jaxis.which == p1->input[2].jaxis.which && event.jaxis.axis == p1->input[2].jaxis.axis && event.jaxis.value == p1->input[2].jaxis.value && !selectFlag1) select1--;
-				if(event.jaxis.which == p1->input[3].jaxis.which && event.jaxis.axis == p1->input[3].jaxis.axis && event.jaxis.value == p1->input[3].jaxis.value && !selectFlag1) select1++;
-				if(event.jaxis.which == p2->input[2].jaxis.which && event.jaxis.axis == p2->input[2].jaxis.axis && event.jaxis.value == p2->input[2].jaxis.value && !selectFlag2) select2--;
-				if(event.jaxis.which == p2->input[3].jaxis.which && event.jaxis.axis == p2->input[3].jaxis.axis && event.jaxis.value == p2->input[3].jaxis.value && !selectFlag2) select2++;
+				if(event.jaxis.which == p[0]->input[2].jaxis.which && event.jaxis.axis == p[0]->input[2].jaxis.axis && event.jaxis.value == p[0]->input[2].jaxis.value && !selectFlag1) select1--;
+				if(event.jaxis.which == p[0]->input[3].jaxis.which && event.jaxis.axis == p[0]->input[3].jaxis.axis && event.jaxis.value == p[0]->input[3].jaxis.value && !selectFlag1) select1++;
+				if(event.jaxis.which == p[1]->input[2].jaxis.which && event.jaxis.axis == p[1]->input[2].jaxis.axis && event.jaxis.value == p[1]->input[2].jaxis.value && !selectFlag2) select2--;
+				if(event.jaxis.which == p[1]->input[3].jaxis.which && event.jaxis.axis == p[1]->input[3].jaxis.axis && event.jaxis.value == p[1]->input[3].jaxis.value && !selectFlag2) select2++;
 				break;
 			}
 			if(select2 > numChars) select2 = 1;
@@ -421,13 +421,13 @@ void interface::cSelectMenu()
 	SDL_FreeSurface(cursor2);
 	SDL_FreeSurface(selectScreen);
 
-	p1->characterSelect(select1);
-	p2->characterSelect(select2);
+	p[0]->characterSelect(select1);
+	p[1]->characterSelect(select2);
 }
 
 interface::~interface()
 {
 	SDL_FreeSurface(screen);
-	delete p1;
-	delete p2;
+	delete p[0];
+	delete p[1];
 }

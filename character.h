@@ -5,7 +5,7 @@
  */
 
 #include "SDL.h"
-#include "special.h"
+#include "projectile.h"
 #include <stdio.h>
 
 class character{
