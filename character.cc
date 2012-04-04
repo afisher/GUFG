@@ -32,9 +32,6 @@ character::character()
 	walk->tolerance = 0; walk->activation = 0; 
 	walk->xLock = 1;
 
-	jump = new move("White/J");
-	jump->tolerance = 0; jump->activation = 0;
-	
 	reel = new hitstun("White/H");
 	reel->xLock = 1; reel->yLock = 1;
 
@@ -47,7 +44,19 @@ character::character()
 	
 	crouchBlock = new hitstun("White/BL");
 	crouchBlock->xLock = 1;
+	
+	temp = new move("White/JN");
+	temp->activation = 0;
+	head->insert(8, temp);
+	
+	temp = new move("White/JF");
+	temp->activation = 0;
+	head->insert(9, temp);
 
+	temp = new move("White/JQ");
+	temp->activation = 0;
+	head->insert(7, temp);
+	
 	cMove = neutral;
 
 	health = 300;
