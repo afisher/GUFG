@@ -197,14 +197,14 @@ void interface::resolve()
 
 	/*One more collision case: Resolving jumping on people*/
 
-	if(!p1->pick->aerial)
+	if(!p1->pick->aerial){
 		if(p1->pick->cMove == p1->pick->neutral)
 			p1->deltaX = 0;
-
-	if(!p2->pick->aerial)
+	}
+	if(!p2->pick->aerial){
 		if(p2->pick->cMove == p2->pick->neutral)
 			p2->deltaX = 0;
-
+	}
 	/*Reinitialize inputs*/
 	for(int i = 0; i < 5; i++){
 		posEdge1[i] = 0;

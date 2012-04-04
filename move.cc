@@ -104,6 +104,8 @@ move::move(char * n)
 		fSprite[i] = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
 	}
+	xLock = 0;
+	yLock = 0;
 	tolerance = 30;
 	activation = 30;
 	init();
