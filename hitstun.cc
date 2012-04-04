@@ -1,4 +1,5 @@
 #include "hitstun.h"
+
 void hitstun::init(int n)
 {
 	counter = n;
