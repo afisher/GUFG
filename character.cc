@@ -134,18 +134,6 @@ int character::takeHit(move * attack)
 	mitigation we want to, but also allows us to do things like pushback ramping during blockstrings*/
 }
 
-SDL_Surface * character::draw(int facing){
-	SDL_Surface * temp;
-	if(freeze < 0) freeze = 0;
-	temp = cMove->draw(facing, freeze);
-	if(freeze > 0) freeze--;
-	if(cMove->currentFrame == cMove->frames){
-		cMove->init();
-		cMove = NULL;
-	}
-	return temp;
-}
-
 void character::initMoves()
 {
 	char fname[30];

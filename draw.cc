@@ -56,3 +56,24 @@ void player::spriteInit()
 	if(facing == -1) pos.x += (displacement - sprite->w);
 	
 }
+
+SDL_Surface * character::draw(int facing){
+	SDL_Surface * temp;
+	if(freeze < 0) freeze = 0;
+	temp = cMove->draw(facing, freeze);
+	if(freeze > 0) freeze--;
+	if(cMove->currentFrame == cMove->frames){
+		cMove->init();
+		cMove = NULL;
+	}
+	return temp;
+}
+
+SDL_Surface * move::draw(int facing, bool freeze)
+{
+	SDL_Surface * temp;
+	if(facing == -1) temp = fSprite[currentFrame];
+	else temp = sprite[currentFrame];
+	if(!freeze) step();
+	return temp;
+}
