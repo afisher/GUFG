@@ -1,4 +1,4 @@
-#include "moveTrie.h"
+#include "trie.h"
 moveTrie::moveTrie()
 {
 	for(int i = 0; i < 10; i++)
