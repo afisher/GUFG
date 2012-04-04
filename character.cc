@@ -154,3 +154,24 @@ void character::initMoves()
 		}
 	}*/
 }
+
+void character::prepHooks(int inputBuffer[30], bool down[5], bool up[5])
+{
+	move * t = NULL;
+	if (cMove == NULL) {
+		if(aerial) cMove = /*air*/neutral;
+		else {
+			if(inputBuffer[0] == 4) cMove = walkBack;
+			else if(inputBuffer[0] == 6) cMove = walk;
+			else cMove = neutral;
+		}
+	}
+	
+	if(aerial) t = airHead->moveHook(inputBuffer, 0, -1, down, up, cMove);
+	else t = head->moveHook(inputBuffer, 0, -1, down, up, cMove);
+
+	if(t != NULL){ 
+		cMove = t;
+	}
+}
+
