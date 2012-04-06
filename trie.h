@@ -4,13 +4,14 @@
  *Licensed under MIT OSI, see "COPYING" for details
  */
 
-#include "SDL.h"
 #include "move.h"
+#include <SDL/SDL.h>
 #include <cstring>
 #include <stdio.h>
 #include <iostream>
-using namespace std;
 #include <fstream>
+
+using namespace std;
 
 /*Move trie class. Essentially a recursive trie-search algorithm that looks for input hooks*/
 
