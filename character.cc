@@ -58,6 +58,7 @@ character::character()
 	head->insert(8, temp);
 	
 	cMove = neutral;
+	bMove = NULL;
 	
 	health = 300;
 	meter = 0;
@@ -128,7 +129,7 @@ int character::takeHit(move * attack)
 		volitionX -= attack->push;
 		attack->connect(); 	//Tell the attack it's connected.
 	}
-	freeze = attack->stun - 10; //For now this is the simple formula for freeze. Eventually it might be changed, or made a separate parameter
+	freeze = attack->stun / 2; //For now this is the simple formula for freeze. Eventually it might be changed, or made a separate parameter
  	return ct;
 	/*Eventually the plan is to have this return a combo count. This not only allows us to display a counter and do whatever scaling/combo 
 	mitigation we want to, but also allows us to do things like pushback ramping during blockstrings*/
@@ -170,8 +171,18 @@ void character::prepHooks(int inputBuffer[30], bool down[5], bool up[5])
 	if(aerial) t = airHead->moveHook(inputBuffer, 0, -1, down, up, cMove);
 	else t = head->moveHook(inputBuffer, 0, -1, down, up, cMove);
 
-	if(t != NULL){ 
-		cMove = t;
+	if(t != NULL){
+		if(freeze > 0){
+			if(bMove == NULL || (*t) > bMove) bMove = t;
+		} 
+		else {
+			t->execute(cMove);
+			cMove = t;
+		}
+	} else if (bMove != NULL && freeze <= 0) {
+		bMove->execute(cMove);
+		cMove = bMove;
+		bMove = NULL;
 	}
 }
 

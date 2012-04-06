@@ -37,6 +37,7 @@ public:
 	hitstun * airBlock;
 
 	move * cMove;
+	move * bMove;
 
 	int freeze;
 	int health;
