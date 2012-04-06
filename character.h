@@ -4,7 +4,7 @@
  *Under MIT OSI license, see "COPYING" for details
  */
 
-#include "SDL.h"
+#include <SDL/SDL.h>
 #include "projectile.h"
 #include <stdio.h>
 
