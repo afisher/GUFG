@@ -21,6 +21,8 @@ hitstun::hitstun(char * n)
 	SDL_Surface * temp;
 	int startup, active, recovery;
 	char fname[40];
+	char buffer[100];
+	streampos backup;
 	sprintf(fname, "%s.mv", n);
 	name = n; 
 	read.open(fname);
@@ -56,7 +58,7 @@ hitstun::hitstun(char * n)
 	//Properties will be a bit more complicated, I'll add this later.
 	collision = new SDL_Rect[frames];
 	hitbox = new SDL_Rect[frames];
-	hitreg = new SDL_Rect[frames];
+	hitreg = new SDL_Rect*[frames];
 	delta = new SDL_Rect[frames];
 
 	for(int i = 0; i < frames; i++)
@@ -64,7 +66,17 @@ hitstun::hitstun(char * n)
 		while(read.get() != '$'); read.ignore(2);
 		read >> collision[i].x >> collision[i].y >> collision[i].w >> collision[i].h;
 		while(read.get() != '$'); read.ignore(2);
-		read >> hitreg[i].x >> hitreg[i].y >> hitreg[i].w >> hitreg[i].h;
+		read.tellg();
+		read.getline(buffer, 100);
+		regComplexity[i] = 1;
+		for(int j = 0; j < strlen(buffer); j++)
+			if(buffer[i] == ',') regComplexity[i]++;
+		read.seekg(backup);
+		hitreg[i] = new SDL_Rect[regComplexity[i]];
+		for(int j = 0; j < regComplexity[i]; j++){
+			read >> hitreg[i][j].x >> hitreg[i][j].y >> hitreg[i][j].w >> hitreg[i][j].h;
+			read.ignore();
+		}
 		while(read.get() != '$'); read.ignore(2);
 		read >> delta[i].x >> delta[i].y >> delta[i].w >> delta[i].h;
 		if(i >= startup && i < startup+active){
