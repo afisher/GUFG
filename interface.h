@@ -7,7 +7,7 @@
  *Licensed under MIT OSI: Additional information in the file "COPYING"
  */
 
-#include "SDL.h"
+#include <SDL/SDL.h>
 #include <stdio.h>
 #include "player.h"
 class interface
