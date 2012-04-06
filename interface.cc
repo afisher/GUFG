@@ -127,27 +127,27 @@ void interface::resolve()
 	p[0]->updateRects();
 	p[1]->updateRects();
 
-	if(!p[0]->pick->freeze){
+	p[0]->deltaX += p[0]->pick->volitionX*p[0]->facing;
+	p[0]->deltaY += p[0]->pick->volitionY;
+	p[1]->deltaX += p[1]->pick->volitionX*p[1]->facing;
+	p[1]->deltaY += p[1]->pick->volitionY;
+	
+	if(p[0]->lCorner || p[0]->rCorner) p[1]->deltaX += p[0]->pick->volitionX*p[1]->facing;
+	if(p[1]->lCorner || p[1]->rCorner) p[0]->deltaX += p[1]->pick->volitionX*p[0]->facing;
+	
+	p[1]->pick->volitionX = 0;
+	p[1]->pick->volitionY = 0;
+	p[0]->pick->volitionX = 0;
+	p[0]->pick->volitionY = 0;
+	
+	if(p[0]->pick->freeze < 1){
 		p[0]->pos.x += p[0]->deltaX;
 		p[0]->pos.y += p[0]->deltaY;
-		p[0]->deltaX += p[0]->pick->volitionX*p[0]->facing;
-		p[0]->deltaY += p[0]->pick->volitionY;
-		if(p[0]->lCorner || p[0]->rCorner) p[1]->deltaX += p[0]->pick->volitionX*p[1]->facing;
 	}
-	if(!p[1]->pick->freeze){
+	if(p[1]->pick->freeze < 1){
 		p[1]->pos.y += p[1]->deltaY;
 		p[1]->pos.x += p[1]->deltaX;
-		p[1]->deltaX += p[1]->pick->volitionX*p[1]->facing;
-		p[1]->deltaY += p[1]->pick->volitionY;
-		if(p[1]->lCorner || p[1]->rCorner) p[0]->deltaX += p[1]->pick->volitionX*p[0]->facing;
-		p[1]->pick->volitionX = 0;
-		p[1]->pick->volitionY = 0;
 	}
-
-	if(!p[0]->pick->freeze){
-		p[0]->pick->volitionX = 0;
-		p[0]->pick->volitionY = 0;
-	}	
 
 	p[0]->updateRects();
 	p[1]->updateRects();
@@ -193,9 +193,6 @@ void interface::resolve()
 	}
 	if(hit2) temp2->init();
 	if(hit1) temp1->init();
-
-
-	/*One more collision case: Resolving jumping on people*/
 
 	if(!p[0]->pick->aerial){
 		if(p[0]->pick->cMove == p[0]->pick->neutral)
