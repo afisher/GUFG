@@ -74,6 +74,7 @@ SDL_Surface * move::draw(int facing, bool freeze)
 	SDL_Surface * temp;
 	if(facing == -1) temp = fSprite[currentFrame];
 	else temp = sprite[currentFrame];
-	if(!freeze) step();
+	if(freeze == 0) 
+		step();
 	return temp;
 }

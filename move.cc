@@ -203,7 +203,7 @@ void move::blockSuccess(int st)
 	return;
 }
 
-void execute(move * last)
+void move::execute(move * last)
 {
 	last->init();
 }
