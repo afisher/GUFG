@@ -175,20 +175,26 @@ void interface::resolve()
 	bool hit1 = 0;
 	bool hit2 = 0;
 
-	if(p[0]->hitbox.w > 0 && p[1]->hitreg.w > 0){
-		if(checkCollision(p[0]->hitbox, p[1]->hitreg)) {
-			combo1 += p[1]->pick->takeHit(temp1);
-			if(combo1 > 0) printf("p1: %i-hit combo\n", combo1+1);
-			p[0]->pick->freeze = p[0]->pick->cMove->stun / 2;
-			hit2 = 1;
+	for(int i = 0; i < p[1]->regComplexity; i++){
+		if(p[0]->hitbox.w > 0 && p[1]->hitreg[i].w > 0){
+			if(checkCollision(p[0]->hitbox, p[1]->hitreg[i])) {
+				combo1 += p[1]->pick->takeHit(temp1);
+				if(combo1 > 0) printf("p1: %i-hit combo\n", combo1+1);
+				p[0]->pick->freeze = temp1->stun / 2;
+				hit2 = 1;
+				i = p[1]->regComplexity;
+			}
 		}
 	}
-	if(p[1]->hitbox.w > 0 && p[0]->hitreg.w > 0){
-		if(checkCollision(p[1]->hitbox, p[0]->hitreg)) {
-			combo2 += p[0]->pick->takeHit(temp2);
-			if(combo2 > 0) printf("p2: %i-hit combo\n", combo2+1);
-			p[1]->pick->freeze = p[1]->pick->cMove->stun / 2;
-			hit1 = 1;
+	for(int i = 0; i < p[0]->regComplexity; i++){
+		if(p[1]->hitbox.w > 0 && p[0]->hitreg[i].w > 0){
+			if(checkCollision(p[1]->hitbox, p[0]->hitreg[i])) {
+				combo2 += p[0]->pick->takeHit(temp2);
+				if(combo2 > 0) printf("p2: %i-hit combo\n", combo2+1);
+				p[1]->pick->freeze = temp2->stun / 2;
+				hit1 = 1;
+				i = p[0]->regComplexity;
+			}
 		}
 	}
 	if(hit2) temp2->init();
