@@ -54,6 +54,7 @@ void interface::matchInit()
 	p[1]->rounds = 0;
 	temp = SDL_LoadBMP("Misc/BG1.bmp");
 	background = SDL_DisplayFormat(temp);
+	SDL_FreeSurface(temp);
 	bg.w = 1600;
 	bg.h = 900;
 	q = 0;
@@ -442,6 +443,7 @@ void interface::cSelectMenu()
 interface::~interface()
 {
 	SDL_FreeSurface(screen);
+	SDL_FreeSurface(background);
 	delete p[0];
 	delete p[1];
 }
