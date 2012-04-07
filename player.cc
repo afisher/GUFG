@@ -29,6 +29,7 @@ player::player()
 	rounds = 0;
 	deltaX = 0;
 	deltaY = 0;
+	regComplexity = 0;
 }
 
 void player::keyConfig(int curr)
