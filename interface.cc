@@ -16,6 +16,8 @@ interface::interface()
 	/*Start SDL*/
 	screenWidth = 800;
 	screenHeight = 600;
+	bg.w = 1600;
+	bg.h = 900;
 	floor = screenHeight - 25;
 	wall = 25;
 	SDL_Init(SDL_INIT_VIDEO);
@@ -52,18 +54,14 @@ void interface::matchInit()
 	SDL_Surface * temp;
 	p[0]->rounds = 0;
 	p[1]->rounds = 0;
-	temp = SDL_LoadBMP("Misc/BG1.bmp");
-	background = SDL_DisplayFormat(temp);
-	SDL_FreeSurface(temp);
-	bg.w = 1600;
-	bg.h = 900;
+	background = SDL_LoadBMP("Misc/BG1.bmp");
 	q = 0;
 	roundInit();
 }
 
 void interface::roundInit()
 {
-	bg.x = 800;
+	bg.x = 400;
 	bg.y = 300;
 	p[0]->pick->health = 300;
 	p[1]->pick->health = 300;
@@ -231,10 +229,10 @@ void interface::resolve()
 	p[1]->spriteInit();
 	checkWin();
 	runTimer();
-	if(q) { bg.y += 3; bg.x += 8; }
+	/*if(q) { bg.y += 3; bg.x += 8; }
 	else { bg.y -= 3; bg.x -= 8; }
 	if(bg.y >= 300) q = 0;
-	if(bg.y <= 0) q = 1;
+	if(bg.y <= 0) q = 1;*/
 }
 
 void interface::checkWin()
