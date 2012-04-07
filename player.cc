@@ -263,6 +263,12 @@ void player::checkFacing(int maypole){
 	}
 }
 
+int player::dragBG(int left, int right)
+{
+	if(collision.x < left || collision.x + collision.w > right) return deltaX;
+	else return 0;
+}
+
 player::~player(){
 	SDL_FreeSurface(sprite);
 	delete pick;
