@@ -125,6 +125,8 @@ void interface::runTimer()
 
 void interface::resolve()
 {
+	p[0]->pushInput(sAxis1, posEdge1, negEdge1);
+	p[1]->pushInput(sAxis2, posEdge2, negEdge2);
 
 	/*Current plan for this function: Once I've got everything reasonably functionally abstracted into player members,
 	the idea is to do the procedure as follows: 
