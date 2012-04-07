@@ -7,6 +7,7 @@
 #include "interface.h"
 void interface::draw()
 {
+	SDL_Surface * back = SDL_DisplayFormat(background);
 	SDL_Rect bar1, bar2, meter1, meter2, rounds1[numRounds], rounds2[numRounds];
 	
 	if(p[0]->pick->health >= 0) bar1.w = p[0]->pick->health; else bar1.w = 1; 
@@ -26,7 +27,7 @@ void interface::draw()
 	SDL_SetColorKey(p[1]->sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 	
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
-	SDL_BlitSurface(background, &bg, screen, NULL);
+	SDL_BlitSurface(back, &bg, screen, NULL);
 	
 	for(int i = 0; i < numRounds; i++){
 		if(p[0]->rounds > i) SDL_FillRect(screen, &rounds1[i], SDL_MapRGB(screen->format, 0, 255, 255));
@@ -42,6 +43,7 @@ void interface::draw()
 	SDL_BlitSurface(p[1]->sprite, NULL, screen, &p[1]->pos);
 	
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
+	SDL_FreeSurface(back);
 }
 
 void player::spriteInit()
