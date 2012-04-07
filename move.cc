@@ -12,6 +12,7 @@ move::move(char * n)
 	SDL_Surface * temp;
 	int startup, active, recovery;
 	char fname[40];
+	char buffer[100];
 	sprintf(fname, "%s.mv", n);
 	name = n; 
 	read.open(fname);
@@ -46,7 +47,9 @@ move::move(char * n)
 	//Properties will be a bit more complicated, I'll add this later.
 	collision = new SDL_Rect[frames];
 	hitbox = new SDL_Rect[frames];
-	hitreg = new SDL_Rect[frames];
+	hitComplexity = new int[frames];
+	hitreg = new SDL_Rect*[frames];
+	regComplexity = new int[frames];
 	delta = new SDL_Rect[frames];
 
 	for(int i = 0; i < frames; i++)
@@ -54,7 +57,26 @@ move::move(char * n)
 		while(read.get() != '$'); read.ignore(2);
 		read >> collision[i].x >> collision[i].y >> collision[i].w >> collision[i].h;
 		while(read.get() != '$'); read.ignore(2);
-		read >> hitreg[i].x >> hitreg[i].y >> hitreg[i].w >> hitreg[i].h;
+		read.get(buffer, 100, '\n');
+		regComplexity[i] = 1;
+		for(int j = 0; j < strlen(buffer); j++){
+			if(buffer[j] == '\t') regComplexity[i]++;
+		}
+		hitreg[i] = new SDL_Rect[regComplexity[i]];
+		char* bb[regComplexity[i]*4];
+		bb[0] = strtok(buffer, ",\n\t ");
+		for(int j = 1; j < regComplexity[i]*4; j++){
+			bb[j] = strtok(NULL, ", \n\t"); j++;
+			bb[j] = strtok(NULL, ", \n\t"); j++;
+			bb[j] = strtok(NULL, ", \n\t"); j++;
+			bb[j] = strtok(NULL, ", \n\t"); 
+		}
+		for(int j = 0; j < regComplexity[i]*4; j++){
+			hitreg[i][j/4].x = atoi(bb[j]); j++;	
+			hitreg[i][j/4].y = atoi(bb[j]); j++;	
+			hitreg[i][j/4].w = atoi(bb[j]); j++;	
+			hitreg[i][j/4].h = atoi(bb[j]);	
+		}
 		while(read.get() != '$'); read.ignore(2);
 		read >> delta[i].x >> delta[i].y >> delta[i].w >> delta[i].h;
 		if(i >= startup && i < startup+active){
@@ -123,12 +145,16 @@ move::~move()
 	for(int i = 0; i < frames; i++){
 		if(sprite[i]) SDL_FreeSurface(sprite[i]);
 		if(fSprite[i]) SDL_FreeSurface(fSprite[i]);
+		for(int j = 0; j < regComplexity[i]; j++)
+			if(hitreg[j]) delete [] hitreg[j];
 	}
 	if(sprite) delete [] sprite;
 	if(fSprite) delete [] fSprite;
 	if(collision) delete [] collision;
 	if(hitbox) delete [] hitbox;
 	if(hitreg) delete [] hitreg;
+	if(hitComplexity) delete [] hitComplexity;
+	if(regComplexity) delete [] regComplexity;
 	if(delta) delete [] delta;
 }
 
@@ -147,14 +173,21 @@ bool move::check(bool pos[5], bool neg[5], int t, int f)
 	return 1;
 }
 
-void move::pollRects(SDL_Rect &d, SDL_Rect &c, SDL_Rect &r, SDL_Rect &b)
+void move::pollRects(SDL_Rect &d, SDL_Rect &c, SDL_Rect* &r, int &rc, SDL_Rect &b)
 {
-
+	if(rc > 0) delete [] r;
+	rc = regComplexity[currentFrame];
+	r = new SDL_Rect[rc];
 	d.x = delta[currentFrame].x; d.y = delta[currentFrame].y;
+	
 	c.x = collision[currentFrame].x; c.w = collision[currentFrame].w;
 	c.y = collision[currentFrame].y; c.h = collision[currentFrame].h;
-	r.x = hitreg[currentFrame].x; r.w = hitreg[currentFrame].w;
-	r.y = hitreg[currentFrame].y; r.h = hitreg[currentFrame].h;
+
+	SDL_Rect * temp = hitreg[currentFrame];
+	for(int i = 0; i < rc; i++){
+		r[i].x = temp[i].x; r[i].w = temp[i].w;
+		r[i].y = temp[i].y; r[i].h = temp[i].h;
+	}
 	if(cFlag) {
 		b.x = 0; b.w = 0;
 		b.y = 0; b.h = 0;

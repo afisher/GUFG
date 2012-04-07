@@ -17,7 +17,7 @@ public:
 	int deltaX, deltaY;
 	int rounds;
 	int facing;
-		
+	int padding[490];	//More magic. Do not touch
 	void init();
 	void keyConfig(int);
 	void characterSelect(int);
@@ -26,7 +26,8 @@ public:
 	void draw();
 	void spriteInit();
 
-	SDL_Rect pos, hitbox, hitreg, collision, delta, lock;
+	SDL_Rect pos, hitbox, *hitreg, collision, delta, lock;
+	int hitComplexity, regComplexity;
 	bool rCorner, lCorner;
 	
 	/*Helper functions for "resolve" tick*/
