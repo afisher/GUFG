@@ -174,10 +174,11 @@ void move::pollRects(SDL_Rect &d, SDL_Rect &c, SDL_Rect* &r, int &rc, SDL_Rect &
 	
 	c.x = collision[currentFrame].x; c.w = collision[currentFrame].w;
 	c.y = collision[currentFrame].y; c.h = collision[currentFrame].h;
-	
+
+	SDL_Rect * temp = hitreg[currentFrame];
 	for(int i = 0; i < rc; i++){
-		r[i].x = hitreg[currentFrame][i].x; r[i].w = hitreg[currentFrame][i].w;
-		r[i].y = hitreg[currentFrame][i].y; r[i].h = hitreg[currentFrame][i].h;
+		r[i].x = temp[i].x; r[i].w = temp[i].w;
+		r[i].y = temp[i].y; r[i].h = temp[i].h;
 	}
 	if(cFlag) {
 		b.x = 0; b.w = 0;
