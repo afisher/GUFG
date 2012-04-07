@@ -29,6 +29,7 @@ player::player()
 	rounds = 0;
 	deltaX = 0;
 	deltaY = 0;
+	regComplexity = 0;
 }
 
 void player::keyConfig(int curr)
@@ -85,7 +86,7 @@ void player::characterSelect(int i)
 void player::updateRects()
 {
 	if(pick->cMove != NULL) {
-		pick->cMove->pollRects(delta, collision, hitreg, hitbox);
+		pick->cMove->pollRects(delta, collision, hitreg, regComplexity, hitbox);
 		if(!pick->freeze){
 			if(pick->cMove->xLock) deltaX = delta.x*facing; else deltaX += delta.x*facing;
 		}
@@ -95,9 +96,11 @@ void player::updateRects()
 		if(facing == -1) hitbox.x = pos.x + pos.w - hitbox.x - hitbox.w;
 		else hitbox.x += pos.x;
 		hitbox.y += pos.y;
-		if(facing == -1) hitreg.x = pos.x + pos.w - hitreg.x - hitreg.w;
-		else hitreg.x += pos.x;
-		hitreg.y += pos.y;
+		for(int i = 0; i < regComplexity; i++){
+			if(facing == -1) hitreg[i].x = pos.x + pos.w - hitreg[i].x - hitreg[i].w;
+			else hitreg[i].x += pos.x;
+			hitreg[i].y += pos.y;
+		}
 		if(facing == -1) collision.x = pos.x + pos.w - collision.x - collision.w;
 		else collision.x += pos.x;
 		collision.y += pos.y;

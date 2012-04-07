@@ -21,6 +21,7 @@ hitstun::hitstun(char * n)
 	SDL_Surface * temp;
 	int startup, active, recovery;
 	char fname[40];
+	char buffer[100];
 	sprintf(fname, "%s.mv", n);
 	name = n; 
 	read.open(fname);
@@ -52,11 +53,12 @@ hitstun::hitstun(char * n)
 	while(read.get() != ':'); read.ignore(); 
 	read >> blockState;
 
-	while(read.get() != ':'); read.ignore();
 	//Properties will be a bit more complicated, I'll add this later.
 	collision = new SDL_Rect[frames];
 	hitbox = new SDL_Rect[frames];
-	hitreg = new SDL_Rect[frames];
+	hitComplexity = new int[frames];
+	hitreg = new SDL_Rect*[frames];
+	regComplexity = new int[frames];
 	delta = new SDL_Rect[frames];
 
 	for(int i = 0; i < frames; i++)
@@ -64,7 +66,26 @@ hitstun::hitstun(char * n)
 		while(read.get() != '$'); read.ignore(2);
 		read >> collision[i].x >> collision[i].y >> collision[i].w >> collision[i].h;
 		while(read.get() != '$'); read.ignore(2);
-		read >> hitreg[i].x >> hitreg[i].y >> hitreg[i].w >> hitreg[i].h;
+		read.get(buffer, 100, '\n');
+		regComplexity[i] = 1;
+		for(int j = 0; j < strlen(buffer); j++){
+			if(buffer[j] == '\t') regComplexity[i]++;
+		}
+		hitreg[i] = new SDL_Rect[regComplexity[i]];
+		char* bb[regComplexity[i]*4];
+		bb[0] = strtok(buffer, ",\n\t ");
+		for(int j = 1; j < regComplexity[i]*4; j++){
+			bb[j] = strtok(NULL, ", \n\t"); j++;
+			bb[j] = strtok(NULL, ", \n\t"); j++;
+			bb[j] = strtok(NULL, ", \n\t"); j++;
+			bb[j] = strtok(NULL, ", \n\t"); 
+		}
+		for(int j = 0; j < regComplexity[i]*4; j++){
+			hitreg[i][j/4].x = atoi(bb[j]); j++;	
+			hitreg[i][j/4].y = atoi(bb[j]); j++;	
+			hitreg[i][j/4].w = atoi(bb[j]); j++;	
+			hitreg[i][j/4].h = atoi(bb[j]);	
+		}
 		while(read.get() != '$'); read.ignore(2);
 		read >> delta[i].x >> delta[i].y >> delta[i].w >> delta[i].h;
 		if(i >= startup && i < startup+active){
@@ -116,5 +137,7 @@ hitstun::hitstun(char * n)
 	}
 	tolerance = 0;
 	activation = 0;
+	xLock = 0;
+	yLock = 0;
 	currentFrame = 0;
 }
