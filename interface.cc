@@ -44,11 +44,25 @@ interface::interface()
 	cSelectMenu();
 
 	/*Build the character. Eventually this will probably be a function.*/
+	matchInit();
+}
+
+void interface::matchInit()
+{
+	SDL_Surface * temp;
+	p[0]->rounds = 0;
+	p[1]->rounds = 0;
+	temp = SDL_LoadBMP("Misc/BG1.bmp");
+	background = SDL_DisplayFormat(temp);
+	bg.w = 1600;
+	bg.h = 900;
 	roundInit();
 }
 
 void interface::roundInit()
 {
+	bg.x = -400;
+	bg.y = -300;
 	p[0]->pick->health = 300;
 	p[1]->pick->health = 300;
 	p[0]->pick->meter = 0;
@@ -234,12 +248,10 @@ void interface::checkWin()
 			if(p[1]->rounds < numRounds - 1) p[1]->rounds++;
 		}
 		if(p[0]->rounds == numRounds || p[1]->rounds == numRounds){
-			p[0]->rounds = 0;
-			p[1]->rounds = 0;
 			delete p[0]->pick;
 			delete p[1]->pick;
 			cSelectMenu();
-			roundInit();
+			matchInit();
 		}
 		else roundInit();
 	}

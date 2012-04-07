@@ -29,7 +29,8 @@ public:
 	void checkWin();
 
 	player * p[2];	
-	SDL_Surface *bg, *screen;
+	SDL_Surface *background, *screen;
+	SDL_Rect bg;
 	int grav;
 	int colorKey;
 	bool sAxis1[4], sAxis2[4]; 
