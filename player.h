@@ -38,6 +38,7 @@ public:
 	void enforceGravity(int, int);
 	void checkBlocking();
 	void checkFacing(int);
+	int dragBG(int, int);
 	void checkCorners(int, int, int);
 private:
 	int inputBuffer[29];

@@ -174,8 +174,12 @@ void interface::resolve()
 	p[0]->checkFacing(p[1]->pos.x);
 	p[1]->checkFacing(p[0]->pos.x);
 
-	p[0]->checkCorners(floor, 400 + wall, 1200 - wall);
-	p[1]->checkCorners(floor, 400 + wall, 1200 - wall);
+//*	
+	dragBG(	p[1]->dragBG(bg.x + wall, bg.x + screenWidth - wall) + 
+	p[0]->dragBG(bg.x + wall, bg.x + screenWidth - wall) );
+//*/
+	p[0]->checkCorners(floor, bg.x + wall, bg.x + screenWidth - wall);
+	p[1]->checkCorners(floor, bg.x + wall, bg.x + screenWidth - wall);
 	
 	if (checkCollision(p[0]->collision, p[1]->collision)){
 		p[0]->resolveCollision(p[1]);
@@ -447,6 +451,13 @@ void interface::cSelectMenu()
 	p[1]->characterSelect(select2);
 }
 
+int interface::dragBG(int deltaX)
+{
+	bg.x += deltaX;
+	if(bg.x < 0) bg.x = 0;
+	else if(bg.x > 800) bg.x = 800;
+}
+
 interface::~interface()
 {
 	SDL_FreeSurface(screen);
@@ -454,3 +465,4 @@ interface::~interface()
 	delete p[0];
 	delete p[1];
 }
+
