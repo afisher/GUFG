@@ -370,7 +370,8 @@ void interface::cSelectMenu()
 	SDL_SetColorKey(selectScreen, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 	SDL_BlitSurface(selectScreen, NULL, screen, &wheel);
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
-	
+
+
 	while(!selectFlag1 || !selectFlag2){
 		if (SDL_PollEvent(&event)){
 			switch(event.type){
