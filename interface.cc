@@ -18,7 +18,7 @@ interface::interface()
 	screenHeight = 600;
 	bg.w = 1600;
 	bg.h = 900;
-	floor = screenHeight - 25;
+	floor = bg.h - 25;
 	wall = 25;
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Init(SDL_INIT_JOYSTICK);
@@ -111,8 +111,8 @@ void interface::roundInit()
 	p[1]->facing = -1;
 	p[0]->spriteInit();
 	p[1]->spriteInit();
-	p[0]->pos.x = wall*4;
-	p[1]->pos.x = screenWidth - wall*4 - p[1]->sprite->w;
+	p[0]->pos.x = 700;
+	p[1]->pos.x = 900 - p[1]->sprite->w;
 	p[0]->pos.y = floor - p[0]->sprite->h;
 	p[1]->pos.y = floor - p[1]->sprite->h;
 	draw();
@@ -174,8 +174,8 @@ void interface::resolve()
 	p[0]->checkFacing(p[1]->pos.x);
 	p[1]->checkFacing(p[0]->pos.x);
 
-	p[0]->checkCorners(floor, wall, screenWidth - wall);
-	p[1]->checkCorners(floor, wall, screenWidth - wall);
+	p[0]->checkCorners(floor, 400 + wall, 1200 - wall);
+	p[1]->checkCorners(floor, 400 + wall, 1200 - wall);
 	
 	if (checkCollision(p[0]->collision, p[1]->collision)){
 		p[0]->resolveCollision(p[1]);

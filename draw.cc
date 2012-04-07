@@ -26,6 +26,8 @@ void interface::draw()
 	SDL_SetColorKey(p[0]->sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 	SDL_SetColorKey(p[1]->sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 	
+	SDL_BlitSurface(p[0]->sprite, NULL, back, &p[0]->pos);
+	SDL_BlitSurface(p[1]->sprite, NULL, back, &p[1]->pos);
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
 	SDL_BlitSurface(back, &bg, screen, NULL);
 	
@@ -39,8 +41,6 @@ void interface::draw()
 	SDL_FillRect(screen, &bar1, SDL_MapRGB(screen->format, 255, 0, 0));
 	SDL_FillRect(screen, &bar2, SDL_MapRGB(screen->format, 255, 0, 0));
 	
-	SDL_BlitSurface(p[0]->sprite, NULL, screen, &p[0]->pos);
-	SDL_BlitSurface(p[1]->sprite, NULL, screen, &p[1]->pos);
 	
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
 	SDL_FreeSurface(back);
@@ -49,7 +49,7 @@ void interface::draw()
 void player::spriteInit()
 {
 	int displacement;
-	SDL_Surface *sTemp;
+	SDL_Surface *sTemp = NULL;
 	if(sprite) displacement = sprite->w;
 
 	/*Doing moves*/
@@ -57,7 +57,6 @@ void player::spriteInit()
 	sTemp = pick->draw(facing);
 	if(sTemp != NULL) sprite = SDL_DisplayFormat(sTemp);
 	if(facing == -1) pos.x += (displacement - sprite->w);
-	
 }
 
 SDL_Surface * character::draw(int facing){
