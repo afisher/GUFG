@@ -61,8 +61,8 @@ void interface::matchInit()
 
 void interface::roundInit()
 {
-	bg.x = -400;
-	bg.y = -300;
+	bg.x = 400;
+	bg.y = 300;
 	p[0]->pick->health = 300;
 	p[1]->pick->health = 300;
 	p[0]->pick->meter = 0;

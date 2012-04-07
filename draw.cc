@@ -26,7 +26,7 @@ void interface::draw()
 	SDL_SetColorKey(p[1]->sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 	
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
-	SDL_BlitSurface(background, NULL, screen, &bg);
+	SDL_BlitSurface(background, &bg, screen, NULL);
 	
 	for(int i = 0; i < numRounds; i++){
 		if(p[0]->rounds > i) SDL_FillRect(screen, &rounds1[i], SDL_MapRGB(screen->format, 0, 255, 255));
