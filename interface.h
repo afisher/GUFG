@@ -27,6 +27,7 @@ public:
 	void matchInit();
 	void cSelectMenu();
 	void checkWin();
+	bool checkCollision(SDL_Rect, SDL_Rect);
 
 	player * p[2];	
 	SDL_Surface *background, *screen;
@@ -41,12 +42,11 @@ public:
 	int combo1;
 	int combo2;
 	int numRounds;
-
 	bool gameover;
-	bool checkCollision(SDL_Rect, SDL_Rect);
+
+//testing variables;
+	bool q;
 private:
-	int inputBuffer[30];
-	int state;
 	int timer;
 	int screenHeight, screenWidth, floor, wall;
 };
