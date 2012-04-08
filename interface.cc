@@ -188,8 +188,10 @@ void interface::resolve()
 	if(p[0]->pick->cMove != p[0]->pick->reel && p[0]->pick->cMove != p[0]->pick->fall) combo2 = 0;
 	if(p[1]->pick->cMove != p[1]->pick->reel && p[1]->pick->cMove != p[1]->pick->fall) combo1 = 0;
 
-	if(p[1]->hitbox.w > 0) p[0]->checkBlocking();
-	if(p[0]->hitbox.w > 0) p[1]->checkBlocking();
+	if(p[1]->hitbox[0].w > 0) p[0]->checkBlocking();
+	if(p[0]->hitbox[0].w > 0) p[1]->checkBlocking();
+
+	//Check if moves hit. This will probably be a function at some point
 
 	move * temp1 = p[0]->pick->cMove;
 	move * temp2 = p[1]->pick->cMove;
@@ -197,24 +199,31 @@ void interface::resolve()
 	bool hit2 = 0;
 
 	for(int i = 0; i < p[1]->regComplexity; i++){
-		if(p[0]->hitbox.w > 0 && p[1]->hitreg[i].w > 0){
-			if(checkCollision(p[0]->hitbox, p[1]->hitreg[i])) {
-				combo1 += p[1]->pick->takeHit(temp1);
-				if(combo1 > 0) printf("p1: %i-hit combo\n", combo1+1);
-				p[0]->pick->freeze = temp1->stun / 2;
-				hit2 = 1;
-				i = p[1]->regComplexity;
+		for(int j = 0; j < p[0]->hitComplexity; j++){
+			if(p[0]->hitbox[j].w > 0 && p[1]->hitreg[i].w > 0){
+				if(checkCollision(p[0]->hitbox[j], p[1]->hitreg[i])) {
+					combo1 += p[1]->pick->takeHit(temp1);
+					if(combo1 > 0) printf("p1: %i-hit combo\n", combo1+1);
+					p[0]->pick->freeze = temp1->stun / 2;
+					hit2 = 1;
+					i = p[1]->regComplexity;
+					j = p[0]->hitComplexity;
+				}
 			}
+
 		}
 	}
 	for(int i = 0; i < p[0]->regComplexity; i++){
-		if(p[1]->hitbox.w > 0 && p[0]->hitreg[i].w > 0){
-			if(checkCollision(p[1]->hitbox, p[0]->hitreg[i])) {
-				combo2 += p[0]->pick->takeHit(temp2);
-				if(combo2 > 0) printf("p2: %i-hit combo\n", combo2+1);
-				p[1]->pick->freeze = temp2->stun / 2;
-				hit1 = 1;
-				i = p[0]->regComplexity;
+		for(int j = 0; j < p[1]->hitComplexity; j++){
+			if(p[1]->hitbox[j].w > 0 && p[0]->hitreg[i].w > 0){
+				if(checkCollision(p[1]->hitbox[j], p[0]->hitreg[i])) {
+					combo2 += p[0]->pick->takeHit(temp2);
+					if(combo2 > 0) printf("p2: %i-hit combo\n", combo2+1);
+					p[1]->pick->freeze = temp2->stun / 2;
+					hit1 = 1;
+					i = p[0]->regComplexity;
+					j = p[1]->hitComplexity;
+				}
 			}
 		}
 	}
