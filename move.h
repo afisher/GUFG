@@ -17,6 +17,7 @@ public:
 	move();
 	move(char*);
 	~move();
+	void build(char *);
 	void execute();
 	void execute(move *);		/*Okay so, hopefully the idea here is that we can init() 
 						the move we're cancelling out of in the usual case, and, well

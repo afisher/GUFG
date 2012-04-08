@@ -8,6 +8,35 @@ move::move()
 
 move::move(char * n)
 {
+	build(n);
+	init();
+	xLock = 0;
+	yLock = 0;
+	tolerance = 30;
+	activation = 30;
+}
+
+move::~move()
+{
+	if(!this) return;
+	for(int i = 0; i < frames; i++){
+		if(sprite[i]) SDL_FreeSurface(sprite[i]);
+		if(fSprite[i]) SDL_FreeSurface(fSprite[i]);
+		for(int j = 0; j < regComplexity[i]; j++)
+			if(hitreg[j]) delete [] hitreg[j];
+	}
+	if(sprite) delete [] sprite;
+	if(fSprite) delete [] fSprite;
+	if(collision) delete [] collision;
+	if(hitbox) delete [] hitbox;
+	if(hitreg) delete [] hitreg;
+	if(hitComplexity) delete [] hitComplexity;
+	if(regComplexity) delete [] regComplexity;
+	if(delta) delete [] delta;
+}
+
+void move::build(char * n)
+{
 	ifstream read;
 	SDL_Surface * temp;
 	int startup, active, recovery;
@@ -126,36 +155,6 @@ move::move(char * n)
 		fSprite[i] = SDL_DisplayFormat(temp);
 		SDL_FreeSurface(temp);
 	}
-	xLock = 0;
-	yLock = 0;
-	tolerance = 30;
-	activation = 30;
-	init();
-}
-
-void move::setTolerance(int t)
-{
-	tolerance = t;
-}
-
-
-move::~move()
-{
-	if(!this) return;
-	for(int i = 0; i < frames; i++){
-		if(sprite[i]) SDL_FreeSurface(sprite[i]);
-		if(fSprite[i]) SDL_FreeSurface(fSprite[i]);
-		for(int j = 0; j < regComplexity[i]; j++)
-			if(hitreg[j]) delete [] hitreg[j];
-	}
-	if(sprite) delete [] sprite;
-	if(fSprite) delete [] fSprite;
-	if(collision) delete [] collision;
-	if(hitbox) delete [] hitbox;
-	if(hitreg) delete [] hitreg;
-	if(hitComplexity) delete [] hitComplexity;
-	if(regComplexity) delete [] regComplexity;
-	if(delta) delete [] delta;
 }
 
 bool move::check(bool pos[5], bool neg[5], int t, int f)
