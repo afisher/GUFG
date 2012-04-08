@@ -40,6 +40,7 @@ void player::keyConfig(int curr)
 	/*Flag for breaking the loop*/
 	bool configFlag = 0;
 
+	while(SDL_PollEvent(&temp));
 	/*Run a simple event poll*/
 	while (configFlag == 0){
 		if (SDL_PollEvent(&temp)) {
