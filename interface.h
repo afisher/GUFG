@@ -36,6 +36,7 @@ public:
 	int grav;
 	int colorKey;
 	bool sAxis1[4], sAxis2[4]; 
+	bool fullscreen;
 	bool posEdge1[5], posEdge2[5];
 	bool negEdge1[5], negEdge2[5];
 	void readStick(SDL_Event&);
