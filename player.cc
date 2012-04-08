@@ -30,6 +30,7 @@ player::player()
 	deltaX = 0;
 	deltaY = 0;
 	regComplexity = 0;
+	hitComplexity = 0;
 }
 
 void player::keyConfig(int curr)
@@ -87,16 +88,18 @@ void player::characterSelect(int i)
 void player::updateRects()
 {
 	if(pick->cMove != NULL) {
-		pick->cMove->pollRects(delta, collision, hitreg, regComplexity, hitbox);
+		pick->cMove->pollRects(delta, collision, hitreg, regComplexity, hitbox, hitComplexity);
 		if(!pick->freeze){
 			if(pick->cMove->xLock) deltaX = delta.x*facing; else deltaX += delta.x*facing;
 		}
 		if(!pick->aerial){
 			if(pick->cMove->yLock) deltaY = delta.y; else deltaY += delta.y;
 		}
-		if(facing == -1) hitbox.x = pos.x + pos.w - hitbox.x - hitbox.w;
-		else hitbox.x += pos.x;
-		hitbox.y += pos.y;
+		for(int i = 0; i < hitComplexity; i++){
+			if(facing == -1) hitbox[i].x = pos.x + pos.w - hitbox[i].x - hitbox[i].w;
+			else hitbox[i].x += pos.x;
+			hitbox[i].y += pos.y;
+		}
 		for(int i = 0; i < regComplexity; i++){
 			if(facing == -1) hitreg[i].x = pos.x + pos.w - hitreg[i].x - hitreg[i].w;
 			else hitreg[i].x += pos.x;

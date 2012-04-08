@@ -25,7 +25,7 @@ public:
 	virtual bool check(bool[], bool[], int, int);	//Check to see if the move is possible right now.
 	void setTolerance(int);
 	virtual void blockSuccess(int);
-	void pollRects(SDL_Rect&, SDL_Rect&, SDL_Rect*&, int&, SDL_Rect&); //Return the relevant information needed for interface::resolve(), then step to the next frame.
+	void pollRects(SDL_Rect&, SDL_Rect&, SDL_Rect*&, int&, SDL_Rect*&, int&); //Return the relevant information needed for interface::resolve(), then step to the next frame.
 	bool operator>(move*); //Cancel allowed check. Essentially: is move Lvalue allowed given the current state of move Rvalue?
 	void init();		//Really just sets current frame to 0. I wanted current frame to be private for now, so I don't break anything.
 	virtual void step();
@@ -60,7 +60,7 @@ public:
 				Implies that the most recent input has to have been *this frame* for the move to be
 				Accepted. Default is 30 (the entire input buffer)*/
 	SDL_Rect * collision;	//This will be an array of rects that are the collision boxes for the move per frame
-	SDL_Rect * hitbox;	//Same but for hitboxes
+	SDL_Rect ** hitbox;	//Same but for hitboxes
 	SDL_Rect ** hitreg;	//Same but for hitreg boxes
 	SDL_Rect * delta;	//Same but for position on the screen.
 	int * hitComplexity;
