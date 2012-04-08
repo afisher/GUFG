@@ -25,6 +25,7 @@ interface::interface()
 	/*WM stuff blah blah*/
 	SDL_WM_SetCaption("GUFG", "GUFG");
 	screen = SDL_SetVideoMode(screenWidth, screenHeight, 0, 0);
+	SDL_ShowCursor(SDL_DISABLE);
 
 	/*Set up input buffers and joysticks*/
 	for(int i = 0; i < SDL_NumJoysticks(); i++)
@@ -464,5 +465,6 @@ interface::~interface()
 	SDL_FreeSurface(background);
 	delete p[0];
 	delete p[1];
+	SDL_Quit();
 }
 
