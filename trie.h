@@ -6,6 +6,7 @@
 
 #include "move.h"
 #include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
 #include <cstring>
 #include <stdio.h>
 #include <iostream>
