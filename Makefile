@@ -38,10 +38,10 @@ CXXFLAGS = -g -O2 -Wno-write-strings `sdl-config --cflags`
 LIBS = `sdl-config --libs`
 
 # Header Files (all)
-ALL_HEAD = interface.h move.h character.h player.h red.h hitstun.h special.h trie.h
+ALL_HEAD = interface.h move.h character.h player.h red.h hitstun.h special.h trie.h projectile.h utility.h
 
 # Source Files (all)
-ALL_SRC = keytest.cc interface.cc move.cc special.cc character.cc player.cc draw.cc red.cc hitstun.cc trie.cc
+ALL_SRC = keytest.cc interface.cc move.cc special.cc character.cc player.cc draw.cc red.cc hitstun.cc trie.cc utility.cc
 
 # Build Targets
 all: keytest
