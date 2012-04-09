@@ -20,17 +20,19 @@ character::character()
 	head->insert(temp);
 	airHead = new moveTrie(temp);
 
-	neutral = new move("White/N");
+	neutral = new utility("White/N");
 	neutral->tolerance = 0; neutral->activation = 0;
 	head->insert(neutral);
 
-	walkBack = new move("White/WB");
+	walkBack = new utility("White/WB");
 	walkBack->tolerance = 0; walkBack->activation = 0; 
 	walkBack->xLock = 1;
+	head->insert(4, walkBack);
 
-	walk = new move("White/W");
+	walk = new utility("White/W");
 	walk->tolerance = 0; walk->activation = 0; 
 	walk->xLock = 1;
+	head->insert(6, walk);
 
 	reel = new hitstun("White/H");
 	reel->xLock = 1; reel->yLock = 1;
@@ -45,15 +47,15 @@ character::character()
 	crouchBlock = new hitstun("White/BL");
 	crouchBlock->xLock = 1;
 
-	temp = new move("White/JQ");
+	temp = new utility("White/JQ");
 	temp->activation = 0;
 	head->insert(7, temp);
 
-	temp = new move("White/JF");
+	temp = new utility("White/JF");
 	temp->activation = 0;
 	head->insert(9, temp);
 
-	temp = new move("White/JN");
+	temp = new utility("White/JN");
 	temp->activation = 0;
 	head->insert(8, temp);
 	
