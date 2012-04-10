@@ -12,7 +12,7 @@
 using namespace std;
 
 // intitializes the screen and returns it (returns null if something went wrong)
-SDL_Surface* Util::init_screen(int width, int height, int bpp) {
+SDL_Surface* aux::init_screen(int width, int height, int bpp) {
     //Initialize all SDL subsystems
     if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
         return NULL;
@@ -25,7 +25,7 @@ SDL_Surface* Util::init_screen(int width, int height, int bpp) {
     return screen;
 }
 
-void Util::update_screen(SDL_Surface* source, SDL_Surface* destination) {
+void aux::update_screen(SDL_Surface* source, SDL_Surface* destination) {
     SDL_Surface* scaled2x = scale2x(source);
     scale(scaled2x, destination);
     SDL_FreeSurface(scaled2x);
@@ -36,7 +36,7 @@ void Util::update_screen(SDL_Surface* source, SDL_Surface* destination) {
 
 // uses nearest-neighbor algorithm found here:
 // http://tech-algorithm.com/articles/nearest-neighbor-image-scaling/
-void Util::scale(SDL_Surface* source, SDL_Surface* destination) {
+void aux::scale(SDL_Surface* source, SDL_Surface* destination) {
     SDL_LockSurface(source);
     SDL_LockSurface(destination);
 
@@ -64,7 +64,7 @@ void Util::scale(SDL_Surface* source, SDL_Surface* destination) {
     SDL_UnlockSurface(destination);
 }
 
-void Util::bilinear_scale(SDL_Surface* source, SDL_Surface* destination) {
+void aux::bilinear_scale(SDL_Surface* source, SDL_Surface* destination) {
     SDL_LockSurface(source);
     SDL_LockSurface(destination);
 
@@ -141,7 +141,7 @@ void Util::bilinear_scale(SDL_Surface* source, SDL_Surface* destination) {
 
 // uses scale 2x algorithm to create a smoother-looking result
 // https://secure.wikimedia.org/wikipedia/en/wiki/Pixel_art_scaling_algorithms
-SDL_Surface* Util::scale2x(SDL_Surface* source) {
+SDL_Surface* aux::scale2x(SDL_Surface* source) {
     int w1 = source->w;
     int h1 = source->h;
 
@@ -192,7 +192,7 @@ SDL_Surface* Util::scale2x(SDL_Surface* source) {
 }
 
 // loads an image from a file name and returns it as a surface
-SDL_Surface* Util::load_image(std::string filename) {
+SDL_Surface* aux::load_image(std::string filename) {
     SDL_Surface* loadedImage    = NULL;
     SDL_Surface* optimizedImage = NULL;
 
@@ -211,7 +211,7 @@ SDL_Surface* Util::load_image(std::string filename) {
 }
 
 // applies one surface to another based on x and y coords
-void Util::apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination) {
+void aux::apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination) {
     SDL_Rect offset;
     offset.x = x;
     offset.y = y;
