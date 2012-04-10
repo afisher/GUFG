@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
+#include "aux.h"
 
 using namespace std;
 
