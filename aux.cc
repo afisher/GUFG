@@ -6,8 +6,8 @@
 #include <SDL/SDL_image.h>
 #include <string>
 #include <iostream>
-#include "aux.h"
 #include <cmath>
+#include "aux.h"
 
 using namespace std;
 
