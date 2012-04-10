@@ -1,8 +1,5 @@
-/*Button Config and Interface Constructor for GUFG
- *This is intended as a configuration for inputs within GUFG
- *It currently also includes a constructor for the interface struct/class
- *Which currently just names the inputs and does a call-and-response loop
- *in a terminal that sets up the buttons for one player.
+/*Interface class for GUFG
+ *This will run all the main game functions within GUFG
  *
  *Written by Alex Kelly in 2012
  *License to come
@@ -13,16 +10,17 @@
 #include <math.h>
 interface::interface()
 {
-	/*Start SDL*/
-	screenWidth = 800;
+	/*Initialize some pseudo-constants*/
+	screenWidth = 800; //By screen, I mean the window the game occurs in.
 	screenHeight = 600;
-	bg.w = 1600;
+	bg.w = 1600;	//By background, I mean the thing the characters actually move on. Bigger than the screen.
 	bg.h = 900;
-	floor = bg.h - 25;
-	wall = 25;
+	floor = bg.h - 25; //Value of the floor. This is the maximum distance downward that characters can travel.
+	wall = 25;	//The size of the offset at which characters start to scroll the background, and get stuck.
+	/*Initialize SDL*/
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Init(SDL_INIT_JOYSTICK);
-	/*WM stuff blah blah*/
+	/*WM stuff*/
 	SDL_WM_SetCaption("GUFG", "GUFG");
 	screen = SDL_SetVideoMode(screenWidth, screenHeight, 0, 0);
 	SDL_ShowCursor(SDL_DISABLE);
@@ -30,27 +28,28 @@ interface::interface()
 	/*Set up input buffers and joysticks*/
 	for(int i = 0; i < SDL_NumJoysticks(); i++)
 		SDL_JoystickOpen(i);
-
-	printf("Player 1:\n");
+	/*Initialize players.*/
+	printf("Player 1:\n"); //Print statement, a temporary measure.
 	p[0] = new player;
 
 	printf("Player 2:\n");
 	p[1] = new player;
 
-	/*Flag to kill the game*/
+	/*Game and round end conditions*/
 	gameover = 0;
 	numRounds = 2;
 
-	/*Select characters. Currently done automatically, to change later*/
+	/*Select characters.*/
 
-	colorKey = SDL_MapRGB(screen->format, 0, 255, 0);
+	colorKey = SDL_MapRGB(screen->format, 0, 255, 0); //Soon to be deprecated.
 	cSelectMenu();
 
-	/*Build the character. Eventually this will probably be a function.*/
+	/*Start a match*/
 	matchInit();
 }
 
-void interface::matchInit()
+/*This functions sets things up for a new match. Initializes some things and draws the background*/
+void interface::matchInit() 
 {
 	SDL_Surface * temp;
 	p[0]->rounds = 0;
@@ -60,6 +59,7 @@ void interface::matchInit()
 	roundInit();
 }
 
+/*Sets stuff up for a new round. This initializes the characters, the timer, and the background.*/
 void interface::roundInit()
 {
 	bg.x = 400;
@@ -119,11 +119,13 @@ void interface::roundInit()
 	draw();
 }
 
+/*Pretty simple timer modifier*/
 void interface::runTimer()
 {
 	if(timer > 0) timer--;
 }
 
+/*Main function for a frame. This resolves character positions, background scrolling, and hitboxes*/
 void interface::resolve()
 {
 	p[0]->pushInput(sAxis1, posEdge1, negEdge1);
@@ -198,6 +200,7 @@ void interface::resolve()
 	bool hit1 = 0;
 	bool hit2 = 0;
 
+	/*This loop checks for hits. Eventually this might be a function*/
 	for(int i = 0; i < p[1]->regComplexity; i++){
 		for(int j = 0; j < p[0]->hitComplexity; j++){
 			if(p[0]->hitbox[j].w > 0 && p[1]->hitreg[i].w > 0){
@@ -257,6 +260,7 @@ void interface::resolve()
 	if(bg.y <= 0) q = 1;*/
 }
 
+/*Check if someone won*/
 void interface::checkWin()
 {
 	if(p[0]->pick->health == 0 || p[1]->pick->health == 0 || timer == 0){
@@ -283,6 +287,7 @@ void interface::checkWin()
 	}
 }
 
+/*Read the input that's happened this frame*/
 void interface::readInput()
 {
 	/*Make our dummy event for polls*/
