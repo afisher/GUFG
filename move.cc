@@ -45,6 +45,10 @@ void move::build(char * n)
 	read.open(fname);
 	while(read.get() != ':'); read.ignore();
 	while(read.get() != ':'); read.ignore();
+	read >> tolerance;
+	while(read.get() != ':'); read.ignore();
+	read >> activation;
+	while(read.get() != ':'); read.ignore();
 	read >> frames;
 	while(read.get() != ':'); read.ignore();
 	read >> startup;

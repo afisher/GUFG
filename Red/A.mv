@@ -1,13 +1,14 @@
 Name: A
+Buffer: 30 : 30
 Frames: 10 : 3 : 3 : 4 
-Check: 3
+Check: 3 
 State: 16 : 30
 Damage: 9
 Stun: 10
 Push: 1
 Lift: 3
 Block: 3 : 4
-Properties: 
+Properties:  
 #0 
 $C	5 0 55 150
 $R	5 0 55 150
