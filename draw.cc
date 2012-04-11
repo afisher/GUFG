@@ -7,7 +7,7 @@
 #include "interface.h"
 void interface::draw()
 {
-	SDL_Surface * back = SDL_DisplayFormat(background);
+	SDL_Surface * back = SDL_DisplayFormatAlpha(background);
 	SDL_Rect bar1, bar2, meter1, meter2, rounds1[numRounds], rounds2[numRounds];
 	
 	if(p[0]->pick->health >= 0) bar1.w = p[0]->pick->health; else bar1.w = 1; 
@@ -23,9 +23,6 @@ void interface::draw()
 		rounds1[i].x = 340 - 12 * i; rounds2[i].x = 450 + 12 * i;
 	}
 
-	SDL_SetColorKey(p[0]->sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
-	SDL_SetColorKey(p[1]->sprite, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
-	
 	SDL_BlitSurface(p[0]->sprite, NULL, back, &p[0]->pos);
 	SDL_BlitSurface(p[1]->sprite, NULL, back, &p[1]->pos);
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 255, 212, 120));
@@ -49,13 +46,10 @@ void interface::draw()
 void player::spriteInit()
 {
 	int displacement;
-	SDL_Surface *sTemp = NULL;
-	if(sprite) displacement = sprite->w;
 
+	if(sprite) displacement = sprite->w;
 	/*Doing moves*/
-	if(pick->cMove == NULL) pick->cMove = pick->neutral;
-	sTemp = pick->draw(facing);
-	if(sTemp != NULL) sprite = SDL_DisplayFormat(sTemp);
+	sprite = pick->draw(facing);
 	if(facing == -1) pos.x += (displacement - sprite->w);
 }
 

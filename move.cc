@@ -167,14 +167,10 @@ void move::build(char * n)
 	sprite = new SDL_Surface*[frames];
 	fSprite = new SDL_Surface*[frames];
 	for(int i = 0; i < frames; i++){
-		sprintf(fname, "%s#%i", n, i);
-		temp = SDL_LoadBMP(fname);
-		sprite[i] = SDL_DisplayFormat(temp);
-		SDL_FreeSurface(temp);
-		sprintf(fname, "%s#%iF", n, i);
-		temp = SDL_LoadBMP(fname);
-		fSprite[i] = SDL_DisplayFormat(temp);
-		SDL_FreeSurface(temp);
+		sprintf(fname, "%s#%i.bmp", n, i);
+		sprite[i] = aux::load_image(fname);
+		sprintf(fname, "%s#%iF.bmp", n, i);
+		fSprite[i] = aux::load_image(fname);
 	}
 }
 
