@@ -28,7 +28,6 @@ public:
 	void matchInit();
 	void cSelectMenu();
 	void checkWin();
-	bool checkCollision(SDL_Rect, SDL_Rect);
 	int dragBG(int);
 
 	player * p[2];	
