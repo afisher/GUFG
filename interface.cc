@@ -54,7 +54,7 @@ void interface::matchInit()
 	SDL_Surface * temp;
 	p[0]->rounds = 0;
 	p[1]->rounds = 0;
-	background = SDL_LoadBMP("Misc/BG1.bmp");
+	background = IMG_Load("Misc/BG1.png");
 	q = 0;
 	roundInit();
 }
@@ -378,14 +378,12 @@ void interface::cSelectMenu()
 	printf("Please select a character:\n");
 	int numChars = 2;
 	SDL_Event event;
-	SDL_Surface *temp = SDL_LoadBMP("Misc/Select.bmp");
-	SDL_Surface *cursor1, *cursor2, *ct1, *ct2, *selectScreen;
+	SDL_Surface *selectScreen = aux::load_image("Misc/Select.png");
+	SDL_Surface *cursor1, *cursor2;
 	int select1, select2;
 	select1 = 1;
 	select2 = 2;
-	SDL_Rect c1, c2, wheel;
-	c1.x = 100; c1.y = 0;
-	c2.x = 100; c2.y = 0;
+	SDL_Rect wheel;
 	wheel.x = 100; wheel.y = 0;
 	char base1[40];
 	char base2[40];
@@ -393,9 +391,6 @@ void interface::cSelectMenu()
 	bool selectFlag2 = 0;
 
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 100, 100, 100));
-	selectScreen = SDL_DisplayFormat(temp);
-	SDL_FreeSurface(temp);
-	SDL_SetColorKey(selectScreen, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
 	SDL_BlitSurface(selectScreen, NULL, screen, &wheel);
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
 
@@ -405,9 +400,9 @@ void interface::cSelectMenu()
 			switch(event.type){
 			case SDL_KEYDOWN:
 				if(event.key.keysym.sym == p[0]->input[2].key.keysym.sym && !selectFlag1) select1--;
-				if(event.key.keysym.sym == p[0]->input[3].key.keysym.sym && !selectFlag1)	select1++;
+				if(event.key.keysym.sym == p[0]->input[3].key.keysym.sym && !selectFlag1) select1++;
 				if(event.key.keysym.sym == p[1]->input[2].key.keysym.sym && !selectFlag2) select2--;
-				if(event.key.keysym.sym == p[1]->input[3].key.keysym.sym && !selectFlag2)	select2++;
+				if(event.key.keysym.sym == p[1]->input[3].key.keysym.sym && !selectFlag2) select2++;
 						
 				for(int i = 4; i < 9; i++){
 					if(event.key.keysym.sym == p[0]->input[i].key.keysym.sym) selectFlag1 = 1;
@@ -436,24 +431,18 @@ void interface::cSelectMenu()
 			if(select1 > numChars) select1 = 1;
 			if(select1 < 1) select1 = numChars;
 			if(select2 < 1) select2 = numChars;
-			sprintf(base1, "Misc/P1Select%i.bmp", select1);
-			sprintf(base2, "Misc/P2Select%i.bmp", select2);
-			ct1 = SDL_LoadBMP(base1);
-			ct2 = SDL_LoadBMP(base2);
-			cursor1 = SDL_DisplayFormat(ct1);
-			cursor2 = SDL_DisplayFormat(ct2);
-			SDL_FreeSurface(ct1);
-			SDL_FreeSurface(ct2);
-			SDL_SetColorKey(cursor1, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
-			SDL_SetColorKey(cursor2, SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
+			sprintf(base1, "Misc/P1Select%i.png", select1);
+			sprintf(base2, "Misc/P2Select%i.png", select2);
+			cursor1 = aux::load_image(base1);
+			cursor2 = aux::load_image(base2);
 			SDL_BlitSurface(selectScreen, NULL, screen, &wheel);
-			SDL_BlitSurface(cursor1, NULL, screen, &c1);
-			SDL_BlitSurface(cursor2, NULL, screen, &c2);
+			SDL_BlitSurface(cursor1, NULL, screen, &wheel);
+			SDL_BlitSurface(cursor2, NULL, screen, &wheel);
 			SDL_UpdateRect(screen, 0, 0, 0, 0);
+			SDL_FreeSurface(cursor1);
+			SDL_FreeSurface(cursor2);
 		}
 	}
-	SDL_FreeSurface(cursor1);
-	SDL_FreeSurface(cursor2);
 	SDL_FreeSurface(selectScreen);
 
 	p[0]->characterSelect(select1);
