@@ -113,9 +113,12 @@ void interface::roundInit()
 	p[0]->spriteInit();
 	p[1]->spriteInit();
 	p[0]->pos.x = 700;
-	p[1]->pos.x = 900 - p[1]->sprite->w;
-	p[0]->pos.y = floor - p[0]->sprite->h;
-	p[1]->pos.y = floor - p[1]->sprite->h;
+	if(p[1]->sprite) p[1]->pos.x = 900 - p[1]->sprite->w;
+	else p[1]->pos.x = 900 - p[1]->collision.h;
+	if(p[0]->sprite) p[0]->pos.y = floor - p[0]->sprite->h;
+	else p[0]->pos.y = floor - p[0]->collision.h;
+	if(p[1]->sprite) p[1]->pos.y = floor - p[1]->sprite->h;
+	else p[1]->pos.y = floor - p[1]->collision.h;
 	draw();
 }
 

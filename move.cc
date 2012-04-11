@@ -19,12 +19,10 @@ move::move(char * n)
 move::~move()
 {
 	if(!this) return;
-	for(int i = 0; i < frames; i++){
-		if(sprite[i]) SDL_FreeSurface(sprite[i]);
-		if(fSprite[i]) SDL_FreeSurface(fSprite[i]);
-		for(int j = 0; j < regComplexity[i]; j++)
-			if(hitreg[j]) delete [] hitreg[j];
-	}
+/*	for(int i = 0; i < frames; i++){
+		if(sprite[i] != NULL) SDL_FreeSurface(sprite[i]);
+		if(fSprite[i] != NULL) SDL_FreeSurface(fSprite[i]);
+	}*/
 	if(sprite) delete [] sprite;
 	if(fSprite) delete [] fSprite;
 	if(collision) delete [] collision;
@@ -167,9 +165,9 @@ void move::build(char * n)
 	sprite = new SDL_Surface*[frames];
 	fSprite = new SDL_Surface*[frames];
 	for(int i = 0; i < frames; i++){
-		sprintf(fname, "%s#%i.bmp", n, i);
+		sprintf(fname, "%s#%i.png", n, i);
 		sprite[i] = aux::load_image(fname);
-		sprintf(fname, "%s#%iF.bmp", n, i);
+		sprintf(fname, "%s#%iF.png", n, i);
 		fSprite[i] = aux::load_image(fname);
 	}
 }
