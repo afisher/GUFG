@@ -20,7 +20,7 @@ character::character()
 	head->insert(temp);
 	airHead = new moveTrie(temp);
 
-	neutral = new utility("White/N");
+	neutral = new utility("White/NS");
 	neutral->tolerance = 0; neutral->activation = 0;
 	head->insert(neutral);
 
