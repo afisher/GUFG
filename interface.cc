@@ -184,7 +184,7 @@ void interface::resolve()
 	p[0]->checkCorners(floor, bg.x + wall, bg.x + screenWidth - wall);
 	p[1]->checkCorners(floor, bg.x + wall, bg.x + screenWidth - wall);
 	
-	if (checkCollision(p[0]->collision, p[1]->collision)){
+	if (aux::checkCollision(p[0]->collision, p[1]->collision)){
 		p[0]->resolveCollision(p[1]);
 	}
 	if(p[0]->pick->cMove != p[0]->pick->reel && p[0]->pick->cMove != p[0]->pick->fall) combo2 = 0;
@@ -204,7 +204,7 @@ void interface::resolve()
 	for(int i = 0; i < p[1]->regComplexity; i++){
 		for(int j = 0; j < p[0]->hitComplexity; j++){
 			if(p[0]->hitbox[j].w > 0 && p[1]->hitreg[i].w > 0){
-				if(checkCollision(p[0]->hitbox[j], p[1]->hitreg[i])) {
+				if(aux::checkCollision(p[0]->hitbox[j], p[1]->hitreg[i])) {
 					combo1 += p[1]->pick->takeHit(temp1);
 					if(combo1 > 0) printf("p1: %i-hit combo\n", combo1+1);
 					p[0]->pick->freeze = temp1->stun / 2;
@@ -219,7 +219,7 @@ void interface::resolve()
 	for(int i = 0; i < p[0]->regComplexity; i++){
 		for(int j = 0; j < p[1]->hitComplexity; j++){
 			if(p[1]->hitbox[j].w > 0 && p[0]->hitreg[i].w > 0){
-				if(checkCollision(p[1]->hitbox[j], p[0]->hitreg[i])) {
+				if(aux::checkCollision(p[1]->hitbox[j], p[0]->hitreg[i])) {
 					combo2 += p[0]->pick->takeHit(temp2);
 					if(combo2 > 0) printf("p2: %i-hit combo\n", combo2+1);
 					p[1]->pick->freeze = temp2->stun / 2;
@@ -371,12 +371,6 @@ void interface::readInput()
 }
 
 
-bool interface::checkCollision(SDL_Rect a, SDL_Rect b)
-{
-	if(a.y + a.h - b.y <= 0 || b.y + b.h - a.y <= 0) return 0;
-	if(a.x + a.w - b.x < 0 || b.x + b.w - a.x < 0) return 0;
-	return 1;
-}
 
 void interface::cSelectMenu()
 {
